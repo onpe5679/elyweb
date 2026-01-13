@@ -1,7 +1,11 @@
-import { useTranslations } from 'next-intl';
+import { getTranslations } from 'next-intl/server';
+import { getLocalizedField, getTimelineEvents } from '@/lib/supabase';
 
-export default function AboutPage() {
-  const t = useTranslations('Vision');
+export default async function AboutPage({ params }: { params: { locale: string } }) {
+  const { locale } = params;
+  const t = await getTranslations('Vision');
+  const tCommon = await getTranslations('Common');
+  const timelineEvents = await getTimelineEvents();
 
   return (
     <div className="pt-24 pb-16 bg-background-light dark:bg-background-dark min-h-screen">
@@ -51,6 +55,37 @@ export default function AboutPage() {
             <div className="bg-white dark:bg-surface-dark p-6 rounded-xl text-center shadow-sm border border-gray-100 dark:border-gray-800">
               <div className="text-3xl font-display font-black text-primary mb-2">Global</div>
               <div className="text-sm text-gray-500 uppercase tracking-wide">Reach</div>
+            </div>
+          </div>
+
+          {/* History Section */}
+          <div className="mt-16 not-prose">
+            <h2 className="font-display font-bold text-3xl text-gray-900 dark:text-white mb-8 border-b border-gray-100 dark:border-gray-800 pb-4">
+              History
+            </h2>
+            <div className="relative border-l-2 border-primary/20 ml-3 space-y-12 pb-12">
+              {timelineEvents.length > 0 ? (
+                timelineEvents.map((event) => (
+                  <div key={event.id} className="relative pl-8">
+                    <span className="absolute -left-[9px] top-1 w-4 h-4 rounded-full bg-primary border-4 border-background-light dark:border-background-dark"></span>
+                    <div className="flex flex-col sm:flex-row sm:items-baseline gap-2 mb-1">
+                      <span className="font-bold text-primary font-display text-xl">{event.date}</span>
+                      <h3 className="text-lg font-bold text-gray-900 dark:text-white">
+                        {getLocalizedField(event, 'title', locale)}
+                      </h3>
+                    </div>
+                    {event.description && (
+                      <p className="text-gray-600 dark:text-gray-400">
+                        {event.description}
+                      </p>
+                    )}
+                  </div>
+                ))
+              ) : (
+                <div className="pl-8 text-gray-500 italic">
+                  No history events available.
+                </div>
+              )}
             </div>
           </div>
         </div>
