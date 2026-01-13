@@ -13,20 +13,20 @@ test.describe('Home Page', () => {
   test('should have navigation with all menu items', async ({ page }) => {
     const nav = page.locator('nav');
     await expect(nav).toBeVisible();
-    await expect(nav.getByText('Studio Elysian')).toBeVisible();
+    await expect(nav.getByText('Studio Elysian', { exact: true })).toBeVisible();
     await expect(nav.getByRole('link', { name: /홈|Home|ホーム/i })).toBeVisible();
     await expect(nav.getByRole('link', { name: /회사 소개|About|会社紹介/i })).toBeVisible();
-    await expect(nav.getByRole('link', { name: /게임 소개|Games|ゲーム紹介/i })).toBeVisible();
+    await expect(nav.getByRole('link', { name: /게임 소개|Games|ゲーム/i })).toBeVisible();
   });
 
   test('should display projects section', async ({ page }) => {
     const projectsSection = page.locator('#projects');
     await expect(projectsSection).toBeVisible();
-    await expect(projectsSection.getByText('Projects')).toBeVisible();
+    await expect(projectsSection.locator('h2')).toBeVisible();
   });
 
   test('should display stats bar', async ({ page }) => {
-    await expect(page.getByText('2022')).toBeVisible();
+    await expect(page.getByText('2022', { exact: true })).toBeVisible();
     await expect(page.getByText('3+')).toBeVisible();
     await expect(page.getByText('296%')).toBeVisible();
   });
@@ -43,7 +43,7 @@ test.describe('Home Page', () => {
   test('should have footer with social links', async ({ page }) => {
     const footer = page.locator('footer');
     await expect(footer).toBeVisible();
-    await expect(footer.getByText('Studio Elysian')).toBeVisible();
+    await expect(footer.getByText('Studio Elysian', { exact: true })).toBeVisible();
   });
 });
 

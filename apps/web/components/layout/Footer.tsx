@@ -23,10 +23,10 @@ export default function Footer() {
                         {t('desc')}
                     </p>
                     <div className="flex space-x-4 mt-6">
-                        <a className="text-gray-400 hover:text-white transition-colors" href="#"><i className="fa-brands fa-twitter text-xl"></i></a>
-                        <a className="text-gray-400 hover:text-white transition-colors" href="#"><i className="fa-brands fa-youtube text-xl"></i></a>
-                        <a className="text-gray-400 hover:text-white transition-colors" href="#"><i className="fa-brands fa-instagram text-xl"></i></a>
-                        <a className="text-gray-400 hover:text-white transition-colors" href="#"><i className="fa-solid fa-envelope text-xl"></i></a>
+                        <a className="text-gray-400 hover:text-white transition-colors" href="https://twitter.com/studioelysian" target="_blank" rel="noopener noreferrer"><i className="fa-brands fa-twitter text-xl"></i></a>
+                        <a className="text-gray-400 hover:text-white transition-colors" href="https://youtube.com/@studioelysian" target="_blank" rel="noopener noreferrer"><i className="fa-brands fa-youtube text-xl"></i></a>
+                        <a className="text-gray-400 hover:text-white transition-colors" href="https://instagram.com/studioelysian" target="_blank" rel="noopener noreferrer"><i className="fa-brands fa-instagram text-xl"></i></a>
+                        <a className="text-gray-400 hover:text-white transition-colors" href="mailto:contact@studioelysian.com"><i className="fa-solid fa-envelope text-xl"></i></a>
                     </div>
                 </div>
                 <div>

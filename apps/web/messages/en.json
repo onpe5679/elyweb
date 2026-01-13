@@ -1,10 +1,10 @@
 {
   "Navigation": {
-    "home": "홈",
-    "about": "회사 소개",
-    "news": "새소식",
-    "games": "게임 소개",
-    "contact": "문의하기",
+    "home": "Home",
+    "about": "About",
+    "news": "News",
+    "games": "Games",
+    "contact": "Contact",
     "press": "PRESS"
   },
   "Hero": {
@@ -13,114 +13,118 @@
     "title1_highlight": "STORY-LOVERS",
     "title1_suffix": ",",
     "title2": "BY STORYTELLERS",
-    "description": "이야기를 만드는 사람들, 엘리시안.\n우리는 당신의 마음을 움직일 아름다운 세계를 창조합니다.",
-    "viewProjects": "프로젝트 보기",
-    "contact": "문의하기"
+    "description": "We are Studio Elysian, creators of stories.\nWe create beautiful worlds that will move your heart.",
+    "viewProjects": "View Projects",
+    "contact": "Contact Us"
   },
   "Vision": {
     "label": "Our Vision",
-    "title": "무궁한 이야기의 지평선",
-    "p1": "스튜디오 엘리시안은 2022년에 설립된 영상, 만화, 일러스트와 음악 등 여러 시청각적 요소들이 어우러진 스토리-중심 게임들을 개발하는 팀입니다.",
-    "p2": "각 분야에서 강점을 가진 팀원들이 모여, 유저와 제작사가 함께 즐길 수 있는 이야기들을 다양한 방식으로 전달하고자 하는 목표로 창작하고 있습니다.",
-    "p3": "<메모리얼 서킷>을 시작으로 \"전쟁과 그로 인한 상처들\"이라는 테마를 중심으로 한 <올드엔진> 세계관을 전개하며 이외에도 <우주공감> 같은 독특한 세계관과 설정을 자랑하는 여러 창의적인 작품들을 선보이고 있습니다.",
-    "more": "회사 소개 더보기"
+    "title": "Endless Horizons of Stories",
+    "p1": "Studio Elysian is a team founded in 2022 that develops story-driven games combining visual, comic, illustration, and music elements.",
+    "p2": "Our team members, each with strengths in their respective fields, come together with the goal of delivering stories that both users and creators can enjoy in various ways.",
+    "p3": "Starting with <Memorial Circuit>, we are developing the <Old Engine> universe centered on the theme of \"war and its wounds,\" while also showcasing creative works like <Space Empathy> with unique worldviews and settings.",
+    "more": "Learn More About Us"
   },
   "Stats": {
-    "year": "설립 연도",
-    "projects": "진행 프로젝트",
-    "funding": "펀딩 달성률",
-    "global": "스팀 출시"
+    "year": "Founded",
+    "projects": "Active Projects",
+    "funding": "Funding Rate",
+    "global": "Steam Release"
   },
   "Projects": {
     "label": "Our Works",
-    "title": "Projects",
+    "title": "Games",
     "memorialCircuit": {
         "tag": "Now Available",
         "series": "Old Engine Series",
-        "title": "메모리얼 서킷",
-        "desc": "\"기억할 수 없다면 의심하라.\"\n전쟁과 그로 인한 상처를 테마로 한 비주얼 노벨. SF와 로맨스, 그리고 미스터리가 결합된 깊이 있는 스토리텔링을 경험하세요.",
-        "genre1": "비주얼 노벨",
+        "title": "Memorial Circuit",
+        "desc": "\"If you cannot remember, doubt.\"\nA visual novel themed around war and its scars. Experience deep storytelling that combines SF, romance, and mystery.",
+        "genre1": "Visual Novel",
         "genre2": "SF",
-        "genre3": "로맨스",
+        "genre3": "Romance",
         "steam": "Steam Store",
-        "details": "상세 정보"
+        "details": "Details"
     },
     "spaceEmpathy": {
         "tag": "Coming Soon",
-        "overlay": "독특한 우주 세계관과 일상의 만남",
+        "overlay": "A unique cosmic worldview meets everyday life",
         "series": "Elysian Panorama",
-        "title": "우주공감",
-        "desc": "일상과 판타지가 교차하는 우주적 비주얼 노벨. 2024년 출시 예정.",
+        "title": "Space Empathy",
+        "desc": "A cosmic visual novel where everyday life and fantasy intersect. Coming 2024.",
         "view": "View Project"
     },
     "festival": {
         "tag": "In Development",
-        "overlay": "전쟁 속 피어나는 드라마",
+        "overlay": "Drama blooming in war",
         "series": "Drama Visual Novel",
-        "title": "축제는 아직 끝나지 않았다",
-        "desc": "전쟁, 공포, 드라마가 어우러진 깊은 서사.",
+        "title": "The Festival Is Not Over Yet",
+        "desc": "Deep narrative interweaving war, horror, and drama.",
         "view": "View Project"
     },
     "sharehouse": {
         "tag": "Publishing",
-        "overlay": "세 명의 히로인과 함께하는 쉐어하우스",
+        "overlay": "A sharehouse with three heroines",
         "series": "Romance Comedy",
-        "title": "어서오세요 쉐어하우스에!",
-        "desc": "엘리시안 퍼블리싱 작품. 로맨스 일상물 비주얼 노벨.",
+        "title": "Welcome to Sharehouse!",
+        "desc": "An Elysian Publishing work. A romance slice-of-life visual novel.",
         "view": "View Project"
     }
   },
   "Timeline": {
-      "title": "주요 연혁",
+      "title": "Milestones",
       "items": {
           "item1": {
               "date": "2024.04",
-              "text": "<메모리얼 서킷> 스팀 정식 출시"
+              "text": "<Memorial Circuit> Official Steam Release"
           },
           "item2": {
               "date": "2023.11",
-              "text": "지스타 2023 전시 (스토브 인디쇼케이스 선정)"
+              "text": "G-Star 2023 Exhibition (STOVE Indie Showcase)"
           },
           "item3": {
               "date": "2022.09",
-              "text": "스튜디오 엘리시안 설립"
+              "text": "Studio Elysian Founded"
           }
       },
-      "viewAll": "전체 연혁 보기"
+      "viewAll": "View All Milestones"
   },
   "Footer": {
-      "desc": "스튜디오 엘리시안은 이야기가 가진 힘을 믿습니다.\n우리는 게임을 통해 더 넓은 세상과 소통합니다.",
-      "quickLinks": "바로가기",
+      "desc": "Studio Elysian believes in the power of stories.\nWe communicate with the wider world through games.",
+      "quickLinks": "Quick Links",
       "links": {
-          "about": "회사 소개",
-          "projects": "프로젝트",
-          "news": "새소식",
-          "careers": "채용 정보"
+          "about": "About Us",
+          "projects": "Projects",
+          "news": "News",
+          "careers": "Careers"
       },
       "contact": "Contact",
       "contactLinks": {
-          "inquiry": "문의하기",
+          "inquiry": "Inquiry",
           "faq": "FAQ",
-          "partnership": "제휴 문의"
+          "partnership": "Partnership"
       },
       "rights": "© 2024 Studio Elysian. All rights reserved.",
-      "privacy": "개인정보처리방침",
-      "terms": "이용약관"
+      "privacy": "Privacy Policy",
+      "terms": "Terms of Service"
+  },
+  "GamesPage": {
+      "title": "Games",
+      "subtitle": "Our Works"
   },
   "ProjectSharehouse": {
       "tag": "Romance Comedy",
-      "title": "어서오세요\n쉐어하우스에!",
-      "subtitle": "세 명의 히로인과 함께하는 두근두근 쉐어하우스 라이프",
-      "historyTitle": "프로젝트 연혁",
+      "title": "Welcome to\nSharehouse!",
+      "subtitle": "Exciting sharehouse life with three heroines",
+      "historyTitle": "Project Timeline",
       "history": {
-          "item1": { "date": "2024.05", "text": "플레이엑스포 B2C & B2B 전시 참가" },
-          "item2": { "date": "2024.01", "text": "텀블벅 크라우드 펀딩 300% 달성" },
-          "item3": { "date": "2023.11", "text": "프로젝트 개발 착수" }
+          "item1": { "date": "2024.05", "text": "PlayX4 B2C & B2B Exhibition" },
+          "item2": { "date": "2024.01", "text": "Tumblbug Crowdfunding 300% Achieved" },
+          "item3": { "date": "2023.11", "text": "Project Development Started" }
       },
       "gameInfo": {
           "title": "GAME INFO",
-          "lead": "스튜디오 엘리시안 X 스튜디오 하봄의 미연시 프로젝트!",
-          "desc": "쉐어하우스에서 펼쳐지는 로맨스코미디 일상! 매력적인 세 명의 히로인들과 함께하는 특별한 동거 생활이 시작됩니다. 선택에 따라 달라지는 그녀들과의 관계, 그리고 숨겨진 이야기를 확인해보세요.",
+          "lead": "Studio Elysian X Studio Habom Dating Sim Project!",
+          "desc": "Romance comedy daily life in a sharehouse! A special cohabitation life with three charming heroines begins. Discover the changing relationships and hidden stories based on your choices.",
           "genreLabel": "Genre",
           "genreValue": "Romance Comedy / Visual Novel",
           "releaseLabel": "Release",
@@ -132,14 +136,14 @@
       },
       "synopsis": {
           "title": "SYNOPSIS",
-          "p1": "20XX년, 평소처럼 무직 백수로 살고 있던 당신.\n수능을 망쳐 대학 입시에 실패한 후, 여느 때처럼 방구석에서 애니메이션만 보고 있었다.",
-          "p2": "여자친구들과 모니터로 소통을 하던 도중.\n뒤에서 날아오는 부모님의 등짝 스매싱과 함께 서울로 상경하게 되었는데, 다른 사람들과 함께 사는 쉐어하우스로 이사를 가게 된다.",
-          "quote": "\"열심히 사는 사람들만 있으니 보고 배워오라는 말을 들은 당신은 쉐어하우스의 일원으로 써 살아가게 되지만, 도착하니 웬 예쁜 여자 세명이 집에...?\"",
-          "char1": "활기차고 당찬 성격의 '류지혜'",
-          "char2": "어른스럽지만 반전 매력이 있는 '박윤하'",
-          "char3": "그리고 귀여우면서도 새침한 '홍세은' 까지.",
-          "outro": "당신은 쉐어하우스에서 이쁜 여자 세명과의 동거 이야기를 시작하게 된다.",
-          "credit": "(제공 - 스튜디오 하봄)"
+          "p1": "20XX, you've been living as a jobless homebody.\nAfter failing college entrance exams, you've been watching anime in your room as usual.",
+          "p2": "While communicating with your online girlfriends through the monitor,\nyou got smacked by your parents and sent to Seoul, moving into a sharehouse with other people.",
+          "quote": "\"Told to learn from hardworking people, you start living as a sharehouse member, but upon arrival, three pretty girls are at home...?\"",
+          "char1": "The lively and spirited 'Ryu Ji-hye'",
+          "char2": "The mature but surprisingly charming 'Park Yun-ha'",
+          "char3": "And the cute yet aloof 'Hong Se-eun'.",
+          "outro": "You begin your cohabitation story with three beautiful girls at the sharehouse.",
+          "credit": "(Provided by - Studio Habom)"
       },
       "store": {
           "title": "STORE",

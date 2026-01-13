@@ -1,11 +1,13 @@
 import { Create, SimpleForm, TextInput, SelectInput, ArrayInput, SimpleFormIterator, BooleanInput, NumberInput, ImageInput, ImageField } from 'react-admin';
 import { LocalizedInput } from '../../components/LocalizedInput';
+import { LocalizedArrayInput } from '../../components/LocalizedArrayInput';
 
 export const GameCreate = () => (
     <Create>
         <SimpleForm>
             <TextInput source="slug" fullWidth />
             <LocalizedInput source="title" label="Title" />
+            <LocalizedInput source="series" label="Series" />
             
             <SelectInput source="status" choices={[
                 { id: 'released', name: 'Released' },
@@ -14,15 +16,11 @@ export const GameCreate = () => (
                 { id: 'publishing', name: 'Publishing' },
             ]} />
             
-            <ArrayInput source="genre">
-                <SimpleFormIterator>
-                    <TextInput />
-                </SimpleFormIterator>
-            </ArrayInput>
+            <LocalizedArrayInput source="genre" label="Genre" />
 
             <ArrayInput source="platforms">
                 <SimpleFormIterator>
-                    <TextInput />
+                    <TextInput source="" label={false} />
                 </SimpleFormIterator>
             </ArrayInput>
 

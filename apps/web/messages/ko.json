@@ -31,9 +31,13 @@
     "funding": "펀딩 달성률",
     "global": "스팀 출시"
   },
+  "GamesPage": {
+    "title": "게임",
+    "subtitle": "Our Works"
+  },
   "Projects": {
     "label": "Our Works",
-    "title": "Projects",
+    "title": "게임",
     "memorialCircuit": {
         "tag": "Now Available",
         "series": "Old Engine Series",

@@ -11,7 +11,7 @@ export default function LanguageSwitcher() {
   const [isPending, startTransition] = useTransition();
 
   function onSelectChange(event: ChangeEvent<HTMLSelectElement>) {
-    const nextLocale = event.target.value;
+    const nextLocale = event.target.value as 'ko' | 'en' | 'ja';
     startTransition(() => {
       router.replace(pathname, {locale: nextLocale});
     });

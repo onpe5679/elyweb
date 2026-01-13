@@ -6,7 +6,6 @@ test.describe('Games Pages', () => {
     
     await expect(page.getByRole('heading', { level: 1 })).toContainText(/게임|Games|ゲーム/i);
     
-    // Check for game cards
     const gameCards = page.locator('[data-testid="game-card"]');
     await expect(gameCards.first()).toBeVisible();
   });
@@ -14,7 +13,6 @@ test.describe('Games Pages', () => {
   test('should navigate to game detail page', async ({ page }) => {
     await page.goto('/ko/games');
     
-    // Click on first game card
     const firstGame = page.locator('[data-testid="game-card"]').first();
     if (await firstGame.isVisible()) {
       await firstGame.click();
@@ -25,11 +23,9 @@ test.describe('Games Pages', () => {
   test('game detail page should display game info', async ({ page }) => {
     await page.goto('/ko/games/memorial-circuit');
     
-    // Should show game title
     await expect(page.getByText('메모리얼 서킷')).toBeVisible();
     
-    // Should show game description or synopsis
-    await expect(page.locator('main')).toContainText(/기억|전쟁|스토리/);
+    await expect(page.getByRole('main').first()).toContainText(/기억|전쟁|스토리/);
   });
 
   test('featured game should be highlighted on home page', async ({ page }) => {
@@ -44,7 +40,6 @@ test.describe('Games Pages', () => {
   test('game card should show status badge', async ({ page }) => {
     await page.goto('/ko/games');
     
-    // Look for status badges
     const badges = page.locator('[data-testid="game-status-badge"]');
     if (await badges.first().isVisible()) {
       await expect(badges.first()).toBeVisible();
@@ -65,11 +60,11 @@ test.describe('Game Detail Page - Sharehouse', () => {
   });
 
   test('should display game info section', async ({ page }) => {
-    await expect(page.getByText('쉐어하우스')).toBeVisible();
+    await expect(page.getByRole('heading', { name: /쉐어하우스/i })).toBeVisible();
   });
 
   test('should display synopsis', async ({ page }) => {
-    await expect(page.locator('main')).toContainText(/히로인|로맨스|동거/);
+    await expect(page.getByRole('main').first()).toContainText(/히로인|로맨스|동거/);
   });
 
   test('should display project timeline', async ({ page }) => {

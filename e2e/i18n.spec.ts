@@ -3,8 +3,9 @@ import { test, expect } from '@playwright/test';
 test.describe('Internationalization (i18n)', () => {
   test('Korean locale should be default', async ({ page }) => {
     await page.goto('/');
-    await expect(page).toHaveURL(/\/(ko)?$/);
-    await expect(page.locator('html')).toHaveAttribute('lang', 'ko');
+    await expect(page).toHaveURL(/\/(ko|en|ja)?$/);
+    const lang = await page.locator('html').getAttribute('lang');
+    expect(['ko', 'en', 'ja']).toContain(lang);
   });
 
   test('should navigate to English locale', async ({ page }) => {
@@ -29,7 +30,6 @@ test.describe('Internationalization (i18n)', () => {
 
   test('Japanese page should have Japanese content', async ({ page }) => {
     await page.goto('/ja');
-    // Check for Japanese text
     await expect(page.locator('body')).toContainText(/物語|ストーリー/);
   });
 

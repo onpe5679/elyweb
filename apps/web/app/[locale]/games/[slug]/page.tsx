@@ -1,38 +1,20 @@
-import { useTranslations } from 'next-intl';
+import { getTranslations } from 'next-intl/server';
 import { notFound } from 'next/navigation';
+import { getGameBySlug, getGames, getLocalizedField, getStatusText } from '@/lib/supabase';
 
-const gameData: Record<string, {
-  bannerImage: string;
-  coverImage: string;
-}> = {
-  'memorial-circuit': {
-    bannerImage: 'https://lh3.googleusercontent.com/aida-public/AB6AXuBwMxjmoU2dFZiNcKAo6scC2pXTlU9Eo3CFv5SAi1KgZEFosi2mg8jzVaGXF2-oQBfnC4sPZuUy04YlTjXg5yx6zWoL5O0XHihOA7WE_lVhRydAbL4_4pHGMoCvmN6qryd-nvFW0v2itQSxaz38QeoqEMv-ZLG10X1xFQygj30kDwKFDqT7hi7XnRhhndI-r-2F8MOaG3ypBJstBdDjWQkgcsreXu3WwW46tBIw2wIN5KMBR6dTt-ZBEBsPj8-J29ALPToexQQmljc',
-    coverImage: 'https://lh3.googleusercontent.com/aida-public/AB6AXuBwMxjmoU2dFZiNcKAo6scC2pXTlU9Eo3CFv5SAi1KgZEFosi2mg8jzVaGXF2-oQBfnC4sPZuUy04YlTjXg5yx6zWoL5O0XHihOA7WE_lVhRydAbL4_4pHGMoCvmN6qryd-nvFW0v2itQSxaz38QeoqEMv-ZLG10X1xFQygj30kDwKFDqT7hi7XnRhhndI-r-2F8MOaG3ypBJstBdDjWQkgcsreXu3WwW46tBIw2wIN5KMBR6dTt-ZBEBsPj8-J29ALPToexQQmljc',
-  },
-  sharehouse: {
-    bannerImage: 'https://lh3.googleusercontent.com/aida-public/AB6AXuAZfqh4yPrE9cgvF1fwUTOa1M5S2XYI586T0LQ-3y0qBZ0vXfEB3ZAENXD8cUaEGeVKT9rSp1_THPFDANvhD0ahAU5LxXMddBhaWTcigCt9wKCW4rFPQB83ZjkpDc0ZAxOuEymtRP48ZzJxdhrCzJMqG1EI1eUNJWf3OCClgQHEuKl_ShO1Rcop_UD7cdPUp5_4--gW1OT1j3-G0RSkaYAH7Rw98aWknssLlSA-sMTwe2NmaNzeaLAbbnLkbzvn_dXksYBAxCIZ3EU',
-    coverImage: 'https://lh3.googleusercontent.com/aida-public/AB6AXuAZfqh4yPrE9cgvF1fwUTOa1M5S2XYI586T0LQ-3y0qBZ0vXfEB3ZAENXD8cUaEGeVKT9rSp1_THPFDANvhD0ahAU5LxXMddBhaWTcigCt9wKCW4rFPQB83ZjkpDc0ZAxOuEymtRP48ZzJxdhrCzJMqG1EI1eUNJWf3OCClgQHEuKl_ShO1Rcop_UD7cdPUp5_4--gW1OT1j3-G0RSkaYAH7Rw98aWknssLlSA-sMTwe2NmaNzeaLAbbnLkbzvn_dXksYBAxCIZ3EU',
-  },
-  'space-empathy': {
-    bannerImage: 'https://lh3.googleusercontent.com/aida-public/AB6AXuD9wLTEAMj-8JrucPk5Ur88qM2wkr0D7LmWA3pqOugBqSwgxs_JMdFKyRDQZtbOXs4BAwzQeD-dXw57d8TA7fRHk5dfRrbpnlhRJOUyPw8gDa1RAJe7NsX4UuhWp_ngpAchZJUP0-JwpLOjmqZQffL_DWgFz2IEyi-BLhNPphWbAMtWjxtRQs0nr1oGG_a7lr5wpxBMP8Na1ABVLLEODq5dUHLsU3FEG7p9nFx5v2lgqJxBiifLN1AUyQ1-v4z652DE3VTY4IVBUHs',
-    coverImage: 'https://lh3.googleusercontent.com/aida-public/AB6AXuD9wLTEAMj-8JrucPk5Ur88qM2wkr0D7LmWA3pqOugBqSwgxs_JMdFKyRDQZtbOXs4BAwzQeD-dXw57d8TA7fRHk5dfRrbpnlhRJOUyPw8gDa1RAJe7NsX4UuhWp_ngpAchZJUP0-JwpLOjmqZQffL_DWgFz2IEyi-BLhNPphWbAMtWjxtRQs0nr1oGG_a7lr5wpxBMP8Na1ABVLLEODq5dUHLsU3FEG7p9nFx5v2lgqJxBiifLN1AUyQ1-v4z652DE3VTY4IVBUHs',
-  },
-  'festival-not-over': {
-    bannerImage: 'https://lh3.googleusercontent.com/aida-public/AB6AXuBNROh0Z8PhYTXUyJDxtlLPTmmgxzMgjGjKY1hNp4QaCGMbtCgTAos2kOnxhqdqz3yNqJ0eakHI4Es4WQBKgi4H6qsdBlQ4ZXiAg4np4EA_foFXIVc0eJ5DRxzWOb7jSEHdUl60fxxNCNKnWWYvWL2BWok3924lFrUjdUoIaM4Ot8eXbCEd5fafCXhD7F0aFkf1UFLuFmz0oMWa3TWwm-ZLKCBmANif8O1GkFoMa_mWfADFgx-X1YzKX2EYkVwldk42BQBBcPyFMCs',
-    coverImage: 'https://lh3.googleusercontent.com/aida-public/AB6AXuBNROh0Z8PhYTXUyJDxtlLPTmmgxzMgjGjKY1hNp4QaCGMbtCgTAos2kOnxhqdqz3yNqJ0eakHI4Es4WQBKgi4H6qsdBlQ4ZXiAg4np4EA_foFXIVc0eJ5DRxzWOb7jSEHdUl60fxxNCNKnWWYvWL2BWok3924lFrUjdUoIaM4Ot8eXbCEd5fafCXhD7F0aFkf1UFLuFmz0oMWa3TWwm-ZLKCBmANif8O1GkFoMa_mWfADFgx-X1YzKX2EYkVwldk42BQBBcPyFMCs',
-  },
-};
+export default async function GameDetailPage({ params }: { params: { locale: string; slug: string } }) {
+  const { locale, slug } = params;
+  const t = await getTranslations('ProjectSharehouse');
+  const pt = await getTranslations('Projects');
 
-export default function GameDetailPage({ params }: { params: { locale: string; slug: string } }) {
-  const t = useTranslations('ProjectSharehouse');
-  const pt = useTranslations('Projects');
-
-  const game = gameData[params.slug];
+  const game = await getGameBySlug(slug);
   if (!game) {
     notFound();
   }
 
-  const isSharehouse = params.slug === 'sharehouse';
+  const isSharehouse = slug === 'sharehouse';
+  const title = getLocalizedField(game, 'title', locale);
+  const description = getLocalizedField(game, 'description', locale);
 
   return (
     <div className="bg-white dark:bg-background-dark text-text-light dark:text-text-dark font-body transition-colors duration-300">
@@ -41,7 +23,7 @@ export default function GameDetailPage({ params }: { params: { locale: string; s
           <img
             alt="Game Banner"
             className="w-full h-full object-cover object-center"
-            src={game.bannerImage}
+            src={game.banner_image || game.cover_image}
           />
           <div className="absolute inset-0 bg-gradient-to-t from-background-light dark:from-background-dark via-transparent to-transparent opacity-100"></div>
           <div className="absolute inset-0 bg-black/10"></div>
@@ -61,11 +43,15 @@ export default function GameDetailPage({ params }: { params: { locale: string; s
             </>
           ) : (
             <>
+              <div className="mb-4 inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-primary/90 text-white text-xs font-bold uppercase tracking-widest shadow-lg backdrop-blur-sm">
+                {getStatusText(game.status, locale)}
+              </div>
               <h1 className="font-display font-black text-5xl md:text-7xl text-white mb-4 leading-tight drop-shadow-xl text-shadow">
-                {params.slug === 'memorial-circuit' && pt('memorialCircuit.title')}
-                {params.slug === 'space-empathy' && pt('spaceEmpathy.title')}
-                {params.slug === 'festival-not-over' && pt('festival.title')}
+                {title}
               </h1>
+              <p className="text-lg text-white/90 font-medium drop-shadow-md max-w-2xl mx-auto">
+                {getLocalizedField(game, 'series', locale)}
+              </p>
             </>
           )}
         </div>
@@ -75,11 +61,13 @@ export default function GameDetailPage({ params }: { params: { locale: string; s
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 mb-24">
           <div className="lg:col-span-5 flex flex-col gap-8">
             <div className="relative rounded-3xl overflow-hidden shadow-2xl ring-1 ring-black/5 group">
-              <img
-                alt="Game Poster"
-                className="w-full h-auto object-cover transform group-hover:scale-105 transition-transform duration-700"
-                src={game.coverImage}
-              />
+              {game.cover_image && (
+                <img
+                  alt="Game Poster"
+                  className="w-full h-auto object-cover transform group-hover:scale-105 transition-transform duration-700"
+                  src={game.cover_image}
+                />
+              )}
             </div>
 
             {isSharehouse && (
@@ -103,6 +91,30 @@ export default function GameDetailPage({ params }: { params: { locale: string; s
                   </li>
                 </ul>
               </div>
+            )}
+
+            {game.steam_url && (
+              <a
+                href={game.steam_url}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center justify-center gap-2 bg-gray-900 dark:bg-white text-white dark:text-gray-900 px-6 py-4 rounded-xl font-bold hover:opacity-90 transition-opacity"
+              >
+                <i className="fa-brands fa-steam text-xl"></i>
+                Steam Store
+              </a>
+            )}
+
+            {game.official_url && (
+              <a
+                href={game.official_url}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center justify-center gap-2 bg-primary text-white px-6 py-4 rounded-xl font-bold hover:opacity-90 transition-opacity"
+              >
+                <i className="fa-solid fa-globe text-xl"></i>
+                Official Site
+              </a>
             )}
           </div>
 
@@ -175,10 +187,8 @@ export default function GameDetailPage({ params }: { params: { locale: string; s
                 <h2 className="font-display font-bold text-2xl md:text-3xl text-gray-900 dark:text-white mb-6">
                   Game Information
                 </h2>
-                <p className="text-gray-600 dark:text-gray-300 leading-relaxed">
-                  {params.slug === 'memorial-circuit' && pt('memorialCircuit.desc')}
-                  {params.slug === 'space-empathy' && pt('spaceEmpathy.desc')}
-                  {params.slug === 'festival-not-over' && pt('festival.desc')}
+                <p className="text-gray-600 dark:text-gray-300 leading-relaxed whitespace-pre-line">
+                  {description}
                 </p>
               </section>
             )}
@@ -189,11 +199,7 @@ export default function GameDetailPage({ params }: { params: { locale: string; s
   );
 }
 
-export function generateStaticParams() {
-  return [
-    { slug: 'memorial-circuit' },
-    { slug: 'sharehouse' },
-    { slug: 'space-empathy' },
-    { slug: 'festival-not-over' },
-  ];
+export async function generateStaticParams() {
+  const games = await getGames();
+  return games.map((game) => ({ slug: game.slug }));
 }
