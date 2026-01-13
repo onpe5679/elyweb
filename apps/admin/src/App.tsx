@@ -1,0 +1,45 @@
+import { Admin, Resource, ListGuesser } from 'react-admin';
+import { dataProvider } from './dataProvider';
+import { authProvider } from './authProvider';
+import { GameList, GameEdit, GameCreate } from './resources/games';
+import { NewsList, NewsEdit, NewsCreate } from './resources/news';
+import { TimelineList, TimelineEdit, TimelineCreate } from './resources/timeline';
+import { SettingsList, SettingsEdit } from './resources/settings';
+
+const App = () => (
+  <Admin
+    dataProvider={dataProvider}
+    authProvider={authProvider}
+    title="Studio Elysian Admin"
+  >
+    <Resource
+      name="games"
+      list={GameList}
+      edit={GameEdit}
+      create={GameCreate}
+      options={{ label: 'Games' }}
+    />
+    <Resource
+      name="news"
+      list={NewsList}
+      edit={NewsEdit}
+      create={NewsCreate}
+      options={{ label: 'News' }}
+    />
+    <Resource
+      name="timeline_events"
+      list={TimelineList}
+      edit={TimelineEdit}
+      create={TimelineCreate}
+      options={{ label: 'Timeline' }}
+    />
+    <Resource
+      name="company_settings"
+      list={SettingsList}
+      edit={SettingsEdit}
+      options={{ label: 'Settings' }}
+    />
+  </Admin>
+);
+
+export default App;

@@ -1,0 +1,106 @@
+-- Seed Games Data (from code.html)
+
+INSERT INTO games (slug, title_ko, title_en, title_ja, series, genre, status, description_ko, description_en, description_ja, synopsis_ko, cover_image, banner_image, steam_url, platforms, developer, is_featured, display_order, project_timeline) VALUES
+(
+    'memorial-circuit',
+    '메모리얼 서킷',
+    'Memorial Circuit',
+    'メモリアルサーキット',
+    'Old Engine Series',
+    ARRAY['비주얼 노벨', 'SF', '로맨스', '미스터리'],
+    'released',
+    '"기억할 수 없다면 의심하라." 전쟁과 그로 인한 상처를 테마로 한 비주얼 노벨. SF와 로맨스, 그리고 미스터리가 결합된 깊이 있는 스토리텔링을 경험하세요.',
+    '"If you can''t remember, doubt." A visual novel themed on war and its wounds. Experience deep storytelling combining SF, romance, and mystery.',
+    '「思い出せないなら疑え」戦争とその傷をテーマにしたビジュアルノベル。SF、ロマンス、ミステリーが融合した深いストーリーテリングを体験してください。',
+    NULL,
+    'https://lh3.googleusercontent.com/aida-public/AB6AXuBwMxjmoU2dFZiNcKAo6scC2pXTlU9Eo3CFv5SAi1KgZEFosi2mg8jzVaGXF2-oQBfnC4sPZuUy04YlTjXg5yx6zWoL5O0XHihOA7WE_lVhRydAbL4_4pHGMoCvmN6qryd-nvFW0v2itQSxaz38QeoqEMv-ZLG10X1xFQygj30kDwKFDqT7hi7XnRhhndI-r-2F8MOaG3ypBJstBdDjWQkgcsreXu3WwW46tBIw2wIN5KMBR6dTt-ZBEBsPj8-J29ALPToexQQmljc',
+    'https://lh3.googleusercontent.com/aida-public/AB6AXuBwMxjmoU2dFZiNcKAo6scC2pXTlU9Eo3CFv5SAi1KgZEFosi2mg8jzVaGXF2-oQBfnC4sPZuUy04YlTjXg5yx6zWoL5O0XHihOA7WE_lVhRydAbL4_4pHGMoCvmN6qryd-nvFW0v2itQSxaz38QeoqEMv-ZLG10X1xFQygj30kDwKFDqT7hi7XnRhhndI-r-2F8MOaG3ypBJstBdDjWQkgcsreXu3WwW46tBIw2wIN5KMBR6dTt-ZBEBsPj8-J29ALPToexQQmljc',
+    'https://store.steampowered.com/app/memorial-circuit',
+    ARRAY['PC', 'Steam'],
+    'Studio Elysian',
+    true,
+    1,
+    '[{"date": "2024.04", "title_ko": "스팀 정식 출시", "title_en": "Steam Release", "title_ja": "Steam正式リリース"}]'::jsonb
+),
+(
+    'space-empathy',
+    '우주공감',
+    'Space Empathy',
+    '宇宙共感',
+    'Elysian Panorama',
+    ARRAY['비주얼 노벨', '일상', '판타지'],
+    'coming_soon',
+    '일상과 판타지가 교차하는 우주적 비주얼 노벨. 2024년 출시 예정.',
+    'A cosmic visual novel where daily life and fantasy intersect. Coming 2024.',
+    '日常とファンタジーが交差する宇宙的ビジュアルノベル。2024年発売予定。',
+    '독특한 우주 세계관과 일상의 만남',
+    'https://lh3.googleusercontent.com/aida-public/AB6AXuD9wLTEAMj-8JrucPk5Ur88qM2wkr0D7LmWA3pqOugBqSwgxs_JMdFKyRDQZtbOXs4BAwzQeD-dXw57d8TA7fRHk5dfRrbpnlhRJOUyPw8gDa1RAJe7NsX4UuhWp_ngpAchZJUP0-JwpLOjmqZQffL_DWgFz2IEyi-BLhNPphWbAMtWjxtRQs0nr1oGG_a7lr5wpxBMP8Na1ABVLLEODq5dUHLsU3FEG7p9nFx5v2lgqJxBiifLN1AUyQ1-v4z652DE3VTY4IVBUHs',
+    'https://lh3.googleusercontent.com/aida-public/AB6AXuD9wLTEAMj-8JrucPk5Ur88qM2wkr0D7LmWA3pqOugBqSwgxs_JMdFKyRDQZtbOXs4BAwzQeD-dXw57d8TA7fRHk5dfRrbpnlhRJOUyPw8gDa1RAJe7NsX4UuhWp_ngpAchZJUP0-JwpLOjmqZQffL_DWgFz2IEyi-BLhNPphWbAMtWjxtRQs0nr1oGG_a7lr5wpxBMP8Na1ABVLLEODq5dUHLsU3FEG7p9nFx5v2lgqJxBiifLN1AUyQ1-v4z652DE3VTY4IVBUHs',
+    NULL,
+    ARRAY['PC'],
+    'Studio Elysian',
+    false,
+    2,
+    '[]'::jsonb
+),
+(
+    'festival-not-over',
+    '축제는 아직 끝나지 않았다',
+    'The Festival is Not Over Yet',
+    '祭りはまだ終わっていない',
+    NULL,
+    ARRAY['비주얼 노벨', '드라마', '전쟁', '공포'],
+    'in_development',
+    '전쟁, 공포, 드라마가 어우러진 깊은 서사.',
+    'Deep narrative combining war, horror, and drama.',
+    '戦争、ホラー、ドラマが融合した深い物語。',
+    '전쟁 속 피어나는 드라마',
+    'https://lh3.googleusercontent.com/aida-public/AB6AXuBNROh0Z8PhYTXUyJDxtlLPTmmgxzMgjGjKY1hNp4QaCGMbtCgTAos2kOnxhqdqz3yNqJ0eakHI4Es4WQBKgi4H6qsdBlQ4ZXiAg4np4EA_foFXIVc0eJ5DRxzWOb7jSEHdUl60fxxNCNKnWWYvWL2BWok3924lFrUjdUoIaM4Ot8eXbCEd5fafCXhD7F0aFkf1UFLuFmz0oMWa3TWwm-ZLKCBmANif8O1GkFoMa_mWfADFgx-X1YzKX2EYkVwldk42BQBBcPyFMCs',
+    'https://lh3.googleusercontent.com/aida-public/AB6AXuBNROh0Z8PhYTXUyJDxtlLPTmmgxzMgjGjKY1hNp4QaCGMbtCgTAos2kOnxhqdqz3yNqJ0eakHI4Es4WQBKgi4H6qsdBlQ4ZXiAg4np4EA_foFXIVc0eJ5DRxzWOb7jSEHdUl60fxxNCNKnWWYvWL2BWok3924lFrUjdUoIaM4Ot8eXbCEd5fafCXhD7F0aFkf1UFLuFmz0oMWa3TWwm-ZLKCBmANif8O1GkFoMa_mWfADFgx-X1YzKX2EYkVwldk42BQBBcPyFMCs',
+    NULL,
+    ARRAY['PC'],
+    'Studio Elysian',
+    false,
+    3,
+    '[]'::jsonb
+),
+(
+    'sharehouse',
+    '어서오세요 쉐어하우스에!',
+    'Welcome to Sharehouse!',
+    'シェアハウスへようこそ！',
+    NULL,
+    ARRAY['로맨스 코미디', '비주얼 노벨', '일상'],
+    'publishing',
+    '엘리시안 퍼블리싱 작품. 로맨스 일상물 비주얼 노벨.',
+    'Elysian Publishing title. Romance slice-of-life visual novel.',
+    'エリシアンパブリッシング作品。ロマンス日常系ビジュアルノベル。',
+    '스튜디오 엘리시안 X 스튜디오 하봄의 미연시 프로젝트! 쉐어하우스에서 펼쳐지는 로맨스코미디 일상! 매력적인 세 명의 히로인들과 함께하는 특별한 동거 생활이 시작됩니다.',
+    'https://lh3.googleusercontent.com/aida-public/AB6AXuAZfqh4yPrE9cgvF1fwUTOa1M5S2XYI586T0LQ-3y0qBZ0vXfEB3ZAENXD8cUaEGeVKT9rSp1_THPFDANvhD0ahAU5LxXMddBhaWTcigCt9wKCW4rFPQB83ZjkpDc0ZAxOuEymtRP48ZzJxdhrCzJMqG1EI1eUNJWf3OCClgQHEuKl_ShO1Rcop_UD7cdPUp5_4--gW1OT1j3-G0RSkaYAH7Rw98aWknssLlSA-sMTwe2NmaNzeaLAbbnLkbzvn_dXksYBAxCIZ3EU',
+    'https://lh3.googleusercontent.com/aida-public/AB6AXuAZfqh4yPrE9cgvF1fwUTOa1M5S2XYI586T0LQ-3y0qBZ0vXfEB3ZAENXD8cUaEGeVKT9rSp1_THPFDANvhD0ahAU5LxXMddBhaWTcigCt9wKCW4rFPQB83ZjkpDc0ZAxOuEymtRP48ZzJxdhrCzJMqG1EI1eUNJWf3OCClgQHEuKl_ShO1Rcop_UD7cdPUp5_4--gW1OT1j3-G0RSkaYAH7Rw98aWknssLlSA-sMTwe2NmaNzeaLAbbnLkbzvn_dXksYBAxCIZ3EU',
+    NULL,
+    ARRAY['PC', 'Steam', 'STOVE'],
+    'Studio Habom / Studio Elysian',
+    false,
+    4,
+    '[{"date": "2024.05", "title_ko": "플레이엑스포 B2C & B2B 전시 참가", "title_en": "PlayX4 Expo B2C & B2B Exhibition", "title_ja": "PlayX4エキスポB2C & B2B展示参加"}, {"date": "2024.01", "title_ko": "텀블벅 크라우드 펀딩 300% 달성", "title_en": "Tumblbug Crowdfunding 300% Achieved", "title_ja": "Tumblbugクラウドファンディング300%達成"}, {"date": "2023.11", "title_ko": "프로젝트 개발 착수", "title_en": "Project Development Started", "title_ja": "プロジェクト開発着手"}]'::jsonb
+);
+
+-- Seed Timeline Events
+INSERT INTO timeline_events (date_label, title_ko, title_en, title_ja, description_ko, description_en, description_ja, icon, is_active, display_order) VALUES
+('2024.04', '스팀 정식 출시', 'Steam Official Release', 'Steam正式リリース', '<메모리얼 서킷> 스팀 정식 출시', 'Memorial Circuit Steam Official Release', 'メモリアルサーキット Steam正式リリース', 'rocket', true, 3),
+('2023.11', '지스타 2023 전시', 'G-STAR 2023 Exhibition', 'G-STAR 2023 展示', '지스타 2023 전시 (스토브 인디쇼케이스 선정)', 'G-STAR 2023 Exhibition (STOVE Indie Showcase)', 'G-STAR 2023 展示（STOVEインディーショーケース選定）', 'trophy', true, 2),
+('2022.09', '스튜디오 설립', 'Studio Founded', 'スタジオ設立', '스튜디오 엘리시안 설립', 'Studio Elysian Founded', 'スタジオエリシアン設立', 'flag', true, 1);
+
+-- Seed Company Settings
+INSERT INTO company_settings (key, value_ko, value_en, value_ja) VALUES
+('vision_title', '무궁한 이야기의 지평선', 'Infinite Horizon of Stories', '無限の物語の地平線'),
+('vision_description', '스튜디오 엘리시안은 2022년에 설립된 영상, 만화, 일러스트와 음악 등 여러 시청각적 요소들이 어우러진 스토리-중심 게임들을 개발하는 팀입니다. 각 분야에서 강점을 가진 팀원들이 모여, 유저와 제작사가 함께 즐길 수 있는 이야기들을 다양한 방식으로 전달하고자 하는 목표로 창작하고 있습니다.', 'Studio Elysian is a team established in 2022 that develops story-centric games combining various audiovisual elements such as video, comics, illustrations, and music. Team members with strengths in each field have gathered to create stories that both users and creators can enjoy together.', 'スタジオエリシアンは2022年に設立された、映像、漫画、イラスト、音楽など様々な視聴覚的要素が調和したストーリー中心のゲームを開発するチームです。各分野で強みを持つチームメンバーが集まり、ユーザーと制作会社が共に楽しめる物語を様々な方法で伝えることを目標に創作しています。'),
+('founded_year', '2022', '2022', '2022'),
+('projects_count', '3+', '3+', '3+'),
+('funding_percentage', '296%', '296%', '296%'),
+('footer_tagline', '스튜디오 엘리시안은 이야기가 가진 힘을 믿습니다. 우리는 게임을 통해 더 넓은 세상과 소통합니다.', 'Studio Elysian believes in the power of stories. We communicate with a wider world through games.', 'スタジオエリシアンは物語の持つ力を信じています。私たちはゲームを通じてより広い世界とつながります。'),
+('contact_email', 'contact@studioelysian.com', 'contact@studioelysian.com', 'contact@studioelysian.com'),
+('twitter_url', 'https://twitter.com/studioelysian', 'https://twitter.com/studioelysian', 'https://twitter.com/studioelysian'),
+('youtube_url', 'https://youtube.com/@studioelysian', 'https://youtube.com/@studioelysian', 'https://youtube.com/@studioelysian'),
+('instagram_url', 'https://instagram.com/studioelysian', 'https://instagram.com/studioelysian', 'https://instagram.com/studioelysian');

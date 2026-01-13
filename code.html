@@ -1,0 +1,654 @@
+<!DOCTYPE html>
+<html lang="ko" class="dark">
+<head>
+    <meta charset="utf-8"/>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <title>Studio Elysian - Homepage Redesign</title>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com?plugins=forms,typography"></script>
+    
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&amp;family=Montserrat:wght@400;600;700;900&amp;display=swap" rel="stylesheet"/>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+    
+    <!-- Tailwind Configuration -->
+    <script>
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        primary: "#7C3AED", 
+                        "background-light": "#F3F4F6", 
+                        "background-dark": "#0F172A", 
+                        "surface-light": "#FFFFFF",
+                        "surface-dark": "#1E293B",
+                        "text-light": "#111827",
+                        "text-dark": "#E2E8F0",
+                        "accent-light": "#4F46E5",
+                        "accent-dark": "#818CF8",
+                        "romance-pink": "#FF8DA1",
+                    },
+                    fontFamily: {
+                        display: ["Montserrat", "sans-serif"],
+                        body: ["Noto Sans KR", "sans-serif"],
+                    },
+                    borderRadius: {
+                        DEFAULT: "0.5rem",
+                        'xl': '1rem',
+                        '2xl': '1.5rem',
+                        '3xl': '2rem',
+                    },
+                },
+            },
+        };
+    </script>
+
+    <!-- Custom Styles -->
+    <style>
+        .hero-gradient {
+            background: linear-gradient(135deg, rgba(15, 23, 42, 0.9) 0%, rgba(124, 58, 237, 0.2) 100%);
+        }
+        .text-shadow {
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+        }
+        .card-hover {
+            transition: all 0.3s ease;
+        }
+        .card-hover:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+        }
+        .custom-scroll::-webkit-scrollbar {
+            width: 6px;
+        }
+        .custom-scroll::-webkit-scrollbar-track {
+            background: rgba(0,0,0,0.05);
+        }
+        .custom-scroll::-webkit-scrollbar-thumb {
+            background: rgba(124, 58, 237, 0.2); 
+            border-radius: 10px;
+        }
+        .custom-scroll::-webkit-scrollbar-thumb:hover {
+            background: rgba(124, 58, 237, 0.4); 
+        }
+    </style>
+
+    <!-- React Dependencies -->
+    <script src="https://unpkg.com/react@18/umd/react.development.js"></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+    <script src="https://unpkg.com/history@5/umd/history.development.js"></script>
+    <script src="https://unpkg.com/react-router@6.3.0/umd/react-router.development.js"></script>
+    <script src="https://unpkg.com/react-router-dom@6.3.0/umd/react-router-dom.development.js"></script>
+    <script src="https://unpkg.com/babel-standalone@6/babel.min.js"></script>
+</head>
+<body class="bg-background-light dark:bg-background-dark text-text-light dark:text-text-dark font-body transition-colors duration-300">
+    <div id="root"></div>
+
+    <script type="text/babel">
+        const { useState, useEffect } = React;
+        const { createRoot } = ReactDOM;
+        const { MemoryRouter, Routes, Route, Link, useNavigate } = ReactRouterDOM;
+
+        // --- Components ---
+
+        const Navigation = () => {
+            return (
+                <nav className="fixed w-full z-50 bg-surface-light/90 dark:bg-surface-dark/90 backdrop-blur-md border-b border-gray-200 dark:border-gray-800 transition-colors duration-300">
+                    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                        <div className="flex justify-between items-center h-20">
+                            <div className="flex-shrink-0 flex items-center gap-3">
+                                <Link to="/" className="flex items-center gap-3">
+                                    <div className="w-10 h-10 bg-primary rounded-full flex items-center justify-center text-white font-bold text-xl shadow-lg">
+                                        <i className="fa-solid fa-book-open"></i>
+                                    </div>
+                                    <span className="font-display font-bold text-xl tracking-wider uppercase text-gray-900 dark:text-white">
+                                        Studio Elysian
+                                    </span>
+                                </Link>
+                            </div>
+                            <div className="hidden md:flex space-x-8 items-center">
+                                <Link className="text-sm font-medium text-gray-700 dark:text-gray-300 hover:text-primary dark:hover:text-primary transition-colors" to="/">홈</Link>
+                                <a className="text-sm font-medium text-gray-700 dark:text-gray-300 hover:text-primary dark:hover:text-primary transition-colors" href="#">회사 소개</a>
+                                <a className="text-sm font-medium text-gray-700 dark:text-gray-300 hover:text-primary dark:hover:text-primary transition-colors" href="#">새소식</a>
+                                <Link className="text-sm font-medium text-gray-700 dark:text-gray-300 hover:text-primary dark:hover:text-primary transition-colors" to="/project/sharehouse">게임 소개</Link>
+                                <a className="text-sm font-medium text-gray-700 dark:text-gray-300 hover:text-primary dark:hover:text-primary transition-colors" href="#">문의하기</a>
+                                <a className="px-4 py-2 rounded-full bg-primary text-white text-sm font-bold hover:bg-opacity-90 transition-all shadow-md" href="#">PRESS</a>
+                            </div>
+                            <div className="md:hidden flex items-center">
+                                <button className="text-gray-700 dark:text-gray-300 hover:text-primary focus:outline-none">
+                                    <i className="fa-solid fa-bars text-2xl"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </nav>
+            );
+        };
+
+        const Footer = () => {
+            return (
+                <footer className="bg-gray-900 text-white pt-16 pb-8 border-t border-gray-800">
+                    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                        <div className="grid grid-cols-1 md:grid-cols-4 gap-12 mb-12">
+                            <div className="col-span-1 md:col-span-2">
+                                <div className="flex items-center gap-3 mb-6">
+                                    <div className="w-8 h-8 bg-primary rounded-full flex items-center justify-center text-white font-bold text-sm">
+                                        <i className="fa-solid fa-book-open"></i>
+                                    </div>
+                                    <span className="font-display font-bold text-xl tracking-wider uppercase">
+                                        Studio Elysian
+                                    </span>
+                                </div>
+                                <p className="text-gray-400 text-sm leading-relaxed max-w-sm">
+                                    스튜디오 엘리시안은 이야기가 가진 힘을 믿습니다.<br/>
+                                    우리는 게임을 통해 더 넓은 세상과 소통합니다.
+                                </p>
+                                <div className="flex space-x-4 mt-6">
+                                    <a className="text-gray-400 hover:text-white transition-colors" href="#"><i className="fa-brands fa-twitter text-xl"></i></a>
+                                    <a className="text-gray-400 hover:text-white transition-colors" href="#"><i className="fa-brands fa-youtube text-xl"></i></a>
+                                    <a className="text-gray-400 hover:text-white transition-colors" href="#"><i className="fa-brands fa-instagram text-xl"></i></a>
+                                    <a className="text-gray-400 hover:text-white transition-colors" href="#"><i className="fa-solid fa-envelope text-xl"></i></a>
+                                </div>
+                            </div>
+                            <div>
+                                <h5 className="text-lg font-bold mb-4 text-white">바로가기</h5>
+                                <ul className="space-y-2 text-sm text-gray-400">
+                                    <li><a className="hover:text-primary transition-colors" href="#">회사 소개</a></li>
+                                    <li><a className="hover:text-primary transition-colors" href="#">프로젝트</a></li>
+                                    <li><a className="hover:text-primary transition-colors" href="#">새소식</a></li>
+                                    <li><a className="hover:text-primary transition-colors" href="#">채용 정보</a></li>
+                                </ul>
+                            </div>
+                            <div>
+                                <h5 className="text-lg font-bold mb-4 text-white">Contact</h5>
+                                <ul className="space-y-2 text-sm text-gray-400">
+                                    <li>문의하기</li>
+                                    <li>FAQ</li>
+                                    <li>제휴 문의</li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div className="border-t border-gray-800 pt-8 flex flex-col md:flex-row justify-between items-center text-sm text-gray-500">
+                            <p>© 2024 Studio Elysian. All rights reserved.</p>
+                            <div className="flex space-x-6 mt-4 md:mt-0">
+                                <a className="hover:text-white transition-colors" href="#">개인정보처리방침</a>
+                                <a className="hover:text-white transition-colors" href="#">이용약관</a>
+                            </div>
+                        </div>
+                    </div>
+                </footer>
+            );
+        };
+
+        const HomePage = () => {
+            return (
+                <div className="bg-background-light dark:bg-background-dark min-h-screen">
+                    <Navigation />
+                    
+                    <header className="relative h-screen min-h-[600px] flex items-center justify-center overflow-hidden">
+                        <div className="absolute inset-0 z-0">
+                            <img alt="Abstract anime style gaming room background" className="w-full h-full object-cover opacity-100 dark:opacity-80" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDVHPTFZPasBZtcFBFsRlZf4vhSmH0uyRPHid_2dtW6N7nVFHK8qMryYJvTPiapEcHt3v__ZGBVm0pq9Ksh-4PNTtSOeIa2biWszDq-Vy1yAkc_QJKfml8I4kAhrKW_WXbHpZmFcWdKPw9ehmpkc6YkK9DBZaN_6DYjmUnwbjc9eOVDfDt1JR0eb5raAdiIelbQWh9ifO-cPkPWFf4ifVhmOI6IGXOrmlJK8cMuMKCkUDJg4L6Ziv-mYRjLAOvB_c2f6hnmdxTlyvQ"/>
+                            <div className="absolute inset-0 bg-gradient-to-t from-background-light dark:from-background-dark via-transparent to-transparent opacity-90"></div>
+                            <div className="absolute inset-0 bg-black/30 dark:bg-black/50"></div>
+                        </div>
+                        <div className="relative z-10 text-center px-4 max-w-5xl mx-auto mt-16">
+                            <div className="inline-block mb-4 px-3 py-1 rounded-full border border-white/30 bg-white/10 backdrop-blur-sm text-white text-xs font-medium tracking-widest uppercase animate-fade-in-down">
+                                Immersive Visual Novels
+                            </div>
+                            <h1 className="font-display font-black text-5xl md:text-7xl lg:text-8xl text-white mb-6 leading-tight drop-shadow-lg">
+                                FOR <span className="text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-pink-400">STORY-LOVERS</span>,<br/>
+                                BY STORYTELLERS
+                            </h1>
+                            <p className="text-lg md:text-xl text-gray-200 mb-10 max-w-2xl mx-auto font-light leading-relaxed">
+                                이야기를 만드는 사람들, 엘리시안.<br/>
+                                우리는 당신의 마음을 움직일 아름다운 세계를 창조합니다.
+                            </p>
+                            <div className="flex flex-col sm:flex-row gap-4 justify-center">
+                                <a className="px-8 py-4 rounded-full bg-white text-primary font-bold text-lg hover:bg-gray-100 transition-all shadow-xl transform hover:-translate-y-1" href="#projects">
+                                    프로젝트 보기
+                                </a>
+                                <a className="px-8 py-4 rounded-full border-2 border-white text-white font-bold text-lg hover:bg-white hover:text-primary transition-all transform hover:-translate-y-1 backdrop-blur-sm" href="#">
+                                    문의하기
+                                </a>
+                            </div>
+                        </div>
+                        <div className="absolute bottom-10 left-1/2 transform -translate-x-1/2 animate-bounce text-white/70">
+                            <i className="fa-solid fa-chevron-down text-2xl"></i>
+                        </div>
+                    </header>
+
+                    <section className="py-24 bg-surface-light dark:bg-surface-dark transition-colors duration-300">
+                        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-16 items-center">
+                                <div className="relative group">
+                                    <div className="absolute -inset-1 bg-gradient-to-r from-primary to-pink-600 rounded-2xl blur opacity-25 group-hover:opacity-75 transition duration-1000 group-hover:duration-200"></div>
+                                    <div className="relative rounded-2xl overflow-hidden shadow-2xl">
+                                        <img alt="Retro futuristic room" className="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-500" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCuH9zfscNU583mjOoxQHWwtrrxL_URj8Cn-XiQYYOWO8bL_cwElK-MXAWahlUtmzmPW6cc5MtnoE29qELOumVwb9xKsYn2_Z793_xKUJkd0g3lsf0vjq-bfcVaZksoNjdBUueHpyh4FtQ_O3OVsg0_C82cJ2CWkhZKUtWUay2m47G1RayxCQbbtPMHfj6w8-j9qkNUIa3wpaQNHiPg2Vvw5HAWHGsAYfZ-_5iOcsEeYvxeVJZl7vQ6Q2g02XZhZ_O8lRo2XIF-nd4"/>
+                                    </div>
+                                </div>
+                                <div>
+                                    <h4 className="text-primary font-bold tracking-widest uppercase mb-2 text-sm">Our Vision</h4>
+                                    <h2 className="font-display font-bold text-3xl md:text-4xl text-gray-900 dark:text-white mb-6">
+                                        무궁한 이야기의 지평선
+                                    </h2>
+                                    <div className="space-y-4 text-gray-600 dark:text-gray-300 leading-relaxed">
+                                        <p>
+                                            스튜디오 엘리시안은 2022년에 설립된 영상, 만화, 일러스트와 음악 등 여러 시청각적 요소들이 어우러진 스토리-중심 게임들을 개발하는 팀입니다.
+                                        </p>
+                                        <p>
+                                            각 분야에서 강점을 가진 팀원들이 모여, 유저와 제작사가 함께 즐길 수 있는 이야기들을 다양한 방식으로 전달하고자 하는 목표로 창작하고 있습니다.
+                                        </p>
+                                        <p>
+                                            &lt;메모리얼 서킷&gt;을 시작으로 "전쟁과 그로 인한 상처들"이라는 테마를 중심으로 한 &lt;올드엔진&gt; 세계관을 전개하며 이외에도 &lt;우주공감&gt; 같은 독특한 세계관과 설정을 자랑하는 여러 창의적인 작품들을 선보이고 있습니다.
+                                        </p>
+                                    </div>
+                                    <div className="mt-8">
+                                        <a className="inline-flex items-center text-primary font-bold hover:text-primary/80 transition-colors" href="#">
+                                            회사 소개 더보기 <i className="fa-solid fa-arrow-right ml-2"></i>
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+
+                    <section className="py-16 bg-primary text-white">
+                        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                            <div className="grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
+                                <div className="p-4">
+                                    <div className="text-4xl font-display font-black mb-2">2022</div>
+                                    <div className="text-sm font-medium opacity-80 uppercase tracking-wide">설립 연도</div>
+                                </div>
+                                <div className="p-4">
+                                    <div className="text-4xl font-display font-black mb-2">3+</div>
+                                    <div className="text-sm font-medium opacity-80 uppercase tracking-wide">진행 프로젝트</div>
+                                </div>
+                                <div className="p-4">
+                                    <div className="text-4xl font-display font-black mb-2">296%</div>
+                                    <div className="text-sm font-medium opacity-80 uppercase tracking-wide">펀딩 달성률</div>
+                                </div>
+                                <div className="p-4">
+                                    <div className="text-4xl font-display font-black mb-2">Global</div>
+                                    <div className="text-sm font-medium opacity-80 uppercase tracking-wide">스팀 출시</div>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+
+                    <section className="py-24 bg-gray-50 dark:bg-gray-900 transition-colors duration-300" id="projects">
+                        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                            <div className="text-center mb-16">
+                                <h4 className="text-primary font-bold tracking-widest uppercase mb-2 text-sm">Our Works</h4>
+                                <h2 className="font-display font-black text-4xl md:text-5xl text-gray-900 dark:text-white uppercase tracking-tight">
+                                    Projects
+                                </h2>
+                            </div>
+                            <div className="mb-16 card-hover bg-white dark:bg-surface-dark rounded-2xl overflow-hidden shadow-xl border border-gray-100 dark:border-gray-800 transition-colors duration-300">
+                                <div className="grid grid-cols-1 lg:grid-cols-2">
+                                    <div className="relative h-64 lg:h-auto overflow-hidden">
+                                        <div className="absolute top-4 left-4 bg-black/80 text-white text-xs font-bold px-3 py-1 rounded uppercase tracking-wider z-10">
+                                            Now Available
+                                        </div>
+                                        <img alt="Memorial Circuit Game Art" className="w-full h-full object-cover transform hover:scale-105 transition-transform duration-700" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBwMxjmoU2dFZiNcKAo6scC2pXTlU9Eo3CFv5SAi1KgZEFosi2mg8jzVaGXF2-oQBfnC4sPZuUy04YlTjXg5yx6zWoL5O0XHihOA7WE_lVhRydAbL4_4pHGMoCvmN6qryd-nvFW0v2itQSxaz38QeoqEMv-ZLG10X1xFQygj30kDwKFDqT7hi7XnRhhndI-r-2F8MOaG3ypBJstBdDjWQkgcsreXu3WwW46tBIw2wIN5KMBR6dTt-ZBEBsPj8-J29ALPToexQQmljc"/>
+                                    </div>
+                                    <div className="p-8 lg:p-12 flex flex-col justify-center">
+                                        <div className="mb-2 text-primary font-semibold text-sm uppercase tracking-wide">Old Engine Series</div>
+                                        <h3 className="text-3xl font-bold text-gray-900 dark:text-white mb-4">메모리얼 서킷</h3>
+                                        <p className="text-gray-600 dark:text-gray-400 mb-6 leading-relaxed">
+                                            "기억할 수 없다면 의심하라."<br/>
+                                            전쟁과 그로 인한 상처를 테마로 한 비주얼 노벨. SF와 로맨스, 그리고 미스터리가 결합된 깊이 있는 스토리텔링을 경험하세요.
+                                        </p>
+                                        <div className="flex flex-wrap gap-2 mb-8">
+                                            <span className="px-3 py-1 bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300 rounded-full text-xs font-medium">비주얼 노벨</span>
+                                            <span className="px-3 py-1 bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300 rounded-full text-xs font-medium">SF</span>
+                                            <span className="px-3 py-1 bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300 rounded-full text-xs font-medium">로맨스</span>
+                                        </div>
+                                        <div className="flex items-center gap-4">
+                                            <button className="bg-gray-900 dark:bg-white text-white dark:text-gray-900 px-6 py-3 rounded-lg font-bold hover:opacity-90 transition-opacity flex items-center gap-2">
+                                                <i className="fa-brands fa-steam"></i> Steam Store
+                                            </button>
+                                            <a className="text-gray-600 dark:text-gray-400 hover:text-primary dark:hover:text-primary font-medium transition-colors" href="#">상세 정보</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                                <div className="card-hover group bg-white dark:bg-surface-dark rounded-xl overflow-hidden shadow-lg border border-gray-100 dark:border-gray-800 transition-colors duration-300 flex flex-col h-full">
+                                    <div className="relative h-64 overflow-hidden">
+                                        <div className="absolute top-4 left-4 bg-primary/90 text-white text-xs font-bold px-3 py-1 rounded uppercase tracking-wider z-10">
+                                            Coming Soon
+                                        </div>
+                                        <img alt="Space Empathy Game Art" className="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-500" src="https://lh3.googleusercontent.com/aida-public/AB6AXuD9wLTEAMj-8JrucPk5Ur88qM2wkr0D7LmWA3pqOugBqSwgxs_JMdFKyRDQZtbOXs4BAwzQeD-dXw57d8TA7fRHk5dfRrbpnlhRJOUyPw8gDa1RAJe7NsX4UuhWp_ngpAchZJUP0-JwpLOjmqZQffL_DWgFz2IEyi-BLhNPphWbAMtWjxtRQs0nr1oGG_a7lr5wpxBMP8Na1ABVLLEODq5dUHLsU3FEG7p9nFx5v2lgqJxBiifLN1AUyQ1-v4z652DE3VTY4IVBUHs"/>
+                                        <div className="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end p-6">
+                                            <p className="text-white text-sm font-medium">독특한 우주 세계관과 일상의 만남</p>
+                                        </div>
+                                    </div>
+                                    <div className="p-6 flex-1 flex flex-col">
+                                        <div className="mb-1 text-primary font-medium text-xs uppercase">Elysian Panorama</div>
+                                        <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-2">우주공감</h3>
+                                        <p className="text-gray-500 dark:text-gray-400 text-sm mb-4 flex-1">
+                                            일상과 판타지가 교차하는 우주적 비주얼 노벨. 2024년 출시 예정.
+                                        </p>
+                                        <a className="text-sm font-bold text-primary hover:text-primary/80 transition-colors uppercase tracking-wide self-start" href="#">
+                                            View Project
+                                        </a>
+                                    </div>
+                                </div>
+                                <div className="card-hover group bg-white dark:bg-surface-dark rounded-xl overflow-hidden shadow-lg border border-gray-100 dark:border-gray-800 transition-colors duration-300 flex flex-col h-full">
+                                    <div className="relative h-64 overflow-hidden">
+                                        <div className="absolute top-4 left-4 bg-primary/90 text-white text-xs font-bold px-3 py-1 rounded uppercase tracking-wider z-10">
+                                            In Development
+                                        </div>
+                                        <img alt="Festival is not over Game Art" className="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-500" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBNROh0Z8PhYTXUyJDxtlLPTmmgxzMgjGjKY1hNp4QaCGMbtCgTAos2kOnxhqdqz3yNqJ0eakHI4Es4WQBKgi4H6qsdBlQ4ZXiAg4np4EA_foFXIVc0eJ5DRxzWOb7jSEHdUl60fxxNCNKnWWYvWL2BWok3924lFrUjdUoIaM4Ot8eXbCEd5fafCXhD7F0aFkf1UFLuFmz0oMWa3TWwm-ZLKCBmANif8O1GkFoMa_mWfADFgx-X1YzKX2EYkVwldk42BQBBcPyFMCs"/>
+                                        <div className="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end p-6">
+                                            <p className="text-white text-sm font-medium">전쟁 속 피어나는 드라마</p>
+                                        </div>
+                                    </div>
+                                    <div className="p-6 flex-1 flex flex-col">
+                                        <div className="mb-1 text-primary font-medium text-xs uppercase">Drama Visual Novel</div>
+                                        <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-2">축제는 아직 끝나지 않았다</h3>
+                                        <p className="text-gray-500 dark:text-gray-400 text-sm mb-4 flex-1">
+                                            전쟁, 공포, 드라마가 어우러진 깊은 서사.
+                                        </p>
+                                        <a className="text-sm font-bold text-primary hover:text-primary/80 transition-colors uppercase tracking-wide self-start" href="#">
+                                            View Project
+                                        </a>
+                                    </div>
+                                </div>
+                                <div className="card-hover group bg-white dark:bg-surface-dark rounded-xl overflow-hidden shadow-lg border border-gray-100 dark:border-gray-800 transition-colors duration-300 flex flex-col h-full">
+                                    <div className="relative h-64 overflow-hidden">
+                                        <div className="absolute top-4 left-4 bg-pink-500 text-white text-xs font-bold px-3 py-1 rounded uppercase tracking-wider z-10">
+                                            Publishing
+                                        </div>
+                                        <img alt="Sharehouse Game Art" className="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-500" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAZfqh4yPrE9cgvF1fwUTOa1M5S2XYI586T0LQ-3y0qBZ0vXfEB3ZAENXD8cUaEGeVKT9rSp1_THPFDANvhD0ahAU5LxXMddBhaWTcigCt9wKCW4rFPQB83ZjkpDc0ZAxOuEymtRP48ZzJxdhrCzJMqG1EI1eUNJWf3OCClgQHEuKl_ShO1Rcop_UD7cdPUp5_4--gW1OT1j3-G0RSkaYAH7Rw98aWknssLlSA-sMTwe2NmaNzeaLAbbnLkbzvn_dXksYBAxCIZ3EU"/>
+                                        <div className="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end p-6">
+                                            <p className="text-white text-sm font-medium">세 명의 히로인과 함께하는 쉐어하우스</p>
+                                        </div>
+                                    </div>
+                                    <div className="p-6 flex-1 flex flex-col">
+                                        <div className="mb-1 text-primary font-medium text-xs uppercase">Romance Comedy</div>
+                                        <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-2">어서오세요 쉐어하우스에!</h3>
+                                        <p className="text-gray-500 dark:text-gray-400 text-sm mb-4 flex-1">
+                                            엘리시안 퍼블리싱 작품. 로맨스 일상물 비주얼 노벨.
+                                        </p>
+                                        <Link className="text-sm font-bold text-primary hover:text-primary/80 transition-colors uppercase tracking-wide self-start" to="/project/sharehouse">
+                                            View Project
+                                        </Link>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+
+                    <section className="py-20 bg-surface-light dark:bg-surface-dark border-t border-gray-200 dark:border-gray-800">
+                        <div className="max-w-4xl mx-auto px-4">
+                            <h2 className="text-center font-display font-bold text-3xl text-gray-900 dark:text-white mb-12">주요 연혁</h2>
+                            <div className="space-y-8 relative before:absolute before:inset-0 before:ml-5 before:-translate-x-px md:before:mx-auto md:before:translate-x-0 before:h-full before:w-0.5 before:bg-gradient-to-b before:from-transparent before:via-gray-300 before:to-transparent">
+                                <div className="relative flex items-center justify-between md:justify-normal md:odd:flex-row-reverse group is-active">
+                                    <div className="flex items-center justify-center w-10 h-10 rounded-full border border-white bg-slate-300 group-[.is-active]:bg-primary text-slate-500 group-[.is-active]:text-emerald-50 shadow shrink-0 md:order-1 md:group-odd:-translate-x-1/2 md:group-even:translate-x-1/2 z-10">
+                                        <i className="fa-solid fa-rocket text-sm"></i>
+                                    </div>
+                                    <div className="w-[calc(100%-4rem)] md:w-[calc(50%-2.5rem)] bg-white dark:bg-gray-800 p-4 rounded-xl border border-gray-100 dark:border-gray-700 shadow-sm">
+                                        <div className="flex items-center justify-between space-x-2 mb-1">
+                                            <div className="font-bold text-slate-900 dark:text-slate-100">2024.04</div>
+                                        </div>
+                                        <div className="text-slate-500 dark:text-slate-400 text-sm">
+                                            <i className="fa-brands fa-steam mr-1"></i> <span className="font-medium text-primary">&lt;메모리얼 서킷&gt;</span> 스팀 정식 출시
+                                        </div>
+                                    </div>
+                                </div>
+                                <div className="relative flex items-center justify-between md:justify-normal md:odd:flex-row-reverse group is-active">
+                                    <div className="flex items-center justify-center w-10 h-10 rounded-full border border-white bg-slate-300 group-[.is-active]:bg-primary text-slate-500 group-[.is-active]:text-emerald-50 shadow shrink-0 md:order-1 md:group-odd:-translate-x-1/2 md:group-even:translate-x-1/2 z-10">
+                                        <i className="fa-solid fa-trophy text-sm"></i>
+                                    </div>
+                                    <div className="w-[calc(100%-4rem)] md:w-[calc(50%-2.5rem)] bg-white dark:bg-gray-800 p-4 rounded-xl border border-gray-100 dark:border-gray-700 shadow-sm">
+                                        <div className="flex items-center justify-between space-x-2 mb-1">
+                                            <div className="font-bold text-slate-900 dark:text-slate-100">2023.11</div>
+                                        </div>
+                                        <div className="text-slate-500 dark:text-slate-400 text-sm">
+                                            지스타 2023 전시 (스토브 인디쇼케이스 선정)
+                                        </div>
+                                    </div>
+                                </div>
+                                <div className="relative flex items-center justify-between md:justify-normal md:odd:flex-row-reverse group is-active">
+                                    <div className="flex items-center justify-center w-10 h-10 rounded-full border border-white bg-slate-300 group-[.is-active]:bg-primary text-slate-500 group-[.is-active]:text-emerald-50 shadow shrink-0 md:order-1 md:group-odd:-translate-x-1/2 md:group-even:translate-x-1/2 z-10">
+                                        <i className="fa-solid fa-flag text-sm"></i>
+                                    </div>
+                                    <div className="w-[calc(100%-4rem)] md:w-[calc(50%-2.5rem)] bg-white dark:bg-gray-800 p-4 rounded-xl border border-gray-100 dark:border-gray-700 shadow-sm">
+                                        <div className="flex items-center justify-between space-x-2 mb-1">
+                                            <div className="font-bold text-slate-900 dark:text-slate-100">2022.09</div>
+                                        </div>
+                                        <div className="text-slate-500 dark:text-slate-400 text-sm">
+                                            스튜디오 엘리시안 설립
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div className="text-center mt-10">
+                                <a className="text-sm text-gray-500 dark:text-gray-400 hover:text-primary dark:hover:text-primary underline" href="#">전체 연혁 보기</a>
+                            </div>
+                        </div>
+                    </section>
+                    
+                    <Footer />
+                </div>
+            );
+        };
+
+        const ProjectPage = () => {
+            useEffect(() => {
+                window.scrollTo(0, 0);
+            }, []);
+
+            return (
+                <div className="bg-white dark:bg-background-dark text-text-light dark:text-text-dark font-body transition-colors duration-300">
+                    <Navigation />
+                    
+                    <header className="relative h-[60vh] min-h-[500px] flex items-end pb-12 justify-center overflow-hidden">
+                        <div className="absolute inset-0 z-0">
+                            <img alt="Welcome to Sharehouse Game Banner" className="w-full h-full object-cover object-center" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAZfqh4yPrE9cgvF1fwUTOa1M5S2XYI586T0LQ-3y0qBZ0vXfEB3ZAENXD8cUaEGeVKT9rSp1_THPFDANvhD0ahAU5LxXMddBhaWTcigCt9wKCW4rFPQB83ZjkpDc0ZAxOuEymtRP48ZzJxdhrCzJMqG1EI1eUNJWf3OCClgQHEuKl_ShO1Rcop_UD7cdPUp5_4--gW1OT1j3-G0RSkaYAH7Rw98aWknssLlSA-sMTwe2NmaNzeaLAbbnLkbzvn_dXksYBAxCIZ3EU"/>
+                            <div className="absolute inset-0 bg-gradient-to-t from-background-light dark:from-background-dark via-transparent to-transparent opacity-100"></div>
+                            <div className="absolute inset-0 bg-black/10"></div>
+                        </div>
+                        <div className="relative z-10 text-center px-4 max-w-5xl mx-auto w-full">
+                            <div className="mb-4 inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-romance-pink/90 text-white text-xs font-bold uppercase tracking-widest shadow-lg backdrop-blur-sm">
+                                <span className="material-symbols-outlined text-sm">favorite</span> Romance Comedy
+                            </div>
+                            <h1 className="font-display font-black text-5xl md:text-7xl text-white mb-4 leading-tight drop-shadow-xl text-shadow">
+                                어서오세요<br/>쉐어하우스에!
+                            </h1>
+                            <p className="text-lg text-white/90 font-medium drop-shadow-md max-w-2xl mx-auto">
+                                세 명의 히로인과 함께하는 두근두근 쉐어하우스 라이프
+                            </p>
+                        </div>
+                    </header>
+
+                    <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 -mt-8 relative z-20 pb-24">
+                        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 mb-24">
+                            <div className="lg:col-span-5 flex flex-col gap-8">
+                                <div className="relative rounded-3xl overflow-hidden shadow-2xl ring-1 ring-black/5 group">
+                                    <img alt="Game Poster Vertical" className="w-full h-auto object-cover transform group-hover:scale-105 transition-transform duration-700" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAZfqh4yPrE9cgvF1fwUTOa1M5S2XYI586T0LQ-3y0qBZ0vXfEB3ZAENXD8cUaEGeVKT9rSp1_THPFDANvhD0ahAU5LxXMddBhaWTcigCt9wKCW4rFPQB83ZjkpDc0ZAxOuEymtRP48ZzJxdhrCzJMqG1EI1eUNJWf3OCClgQHEuKl_ShO1Rcop_UD7cdPUp5_4--gW1OT1j3-G0RSkaYAH7Rw98aWknssLlSA-sMTwe2NmaNzeaLAbbnLkbzvn_dXksYBAxCIZ3EU"/>
+                                    <div className="absolute top-4 right-4 w-16 h-16 bg-white dark:bg-surface-dark rounded-full flex items-center justify-center shadow-lg">
+                                        <img alt="Steam" className="w-8 h-8 opacity-80" src="https://lh3.googleusercontent.com/aida-public/AB6AXuA2DCX_fMm2sZgK7yQAZogLA88_MxbYo00N7dBl7llB8eSWil-g3Hhag4iKYIa91vxGUTHx1hi-7duFvoFv4vJAcLns_Mk-R1bE1EyeOpYLPaAFCyXJM4ueWlOnnuaIgsYTT83IXTEXNgELejLDoXACm-scPgVvbvEfv9TKvk_Yo7RvpYtKOoag3p04ZYIFSbDuvcp702aFK8IjIPdo6-1WJC7YHSEsnBViAnP3XB4K77REHFQNOaW1TS64odDeH1UEMeRHtBvwG2A"/>
+                                    </div>
+                                </div>
+                                <div className="bg-white dark:bg-surface-dark rounded-2xl p-6 shadow-sm border border-gray-100 dark:border-gray-800">
+                                    <h3 className="text-lg font-bold mb-4 flex items-center gap-2">
+                                        <span className="w-1 h-6 bg-primary rounded-full"></span>
+                                        프로젝트 연혁
+                                    </h3>
+                                    <ul className="space-y-4">
+                                        <li className="flex gap-4 text-sm">
+                                            <span className="font-bold text-primary min-w-[60px]">2024.05</span>
+                                            <span className="text-gray-600 dark:text-gray-400">플레이엑스포 B2C &amp; B2B 전시 참가</span>
+                                        </li>
+                                        <li className="flex gap-4 text-sm">
+                                            <span className="font-bold text-primary min-w-[60px]">2024.01</span>
+                                            <span className="text-gray-600 dark:text-gray-400">텀블벅 크라우드 펀딩 300% 달성</span>
+                                        </li>
+                                        <li className="flex gap-4 text-sm">
+                                            <span className="font-bold text-primary min-w-[60px]">2023.11</span>
+                                            <span className="text-gray-600 dark:text-gray-400">프로젝트 개발 착수</span>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div className="lg:col-span-7 space-y-16 pt-4">
+                                <section className="animate-fade-in-up">
+                                    <h2 className="font-display font-bold text-2xl md:text-3xl text-gray-900 dark:text-white mb-6 flex items-center gap-3">
+                                        <span className="material-symbols-outlined text-primary text-3xl">info</span>
+                                        GAME INFO
+                                    </h2>
+                                    <div className="prose prose-lg dark:prose-invert text-gray-600 dark:text-gray-300">
+                                        <p className="lead font-medium text-primary">
+                                            스튜디오 엘리시안 X 스튜디오 하봄의 미연시 프로젝트!
+                                        </p>
+                                        <p>
+                                            쉐어하우스에서 펼쳐지는 로맨스코미디 일상! 매력적인 세 명의 히로인들과 함께하는 특별한 동거 생활이 시작됩니다. 선택에 따라 달라지는 그녀들과의 관계, 그리고 숨겨진 이야기를 확인해보세요.
+                                        </p>
+                                        <div className="grid grid-cols-2 gap-4 mt-6 not-prose">
+                                            <div className="bg-gray-50 dark:bg-gray-800 p-4 rounded-xl">
+                                                <div className="text-xs text-gray-500 uppercase tracking-wide font-bold mb-1">Genre</div>
+                                                <div className="font-semibold text-gray-900 dark:text-white">Romance Comedy / Visual Novel</div>
+                                            </div>
+                                            <div className="bg-gray-50 dark:bg-gray-800 p-4 rounded-xl">
+                                                <div className="text-xs text-gray-500 uppercase tracking-wide font-bold mb-1">Release</div>
+                                                <div className="font-semibold text-gray-900 dark:text-white">2024 (Coming Soon)</div>
+                                            </div>
+                                            <div className="bg-gray-50 dark:bg-gray-800 p-4 rounded-xl">
+                                                <div className="text-xs text-gray-500 uppercase tracking-wide font-bold mb-1">Platform</div>
+                                                <div className="font-semibold text-gray-900 dark:text-white">PC (Steam), STOVE</div>
+                                            </div>
+                                            <div className="bg-gray-50 dark:bg-gray-800 p-4 rounded-xl">
+                                                <div className="text-xs text-gray-500 uppercase tracking-wide font-bold mb-1">Developer</div>
+                                                <div className="font-semibold text-gray-900 dark:text-white">Studio Habom / Studio Elysian</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </section>
+                                <hr className="border-gray-100 dark:border-gray-800"/>
+                                <section className="animate-fade-in-up" style={{animationDelay: "0.1s"}}>
+                                    <h2 className="font-display font-bold text-2xl md:text-3xl text-gray-900 dark:text-white mb-6 flex items-center gap-3">
+                                        <span className="material-symbols-outlined text-primary text-3xl">auto_stories</span>
+                                        SYNOPSIS
+                                    </h2>
+                                    <div className="space-y-6 text-gray-600 dark:text-gray-300 leading-relaxed text-lg">
+                                        <p>
+                                            20XX년, 평소처럼 무직 백수로 살고 있던 당신.<br/>
+                                            수능을 망쳐 대학 입시에 실패한 후, 여느 때처럼 방구석에서 애니메이션만 보고 있었다.
+                                        </p>
+                                        <p>
+                                            여자친구들과 모니터로 소통을 하던 도중.<br/>
+                                            뒤에서 날아오는 부모님의 등짝 스매싱과 함께 서울로 상경하게 되었는데, 다른 사람들과 함께 사는 쉐어하우스로 이사를 가게 된다.
+                                        </p>
+                                        <div className="pl-4 border-l-4 border-romance-pink/50 italic bg-gray-50 dark:bg-gray-800/50 p-4 rounded-r-lg">
+                                            "열심히 사는 사람들만 있으니 보고 배워오라는 말을 들은 당신은 쉐어하우스의 일원으로 써 살아가게 되지만, 도착하니 웬 예쁜 여자 세명이 집에...?"
+                                        </div>
+                                        <ul className="space-y-2 mt-4 text-base">
+                                            <li className="flex items-start gap-2">
+                                                <span className="text-romance-pink mt-1"><i className="fa-solid fa-heart"></i></span>
+                                                <span>활기차고 당찬 성격의 <strong className="text-gray-900 dark:text-white">'류지혜'</strong></span>
+                                            </li>
+                                            <li className="flex items-start gap-2">
+                                                <span className="text-romance-pink mt-1"><i className="fa-solid fa-heart"></i></span>
+                                                <span>어른스럽지만 반전 매력이 있는 <strong className="text-gray-900 dark:text-white">'박윤하'</strong></span>
+                                            </li>
+                                            <li className="flex items-start gap-2">
+                                                <span className="text-romance-pink mt-1"><i className="fa-solid fa-heart"></i></span>
+                                                <span>그리고 귀여우면서도 새침한 <strong className="text-gray-900 dark:text-white">'홍세은'</strong> 까지.</span>
+                                            </li>
+                                        </ul>
+                                        <p className="font-medium text-gray-900 dark:text-white mt-4">
+                                            당신은 쉐어하우스에서 이쁜 여자 세명과의 동거 이야기를 시작하게 된다.
+                                        </p>
+                                        <p className="text-sm text-gray-400 text-right">(제공 - 스튜디오 하봄)</p>
+                                    </div>
+                                </section>
+                            </div>
+                        </div>
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-center mb-24 border-t border-gray-100 dark:border-gray-800 pt-16">
+                            <div className="order-2 md:order-1 flex flex-col items-center justify-center text-center p-8 bg-surface-light dark:bg-surface-dark rounded-3xl shadow-lg border border-gray-100 dark:border-gray-800 md:h-full">
+                                <h2 className="font-display font-bold text-3xl mb-2 text-gray-900 dark:text-white">STORE</h2>
+                                <p className="text-gray-500 dark:text-gray-400 mb-8 font-medium">Coming Soon</p>
+                                <a className="group relative w-24 h-24 mb-6 flex items-center justify-center bg-black text-white rounded-full shadow-xl hover:scale-110 transition-transform duration-300" href="#">
+                                    <i className="fa-brands fa-steam text-5xl"></i>
+                                    <span className="absolute -bottom-8 text-sm font-bold text-gray-900 dark:text-white opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap">Wishlist Now</span>
+                                </a>
+                                <div className="flex gap-4 mt-4">
+                                    <button className="px-6 py-2 rounded-full border border-gray-300 dark:border-gray-600 text-sm font-semibold hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
+                                        Official Site
+                                    </button>
+                                    <button className="px-6 py-2 rounded-full border border-gray-300 dark:border-gray-600 text-sm font-semibold hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
+                                        Press Kit
+                                    </button>
+                                </div>
+                            </div>
+                            <div className="order-1 md:order-2 md:h-full">
+                                <div className="relative rounded-2xl overflow-hidden shadow-xl aspect-video group cursor-pointer md:h-full">
+                                    <img alt="Game PV Thumbnail" className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 filter brightness-90 group-hover:brightness-100" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAZfqh4yPrE9cgvF1fwUTOa1M5S2XYI586T0LQ-3y0qBZ0vXfEB3ZAENXD8cUaEGeVKT9rSp1_THPFDANvhD0ahAU5LxXMddBhaWTcigCt9wKCW4rFPQB83ZjkpDc0ZAxOuEymtRP48ZzJxdhrCzJMqG1EI1eUNJWf3OCClgQHEuKl_ShO1Rcop_UD7cdPUp5_4--gW1OT1j3-G0RSkaYAH7Rw98aWknssLlSA-sMTwe2NmaNzeaLAbbnLkbzvn_dXksYBAxCIZ3EU"/>
+                                    <div className="absolute inset-0 flex items-center justify-center">
+                                        <div className="w-16 h-16 bg-white/20 backdrop-blur-md rounded-full flex items-center justify-center border border-white/50 group-hover:scale-110 transition-transform duration-300">
+                                            <i className="fa-solid fa-play text-white text-2xl ml-1"></i>
+                                        </div>
+                                    </div>
+                                    <div className="absolute bottom-4 left-4 text-white font-bold drop-shadow-md">
+                                        Official Trailer (PV)
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div className="space-y-12">
+                            <div className="flex items-end justify-between border-b border-gray-200 dark:border-gray-800 pb-4">
+                                <h3 className="font-display font-bold text-2xl md:text-3xl text-gray-900 dark:text-white italic">
+                                    DEMO PLAY &amp; SCREENSHOTS
+                                </h3>
+                                <div className="flex gap-2">
+                                    <button className="w-10 h-10 rounded-full border border-gray-300 dark:border-gray-600 flex items-center justify-center hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors">
+                                        <i className="fa-solid fa-chevron-left text-sm"></i>
+                                    </button>
+                                    <button className="w-10 h-10 rounded-full border border-gray-300 dark:border-gray-600 flex items-center justify-center hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors">
+                                        <i className="fa-solid fa-chevron-right text-sm"></i>
+                                    </button>
+                                </div>
+                            </div>
+                            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                                <div className="group relative rounded-xl overflow-hidden aspect-[16/9] bg-gray-100 dark:bg-gray-800">
+                                    <img alt="In-game screenshot 1" className="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-500" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBNROh0Z8PhYTXUyJDxtlLPTmmgxzMgjGjKY1hNp4QaCGMbtCgTAos2kOnxhqdqz3yNqJ0eakHI4Es4WQBKgi4H6qsdBlQ4ZXiAg4np4EA_foFXIVc0eJ5DRxzWOb7jSEHdUl60fxxNCNKnWWYvWL2BWok3924lFrUjdUoIaM4Ot8eXbCEd5fafCXhD7F0aFkf1UFLuFmz0oMWa3TWwm-ZLKCBmANif8O1GkFoMa_mWfADFgx-X1YzKX2EYkVwldk42BQBBcPyFMCs"/>
+                                    <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-colors duration-300"></div>
+                                </div>
+                                <div className="group relative rounded-xl overflow-hidden aspect-[16/9] bg-gray-100 dark:bg-gray-800">
+                                    <img alt="In-game screenshot 2" className="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-500" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBwMxjmoU2dFZiNcKAo6scC2pXTlU9Eo3CFv5SAi1KgZEFosi2mg8jzVaGXF2-oQBfnC4sPZuUy04YlTjXg5yx6zWoL5O0XHihOA7WE_lVhRydAbL4_4pHGMoCvmN6qryd-nvFW0v2itQSxaz38QeoqEMv-ZLG10X1xFQygj30kDwKFDqT7hi7XnRhhndI-r-2F8MOaG3ypBJstBdDjWQkgcsreXu3WwW46tBIw2wIN5KMBR6dTt-ZBEBsPj8-J29ALPToexQQmljc"/>
+                                    <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-colors duration-300"></div>
+                                </div>
+                                <div className="group relative rounded-xl overflow-hidden aspect-[16/9] bg-gray-100 dark:bg-gray-800">
+                                    <img alt="In-game screenshot 3" className="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-500" src="https://lh3.googleusercontent.com/aida-public/AB6AXuD9wLTEAMj-8JrucPk5Ur88qM2wkr0D7LmWA3pqOugBqSwgxs_JMdFKyRDQZtbOXs4BAwzQeD-dXw57d8TA7fRHk5dfRrbpnlhRJOUyPw8gDa1RAJe7NsX4UuhWp_ngpAchZJUP0-JwpLOjmqZQffL_DWgFz2IEyi-BLhNPphWbAMtWjxtRQs0nr1oGG_a7lr5wpxBMP8Na1ABVLLEODq5dUHLsU3FEG7p9nFx5v2lgqJxBiifLN1AUyQ1-v4z652DE3VTY4IVBUHs"/>
+                                    <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-colors duration-300"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </main>
+
+                    <Footer />
+                </div>
+            );
+        };
+
+        const App = () => {
+            return (
+                <MemoryRouter>
+                    <Routes>
+                        <Route path="/" element={<HomePage />} />
+                        <Route path="/project/sharehouse" element={<ProjectPage />} />
+                    </Routes>
+                </MemoryRouter>
+            );
+        };
+
+        const root = createRoot(document.getElementById('root'));
+        root.render(<App />);
+    </script>
+</body>
+</html>
