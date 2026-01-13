@@ -4,8 +4,15 @@ import {useTranslations} from 'next-intl';
 import Image from 'next/image';
 import {Link} from '@/i18n/routing';
 
-export default function VisionSection() {
+const DEFAULT_VISION_IMAGE = 'https://lh3.googleusercontent.com/aida-public/AB6AXuCuH9zfscNU583mjOoxQHWwtrrxL_URj8Cn-XiQYYOWO8bL_cwElK-MXAWahlUtmzmPW6cc5MtnoE29qELOumVwb9xKsYn2_Z793_xKUJkd0g3lsf0vjq-bfcVaZksoNjdBUueHpyh4FtQ_O3OVsg0_C82cJ2CWkhZKUtWUay2m47G1RayxCQbbtPMHfj6w8-j9qkNUIa3wpaQNHiPg2Vvw5HAWHGsAYfZ-_5iOcsEeYvxeVJZl7vQ6Q2g02XZhZ_O8lRo2XIF-nd4';
+
+type VisionSectionProps = {
+  visionImage?: string;
+};
+
+export default function VisionSection({ visionImage }: VisionSectionProps) {
   const t = useTranslations('Vision');
+  const imageSrc = visionImage || DEFAULT_VISION_IMAGE;
 
   return (
     <section className="py-24 bg-surface-light dark:bg-surface-dark transition-colors duration-300">
@@ -16,7 +23,7 @@ export default function VisionSection() {
                     <div className="relative rounded-2xl overflow-hidden shadow-2xl h-[400px]">
                         <Image 
                             alt="Retro futuristic room" 
-                            src="https://lh3.googleusercontent.com/aida-public/AB6AXuCuH9zfscNU583mjOoxQHWwtrrxL_URj8Cn-XiQYYOWO8bL_cwElK-MXAWahlUtmzmPW6cc5MtnoE29qELOumVwb9xKsYn2_Z793_xKUJkd0g3lsf0vjq-bfcVaZksoNjdBUueHpyh4FtQ_O3OVsg0_C82cJ2CWkhZKUtWUay2m47G1RayxCQbbtPMHfj6w8-j9qkNUIa3wpaQNHiPg2Vvw5HAWHGsAYfZ-_5iOcsEeYvxeVJZl7vQ6Q2g02XZhZ_O8lRo2XIF-nd4"
+                            src={imageSrc}
                             fill
                             className="object-cover transform group-hover:scale-105 transition-transform duration-500"
                         />

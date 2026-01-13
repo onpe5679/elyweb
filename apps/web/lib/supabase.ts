@@ -49,10 +49,13 @@ export type News = {
 export type TimelineEvent = {
   id: string;
   date: string;
+  date_label?: string;
   title_ko: string;
   title_en?: string;
   title_ja?: string;
   description?: string;
+  is_active?: boolean;
+  display_order?: number;
   created_at: string;
 };
 
@@ -124,7 +127,6 @@ export async function getNews(publishedOnly = true): Promise<News[]> {
   let query = supabase
     .from('news')
     .select('*')
-    .order('display_order', { ascending: true })
     .order('published_at', { ascending: false });
 
   if (publishedOnly) {
@@ -145,14 +147,17 @@ export async function getTimelineEvents(): Promise<TimelineEvent[]> {
   const { data, error } = await supabase
     .from('timeline_events')
     .select('*')
-    .order('date', { ascending: false });
+    .order('display_order', { ascending: false });
 
   if (error) {
     console.error('Error fetching timeline events:', error);
     return [];
   }
 
-  return data || [];
+  return (data || []).map(event => ({
+    ...event,
+    date: event.date_label || event.date || ''
+  }));
 }
 
 export function getStatusTagColor(status: string): string {
@@ -175,144 +180,196 @@ export function getStatusText(status: string, locale: string): string {
   return textMap[status]?.[locale] || status;
 }
 
-export type SectionType = 'info' | 'synopsis' | 'video' | 'store' | 'timeline' | 'gallery' | 'custom';
+export type SectionType = 'text' | 'gallery' | 'video' | 'store' | 'credits' | 'timeline' | 'custom';
 
-export type GameSection = {
+// DB schema matching game_sections table from 004_game_sections.sql
+export type GameSectionDB = {
   id: string;
   game_id: string;
-  type: SectionType;
+  section_type: SectionType;
   title_ko?: string;
   title_en?: string;
   title_ja?: string;
-  content: any;
+  content_ko?: string;
+  content_en?: string;
+  content_ja?: string;
+  images?: string[];
+  video_url?: string;
+  store_links?: { name: string; url: string; icon?: string }[];
+  credits?: { role: string; name: string }[];
+  timeline_items?: { date: string; event_ko?: string; event_en?: string; event_ja?: string }[];
+  display_order: number;
+  is_visible: boolean;
+  created_at?: string;
+  updated_at?: string;
+};
+
+// Legacy type for backward compatibility with existing SectionRenderer
+export type GameSection = {
+  id: string;
+  game_id: string;
+  type: SectionType | 'info' | 'synopsis'; // include legacy types
+  title_ko?: string;
+  title_en?: string;
+  title_ja?: string;
+  content: Record<string, unknown>;
   display_order: number;
   is_active: boolean;
 };
 
-// Mock function until we have a real table
-export async function getGameSections(slug: string): Promise<GameSection[]> {
-  // In a real app, we would fetch from 'game_sections' table joined with 'games'
-  // const { data } = await supabase.from('game_sections').select('*').eq('game_slug', slug)...
+// Transform DB record to legacy format for existing SectionRenderer
+function transformSectionToLegacy(section: GameSectionDB): GameSection {
+  const content: Record<string, unknown> = {};
 
-  const sections: GameSection[] = [];
+  // Map content fields based on section_type
+  switch (section.section_type) {
+    case 'text':
+      // Text content goes into content object with locale suffixes
+      if (section.content_ko) content.p1_ko = section.content_ko;
+      if (section.content_en) content.p1_en = section.content_en;
+      if (section.content_ja) content.p1_ja = section.content_ja;
+      break;
 
-  if (slug === 'sharehouse') {
-    sections.push(
-      {
-        id: '1',
-        game_id: 'sharehouse',
-        type: 'timeline',
-        title_en: 'Project History',
-        title_ko: '프로젝트 연혁',
-        content: {
-          items: [
-            { date: '2022.01', text_en: 'Project Started', text_ko: '프로젝트 시작' },
-            { date: '2022.06', text_en: 'Alpha Test', text_ko: '알파 테스트' },
-            { date: '2022.12', text_en: 'Beta Release', text_ko: '베타 출시' },
-          ]
-        },
-        display_order: 1,
-        is_active: true
-      },
-      {
-        id: '2',
-        game_id: 'sharehouse',
-        type: 'info',
-        title_en: 'Game Info',
-        title_ko: '게임 정보',
-        content: {
-          lead_en: 'A heartwarming story of connection.',
-          lead_ko: '따뜻한 연결의 이야기.',
-          // Other info fields are usually pulled from the game record itself,
-          // but valid to override here if needed.
-        },
-        display_order: 2,
-        is_active: true
-      },
-      {
-        id: '3',
-        game_id: 'sharehouse',
-        type: 'synopsis',
-        title_en: 'Synopsis',
-        title_ko: '시놉시스',
-        content: {
-          p1_en: 'In a bustling city, strangers become family...',
-          p1_ko: '분주한 도시에서, 낯선 이들이 가족이 되어갑니다...',
-          quote_en: '"Home is where the heart is."',
-          quote_ko: '"마음이 머무는 곳이 집입니다."',
-          characters: ['Protagonist', 'Love Interest A', 'Best Friend']
-        },
-        display_order: 3,
-        is_active: true
+    case 'gallery':
+      content.images = section.images || [];
+      break;
+
+    case 'video':
+      // Extract YouTube ID from URL or use directly
+      if (section.video_url) {
+        const youtubeMatch = section.video_url.match(
+          /(?:youtube\.com\/(?:watch\?v=|embed\/)|youtu\.be\/)([^&\s]+)/
+        );
+        content.youtube_id = youtubeMatch ? youtubeMatch[1] : section.video_url;
       }
-    );
-  } else if (slug === 'memorial-circuit') {
-    // Example for the specific game user mentioned
-    sections.push(
-      {
-        id: 'mc-1',
-        game_id: 'memorial-circuit',
-        type: 'info',
-        title_en: 'Game Info',
-        title_ko: '게임 정보',
-        content: {},
-        display_order: 1,
-        is_active: true
-      },
-      {
-        id: 'mc-2',
-        game_id: 'memorial-circuit',
-        type: 'synopsis',
-        title_en: 'Synopsis',
-        title_ko: '시놉시스',
-        content: {
-          p1_en: 'Deep in the digital void...',
-          p1_ko: '디지털 공허 깊은 곳에서...',
-        },
-        display_order: 2,
-        is_active: true
-      },
-      {
-        id: 'mc-3',
-        game_id: 'memorial-circuit',
-        type: 'video',
-        title_en: 'Trailer',
-        title_ko: '트레일러',
-        content: {
-          youtube_id: 'dQw4w9WgXcQ' // Example ID
-        },
-        display_order: 3,
-        is_active: true
-      },
-      {
-        id: 'mc-4',
-        game_id: 'memorial-circuit',
-        type: 'store',
-        title_en: 'Store',
-        title_ko: '스토어',
-        content: {
-          links: [
-            { label: 'Steam', url: 'https://store.steampowered.com', icon: 'fa-brands fa-steam' },
-            { label: 'Nintendo eShop', url: 'https://nintendo.com', icon: 'fa-solid fa-gamepad' }
-          ]
-        },
-        display_order: 4,
-        is_active: true
-      }
-    );
-  } else {
-    // Default fallback
-    sections.push({
-      id: 'default-1',
-      game_id: slug,
-      type: 'info',
-      title_en: 'Game Info',
-      title_ko: '게임 정보',
-      content: {},
-      display_order: 1,
-      is_active: true
-    });
+      break;
+
+    case 'store':
+      content.links = (section.store_links || []).map(link => ({
+        label: link.name,
+        url: link.url,
+        icon: link.icon || 'fa-solid fa-store'
+      }));
+      break;
+
+    case 'credits':
+      content.credits = section.credits || [];
+      break;
+
+    case 'timeline':
+      content.items = (section.timeline_items || []).map(item => ({
+        date: item.date,
+        text_ko: item.event_ko || '',
+        text_en: item.event_en || '',
+        text_ja: item.event_ja || ''
+      }));
+      break;
+
+    case 'custom':
+      // Custom sections use content fields directly
+      if (section.content_ko) content.content_ko = section.content_ko;
+      if (section.content_en) content.content_en = section.content_en;
+      if (section.content_ja) content.content_ja = section.content_ja;
+      if (section.images?.length) content.images = section.images;
+      if (section.video_url) content.video_url = section.video_url;
+      break;
   }
 
-  return sections.sort((a, b) => a.display_order - b.display_order);
+  return {
+    id: section.id,
+    game_id: section.game_id,
+    type: section.section_type,
+    title_ko: section.title_ko,
+    title_en: section.title_en,
+    title_ja: section.title_ja,
+    content,
+    display_order: section.display_order,
+    is_active: section.is_visible
+  };
+}
+
+// Site settings types
+export type SiteSetting = {
+  id: string;
+  key: string;
+  value_ko?: string;
+  value_en?: string;
+  value_ja?: string;
+  updated_at?: string;
+};
+
+// Fetch a single setting by key
+export async function getSetting(key: string): Promise<SiteSetting | null> {
+  const { data, error } = await supabase
+    .from('company_settings')
+    .select('*')
+    .eq('key', key)
+    .single();
+
+  if (error) {
+    console.error(`Error fetching setting ${key}:`, error);
+    return null;
+  }
+
+  return data;
+}
+
+// Fetch multiple settings by keys
+export async function getSettings(keys: string[]): Promise<Record<string, SiteSetting>> {
+  const { data, error } = await supabase
+    .from('company_settings')
+    .select('*')
+    .in('key', keys);
+
+  if (error) {
+    console.error('Error fetching settings:', error);
+    return {};
+  }
+
+  const result: Record<string, SiteSetting> = {};
+  (data || []).forEach(setting => {
+    result[setting.key] = setting;
+  });
+  return result;
+}
+
+// Get localized setting value
+export function getLocalizedSettingValue(
+  setting: SiteSetting | null | undefined,
+  locale: string
+): string {
+  if (!setting) return '';
+  const localizedField = `value_${locale}` as keyof SiteSetting;
+  return (setting[localizedField] as string) || setting.value_ko || '';
+}
+
+// Fetch game sections from database
+export async function getGameSections(gameIdOrSlug: string): Promise<GameSection[]> {
+  // First, try to get game by slug to get its UUID
+  const { data: game } = await supabase
+    .from('games')
+    .select('id')
+    .eq('slug', gameIdOrSlug)
+    .single();
+
+  const gameId = game?.id || gameIdOrSlug;
+
+  const { data, error } = await supabase
+    .from('game_sections')
+    .select('*')
+    .eq('game_id', gameId)
+    .eq('is_visible', true)
+    .order('display_order', { ascending: true });
+
+  if (error) {
+    console.error('Error fetching game sections:', error);
+    return [];
+  }
+
+  if (!data || data.length === 0) {
+    return [];
+  }
+
+  // Transform DB records to legacy format
+  return (data as GameSectionDB[]).map(transformSectionToLegacy);
 }

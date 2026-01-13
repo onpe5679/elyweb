@@ -4,15 +4,22 @@ import {useTranslations} from 'next-intl';
 import {Link} from '@/i18n/routing';
 import Image from 'next/image';
 
-export default function Hero() {
+const DEFAULT_HERO_IMAGE = 'https://lh3.googleusercontent.com/aida-public/AB6AXuDVHPTFZPasBZtcFBFsRlZf4vhSmH0uyRPHid_2dtW6N7nVFHK8qMryYJvTPiapEcHt3v__ZGBVm0pq9Ksh-4PNTtSOeIa2biWszDq-Vy1yAkc_QJKfml8I4kAhrKW_WXbHpZmFcWdKPw9ehmpkc6YkK9DBZaN_6DYjmUnwbjc9eOVDfDt1JR0eb5raAdiIelbQWh9ifO-cPkPWFf4ifVhmOI6IGXOrmlJK8cMuMKCkUDJg4L6Ziv-mYRjLAOvB_c2f6hnmdxTlyvQ';
+
+type HeroProps = {
+  heroImage?: string;
+};
+
+export default function Hero({ heroImage }: HeroProps) {
   const t = useTranslations('Hero');
+  const imageSrc = heroImage || DEFAULT_HERO_IMAGE;
 
   return (
     <header className="relative h-screen min-h-[600px] flex items-center justify-center overflow-hidden">
         <div className="absolute inset-0 z-0">
             <Image 
               alt="Abstract anime style gaming room background" 
-              src="https://lh3.googleusercontent.com/aida-public/AB6AXuDVHPTFZPasBZtcFBFsRlZf4vhSmH0uyRPHid_2dtW6N7nVFHK8qMryYJvTPiapEcHt3v__ZGBVm0pq9Ksh-4PNTtSOeIa2biWszDq-Vy1yAkc_QJKfml8I4kAhrKW_WXbHpZmFcWdKPw9ehmpkc6YkK9DBZaN_6DYjmUnwbjc9eOVDfDt1JR0eb5raAdiIelbQWh9ifO-cPkPWFf4ifVhmOI6IGXOrmlJK8cMuMKCkUDJg4L6Ziv-mYRjLAOvB_c2f6hnmdxTlyvQ"
+              src={imageSrc}
               fill
               className="object-cover opacity-100 dark:opacity-80"
               priority

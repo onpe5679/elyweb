@@ -1,8 +1,28 @@
-import { Edit, SimpleForm, TextInput, SelectInput, ArrayInput, SimpleFormIterator, BooleanInput, NumberInput, ImageInput, ImageField } from 'react-admin';
+import { 
+    Edit, 
+    SimpleForm, 
+    TextInput, 
+    SelectInput, 
+    ArrayInput, 
+    SimpleFormIterator, 
+    BooleanInput, 
+    NumberInput, 
+    NumberField,
+    ImageInput, 
+    ImageField,
+    ReferenceManyField,
+    Datagrid,
+    TextField,
+    EditButton,
+    DeleteButton,
+    useRecordContext,
+    ChipField,
+    BooleanField
+} from 'react-admin';
 import { LocalizedInput } from '../../components/LocalizedInput';
 import { LocalizedArrayInput } from '../../components/LocalizedArrayInput';
 
-const WEB_URL = import.meta.env.VITE_WEB_API_URL || 'http://localhost:3000';
+const WEB_URL = (import.meta as any).env?.VITE_WEB_API_URL || 'http://localhost:3000';
 
 type ImageValue = string | { src: string; rawFile?: File } | null | undefined;
 
@@ -24,9 +44,74 @@ const parseImageForStorage = (value: File | { src: string; rawFile?: File } | st
     return null;
 };
 
+const AddSectionButton = () => {
+    const record = useRecordContext();
+    if (!record) return null;
+    const url = `#/game_sections/create?source=${encodeURIComponent(JSON.stringify({ game_id: record.id }))}`;
+    return (
+        <a href={url} style={{ 
+            display: 'inline-flex', 
+            alignItems: 'center', 
+            gap: '8px',
+            padding: '8px 16px',
+            backgroundColor: '#1976d2',
+            color: 'white',
+            borderRadius: '4px',
+            textDecoration: 'none',
+            fontSize: '14px',
+            fontWeight: 500
+        }}>
+            + Add Section
+        </a>
+    );
+};
+
+const SectionDivider = ({ title }: { title: string }) => (
+    <div style={{ marginTop: '32px', marginBottom: '16px' }}>
+        <hr style={{ border: 'none', borderTop: '1px solid #e0e0e0', marginBottom: '16px' }} />
+        <h3 style={{ margin: 0, fontSize: '18px', fontWeight: 600, color: '#333' }}>{title}</h3>
+    </div>
+);
+
+const GameSectionsPanel = () => {
+    return (
+        <div style={{ marginTop: '32px' }}>
+            <hr style={{ border: 'none', borderTop: '1px solid #e0e0e0', marginBottom: '24px' }} />
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px' }}>
+                <div>
+                    <h3 style={{ margin: 0, fontSize: '18px', fontWeight: 600, color: '#333' }}>
+                        Game Sections
+                    </h3>
+                    <p style={{ margin: '8px 0 0', fontSize: '14px', color: '#666' }}>
+                        Add custom sections: Info, Synopsis, Gallery, Video, Store, Credits, Timeline, etc.
+                    </p>
+                </div>
+                <AddSectionButton />
+            </div>
+            <ReferenceManyField
+                reference="game_sections"
+                target="game_id"
+                sort={{ field: 'display_order', order: 'ASC' }}
+            >
+                <Datagrid bulkActionButtons={false}>
+                    <NumberField source="display_order" label="Order" />
+                    <ChipField source="section_type" label="Type" />
+                    <TextField source="title_ko" label="Title (KO)" />
+                    <TextField source="title_en" label="Title (EN)" />
+                    <BooleanField source="is_visible" label="Visible" />
+                    <EditButton />
+                    <DeleteButton redirect={false} mutationMode="pessimistic" />
+                </Datagrid>
+            </ReferenceManyField>
+        </div>
+    );
+};
+
 export const GameEdit = () => (
     <Edit>
         <SimpleForm>
+            <h3 style={{ margin: '0 0 16px', fontSize: '18px', fontWeight: 600 }}>Basic Info</h3>
+            
             <TextInput source="slug" fullWidth />
             <LocalizedInput source="title" label="Title" />
             <LocalizedInput source="series" label="Series" />
@@ -46,8 +131,7 @@ export const GameEdit = () => (
                 </SimpleFormIterator>
             </ArrayInput>
 
-            <LocalizedInput source="description" label="Description" multiline rows={4} />
-            <LocalizedInput source="synopsis" label="Synopsis" multiline rows={2} />
+            <SectionDivider title="Images" />
 
             <ImageInput 
                 source="cover_image" 
@@ -69,19 +153,16 @@ export const GameEdit = () => (
                 <ImageField source="src" title="title" />
             </ImageInput>
 
-            <ArrayInput source="gallery_images">
-                <SimpleFormIterator>
-                    <ImageInput source="image" label="Image" accept={{ 'image/*': ['.png', '.jpg', '.jpeg', '.gif', '.webp'] }}>
-                        <ImageField source="src" title="title" />
-                    </ImageInput>
-                </SimpleFormIterator>
-            </ArrayInput>
+            <SectionDivider title="Links & Settings" />
 
-            <TextInput source="steam_url" fullWidth />
-            <TextInput source="trailer_url" fullWidth />
+            <TextInput source="steam_url" fullWidth label="Steam URL" />
+            <TextInput source="trailer_url" fullWidth label="Trailer URL" />
+            <TextInput source="official_url" fullWidth label="Official Website" />
             
             <BooleanInput source="is_featured" />
             <NumberInput source="display_order" />
+
+            <GameSectionsPanel />
         </SimpleForm>
     </Edit>
 );

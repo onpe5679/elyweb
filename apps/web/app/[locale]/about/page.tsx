@@ -1,11 +1,18 @@
 import { getTranslations } from 'next-intl/server';
-import { getLocalizedField, getTimelineEvents } from '@/lib/supabase';
+import { getLocalizedField, getTimelineEvents, getSetting } from '@/lib/supabase';
+
+const DEFAULT_ABOUT_IMAGE = 'https://lh3.googleusercontent.com/aida-public/AB6AXuCuH9zfscNU583mjOoxQHWwtrrxL_URj8Cn-XiQYYOWO8bL_cwElK-MXAWahlUtmzmPW6cc5MtnoE29qELOumVwb9xKsYn2_Z793_xKUJkd0g3lsf0vjq-bfcVaZksoNjdBUueHpyh4FtQ_O3OVsg0_C82cJ2CWkhZKUtWUay2m47G1RayxCQbbtPMHfj6w8-j9qkNUIa3wpaQNHiPg2Vvw5HAWHGsAYfZ-_5iOcsEeYvxeVJZl7vQ6Q2g02XZhZ_O8lRo2XIF-nd4';
 
 export default async function AboutPage({ params }: { params: { locale: string } }) {
   const { locale } = params;
-  const t = await getTranslations('Vision');
-  const tCommon = await getTranslations('Common');
-  const timelineEvents = await getTimelineEvents();
+  const [t, tCommon, timelineEvents, aboutImageSetting] = await Promise.all([
+    getTranslations('Vision'),
+    getTranslations('Common'),
+    getTimelineEvents(),
+    getSetting('about_image'),
+  ]);
+  
+  const aboutImage = aboutImageSetting?.value_ko || DEFAULT_ABOUT_IMAGE;
 
   return (
     <div className="pt-24 pb-16 bg-background-light dark:bg-background-dark min-h-screen">
@@ -24,7 +31,7 @@ export default async function AboutPage({ params }: { params: { locale: string }
             <img
               alt="Studio Elysian"
               className="w-full h-64 md:h-96 object-cover"
-              src="https://lh3.googleusercontent.com/aida-public/AB6AXuCuH9zfscNU583mjOoxQHWwtrrxL_URj8Cn-XiQYYOWO8bL_cwElK-MXAWahlUtmzmPW6cc5MtnoE29qELOumVwb9xKsYn2_Z793_xKUJkd0g3lsf0vjq-bfcVaZksoNjdBUueHpyh4FtQ_O3OVsg0_C82cJ2CWkhZKUtWUay2m47G1RayxCQbbtPMHfj6w8-j9qkNUIa3wpaQNHiPg2Vvw5HAWHGsAYfZ-_5iOcsEeYvxeVJZl7vQ6Q2g02XZhZ_O8lRo2XIF-nd4"
+              src={aboutImage}
             />
           </div>
 

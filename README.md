@@ -22,6 +22,7 @@ Studio Elysian is a comprehensive web solution for a game development company, f
 ### ✨ Key Features
 - **Multi-language Support:** Full localization for Korean, English, and Japanese (ko/en/ja).
 - **Content Management:** Dedicated admin panel to manage games, news, timeline, and company settings.
+- **Custom Game Sections:** Flexible section system - add unlimited sections (Info, Synopsis, Gallery, PV, Store, Credits, etc.) with custom titles and ordering.
 - **Responsive Design:** Optimized for mobile, tablet, and desktop with dark mode support.
 - **Real-time Database:** Seamless integration with Supabase for data and authentication.
 - **Local Image Upload:** Images stored on local filesystem - perfect for home server deployment.
@@ -46,6 +47,7 @@ Studio Elysian is a comprehensive web solution for a game development company, f
 ### ✨ 주요 기능
 - **다국어 지원:** 한국어, 영어, 일본어 완벽 지원 (ko/en/ja).
 - **콘텐츠 관리:** 게임 정보, 뉴스, 타임라인, 회사 설정을 위한 전용 관리자 페이지.
+- **커스텀 게임 섹션:** 유연한 섹션 시스템 - 게임 정보, 시놉시스, 갤러리, PV, 스토어, 크레딧 등 원하는 만큼 섹션 추가 가능. 제목과 순서 자유롭게 지정.
 - **반응형 디자인:** 다크 모드를 지원하며 모바일, 태블릿, 데스크톱에 최적화된 UI.
 - **실시간 데이터베이스:** Supabase를 통한 실시간 데이터 동기화 및 인증.
 - **로컬 이미지 업로드:** 이미지를 로컬 파일시스템에 저장 - 홈 서버 배포에 최적화.
@@ -60,37 +62,57 @@ elyweb/
 ├── apps/
 │   ├── web/                    # Public website (Next.js 14) / 공식 웹사이트
 │   │   ├── app/
-│   │   │   ├── [locale]/       # i18n routes (ko/en/ja)
+│   │   │   ├── [locale]/
+│   │   │   │   ├── page.tsx            # Home page
+│   │   │   │   ├── about/page.tsx      # About page (with timeline)
+│   │   │   │   └── games/
+│   │   │   │       ├── page.tsx        # Game list page
+│   │   │   │       └── [slug]/page.tsx # Game detail page (custom sections)
 │   │   │   └── api/
-│   │   │       └── upload/     # Image upload API endpoint
+│   │   │       └── upload/             # Image upload API endpoint
 │   │   ├── lib/
-│   │   │   └── supabase.ts     # Supabase client & helper functions
-│   │   ├── components/         # React components
+│   │   │   └── supabase.ts             # Supabase client & helper functions
+│   │   ├── components/
+│   │   │   ├── sections/               # Section renderer components
+│   │   │   │   ├── TextSection.tsx
+│   │   │   │   ├── GallerySection.tsx
+│   │   │   │   ├── VideoSection.tsx
+│   │   │   │   ├── StoreSection.tsx
+│   │   │   │   ├── CreditsSection.tsx
+│   │   │   │   └── TimelineSection.tsx
+│   │   │   └── games/
+│   │   │       ├── GameCard.tsx        # Game list card
+│   │   │       └── GameHero.tsx        # Game detail hero banner
 │   │   └── public/
-│   │       └── uploads/        # Uploaded images storage
-│   │           ├── games/      # Game cover/banner images
-│   │           └── news/       # News article images
+│   │       └── uploads/                # Uploaded images storage
+│   │           ├── games/
+│   │           └── news/
 │   └── admin/                  # Admin CMS (React Admin v5) / 관리자 패널
 │       └── src/
 │           ├── components/
-│           │   ├── LocalizedInput.tsx      # Multi-language text input
-│           │   └── LocalizedArrayInput.tsx # Multi-language array input (genres)
+│           │   ├── LocalizedInput.tsx
+│           │   ├── LocalizedArrayInput.tsx
+│           │   └── SortableList.tsx    # Drag & drop ordering
 │           ├── resources/
-│           │   ├── games/      # Game CRUD components
-│           │   ├── news/       # News CRUD components
-│           │   └── timeline/   # Timeline CRUD components
-│           └── dataProvider.ts # Custom data provider with image upload
+│           │   ├── games/
+│           │   │   ├── GameEdit.tsx
+│           │   │   └── GameSections.tsx  # Section management UI
+│           │   ├── game_sections/        # Section CRUD
+│           │   ├── news/
+│           │   └── timeline/
+│           └── dataProvider.ts
 ├── packages/
-│   ├── types/                  # Shared TypeScript types / 공통 타입 정의
-│   ├── db/                     # Supabase client & types / DB 클라이언트
-│   └── config-tailwind/        # Shared Tailwind config / 테일윈드 설정
-├── e2e/                        # Playwright E2E tests / 종단간 테스트
-├── docker/                     # Docker & Nginx configs / 도커 설정
+│   ├── types/                  # Shared TypeScript types
+│   ├── db/                     # Supabase client & types
+│   └── config-tailwind/        # Shared Tailwind config
+├── e2e/                        # Playwright E2E tests
+├── docker/                     # Docker & Nginx configs
 └── supabase/
-    └── migrations/             # Database migrations
+    └── migrations/
         ├── 001_initial.sql
         ├── 002_news_timeline.sql
-        └── 003_genre_series_i18n.sql  # Multi-language genre/series
+        ├── 003_genre_series_i18n.sql
+        └── 004_game_sections.sql       # Custom sections system
 ```
 
 ---
@@ -207,11 +229,58 @@ ALTER TABLE games ADD COLUMN series_en TEXT;
 ALTER TABLE games ADD COLUMN series_ja TEXT;
 ```
 
+**004_game_sections.sql** - Custom game sections system
+```sql
+-- Flexible section system for game detail pages
+CREATE TABLE game_sections (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  game_id UUID NOT NULL REFERENCES games(id) ON DELETE CASCADE,
+  
+  -- Section type: text, gallery, video, store, credits, timeline, custom
+  section_type TEXT NOT NULL DEFAULT 'text',
+  
+  -- Custom section title (multi-language)
+  title_ko TEXT,
+  title_en TEXT,
+  title_ja TEXT,
+  
+  -- Content based on section_type (multi-language for text content)
+  content_ko TEXT,
+  content_en TEXT,
+  content_ja TEXT,
+  
+  -- For gallery/media sections
+  images TEXT[] DEFAULT '{}',
+  video_url TEXT,
+  
+  -- For store sections (array of {name, url, icon} objects)
+  store_links JSONB DEFAULT '[]',
+  
+  -- For credits sections (array of {role, name} objects)
+  credits JSONB DEFAULT '[]',
+  
+  -- For timeline/history sections (array of {date, event} objects)
+  timeline_items JSONB DEFAULT '[]',
+  
+  -- Ordering
+  display_order INTEGER DEFAULT 0,
+  is_visible BOOLEAN DEFAULT true,
+  
+  created_at TIMESTAMPTZ DEFAULT NOW(),
+  updated_at TIMESTAMPTZ DEFAULT NOW()
+);
+
+-- Index for faster queries
+CREATE INDEX idx_game_sections_game_id ON game_sections(game_id);
+CREATE INDEX idx_game_sections_order ON game_sections(game_id, display_order);
+```
+
 ### Schema Overview / 스키마 개요
 
 | Table | Description |
 | :--- | :--- |
 | `games` | Game titles, descriptions (ko/en/ja), genres, series, status, and media |
+| `game_sections` | Custom sections for each game (info, synopsis, gallery, PV, store, credits, etc.) |
 | `news` | Official announcements with multi-language support |
 | `timeline_events` | Company history and milestones |
 | `company_settings` | Global settings and configuration |
@@ -257,6 +326,59 @@ apps/web/public/uploads/
 
 ---
 
+## 🎮 Game Sections System / 게임 섹션 시스템
+
+This project features a **flexible section system** for game detail pages, allowing you to create rich, customizable content for each game.
+
+이 프로젝트는 게임 상세 페이지를 위한 **유연한 섹션 시스템**을 제공하여, 각 게임별로 다양한 콘텐츠를 자유롭게 구성할 수 있습니다.
+
+### Section Types / 섹션 유형
+
+| Type | Description | Use Case |
+| :--- | :--- | :--- |
+| `text` | Rich text content with multi-language support | Game Info, Synopsis, Features |
+| `gallery` | Image gallery with lightbox | Screenshots, Artwork, CG |
+| `video` | Embedded video (YouTube, etc.) | PV, Trailer, Demo Play |
+| `store` | Store links with icons | Steam, STOVE, Epic, etc. |
+| `credits` | Staff/Cast credits list | STAFF, CAST, OST Credits |
+| `timeline` | Project history/milestones | Development history, Events |
+| `custom` | Fully custom content | Any special content |
+
+### Example: Memorial Circuit Sections
+```
+1. [timeline] 프로젝트 연혁 - Development milestones
+2. [text] GAME INFO - Game description and features
+3. [text] SYNOPSIS - Story synopsis
+4. [gallery] GALLERY - Screenshots and artwork
+5. [store] STORE - Steam, STOVE links
+6. [video] PV - Official trailer
+7. [video] DEMO PLAY - Demo gameplay video
+8. [credits] STAFF - Development team credits
+9. [credits] CAST - Voice actor credits
+10. [credits] VOCAL OST - Music credits
+```
+
+### Admin Features / 관리자 기능
+
+- **Add Sections:** Create unlimited sections per game
+- **Custom Titles:** Set custom section titles in Korean/English/Japanese
+- **Drag & Drop Ordering:** Reorder sections with drag and drop
+- **Visibility Toggle:** Show/hide sections without deleting
+- **Section Templates:** Quick-add common section types
+
+### Page Structure / 페이지 구조
+
+```
+/games                    → Game list page (all games with ordering)
+/games/[slug]            → Game detail page (hero + custom sections)
+
+Example:
+/games                    → Shows: Memorial Circuit, Space Empathy, Sharehouse...
+/games/memorial-circuit   → Shows: Hero banner + all custom sections
+```
+
+---
+
 ## 🐳 Deployment / 배포
 
 ### Docker
@@ -290,13 +412,27 @@ For home server deployment without port forwarding:
    - Multi-language fields: Title, Description, Synopsis, Genre, Series (Korean/English/Japanese tabs)
    - Upload cover and banner images directly (no external URL needed)
    - Set game status: Released, Coming Soon, In Development, Publishing
+   - **Ordering:** Adjust `display_order` to control game list order on website
 
-3. **News Management:**
+3. **Game Sections Management:**
+   - Add unlimited custom sections to each game
+   - Section types: Text, Gallery, Video, Store Links, Credits, Timeline
+   - Set custom titles for each section (multi-language)
+   - Drag & drop to reorder sections
+   - Toggle visibility without deleting
+
+4. **News Management:**
    - Publish news articles with multi-language support
    - Toggle `is_published` to control website visibility
    - Upload featured images
+   - **Ordering:** Adjust `display_order` for news article order
 
-4. **Image Upload:**
+5. **Timeline Management:**
+   - Add company milestones and history events
+   - Events displayed on About page automatically
+   - Multi-language support for event descriptions
+
+6. **Image Upload:**
    - Click "Choose File" or drag & drop images
    - Images are automatically uploaded to local storage
    - Supported formats: PNG, JPG, JPEG, GIF, WebP
@@ -310,13 +446,27 @@ For home server deployment without port forwarding:
    - 다국어 필드: 제목, 설명, 시놉시스, 장르, 시리즈 (한국어/영어/일본어 탭)
    - 커버 이미지와 배너 이미지를 직접 업로드 (외부 URL 불필요)
    - 게임 상태 설정: 출시됨, 출시 예정, 개발 중, 퍼블리싱
+   - **순서 조절:** `display_order` 값으로 웹사이트 게임 목록 순서 조절
 
-3. **뉴스 관리:**
+3. **게임 섹션 관리:**
+   - 각 게임에 원하는 만큼 섹션 추가 가능
+   - 섹션 유형: 텍스트, 갤러리, 영상, 스토어 링크, 크레딧, 연혁
+   - 섹션별 커스텀 제목 설정 (다국어 지원)
+   - 드래그 앤 드롭으로 섹션 순서 변경
+   - 삭제 없이 표시/숨김 전환
+
+4. **뉴스 관리:**
    - 다국어 지원으로 뉴스 기사를 발행합니다
    - `is_published` 상태를 변경하여 웹사이트 노출을 제어합니다
    - 대표 이미지를 업로드합니다
+   - **순서 조절:** `display_order` 값으로 뉴스 기사 순서 조절
 
-4. **이미지 업로드:**
+5. **연혁 관리:**
+   - 회사 연혁 및 마일스톤 이벤트 추가
+   - 회사 소개 페이지에 자동으로 표시
+   - 이벤트 설명 다국어 지원
+
+6. **이미지 업로드:**
    - "Choose File" 클릭 또는 드래그 앤 드롭으로 이미지 선택
    - 이미지가 자동으로 로컬 스토리지에 업로드됩니다
    - 지원 형식: PNG, JPG, JPEG, GIF, WebP

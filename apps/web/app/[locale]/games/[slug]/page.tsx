@@ -10,78 +10,95 @@ import {
   Game
 } from '@/lib/supabase';
 
-// Component to render individual sections
 const SectionRenderer = ({ section, game, locale }: { section: GameSection; game: Game; locale: string }) => {
   const content = section.content || {};
-  const isKo = locale === 'ko';
-
-  // Helper for content localization
-  const getLoc = (key: string) => content[`${key}_${locale}`] || content[`${key}_ko`] || '';
-
+  const getLoc = (key: string): string => {
+    const val = content[`${key}_${locale}`] || content[`${key}_ko`] || '';
+    return typeof val === 'string' ? val : '';
+  };
   const title = getLocalizedField(section, 'title', locale);
 
   switch (section.type) {
+    case 'text':
     case 'info':
-      return (
-        <section className="scroll-mt-24" id={`section-${section.id}`}>
-          <h2 className="font-display font-bold text-2xl md:text-3xl text-gray-900 dark:text-white mb-6 flex items-center gap-3">
-            <span className="material-symbols-outlined text-primary text-3xl">info</span>
-            {title}
-          </h2>
-          <div className="prose prose-lg dark:prose-invert text-gray-600 dark:text-gray-300">
-            {getLoc('lead') && <p className="lead font-medium text-primary">{getLoc('lead')}</p>}
-            <p className="whitespace-pre-line">{getLocalizedField(game, 'description', locale)}</p>
-
-            <div className="grid grid-cols-2 gap-4 mt-6 not-prose">
-              <div className="bg-gray-50 dark:bg-gray-800 p-4 rounded-xl">
-                <div className="text-xs text-gray-500 uppercase tracking-wide font-bold mb-1">Genre</div>
-                <div className="font-semibold text-gray-900 dark:text-white">
-                  {getLocalizedField(game, 'genre', locale) || game.genre_ko?.join(', ')}
-                </div>
-              </div>
-              <div className="bg-gray-50 dark:bg-gray-800 p-4 rounded-xl">
-                <div className="text-xs text-gray-500 uppercase tracking-wide font-bold mb-1">Platform</div>
-                <div className="font-semibold text-gray-900 dark:text-white">
-                  {game.platforms?.join(', ')}
-                </div>
-              </div>
-            </div>
-          </div>
-        </section>
-      );
-
     case 'synopsis':
       return (
         <section className="scroll-mt-24" id={`section-${section.id}`}>
           <h2 className="font-display font-bold text-2xl md:text-3xl text-gray-900 dark:text-white mb-6 flex items-center gap-3">
-            <span className="material-symbols-outlined text-primary text-3xl">auto_stories</span>
+            <span className="material-symbols-outlined text-primary text-3xl">
+              {section.type === 'info' ? 'info' : section.type === 'synopsis' ? 'auto_stories' : 'article'}
+            </span>
             {title}
           </h2>
-          <div className="space-y-6 text-gray-600 dark:text-gray-300 leading-relaxed text-lg">
+          <div className="prose prose-lg dark:prose-invert text-gray-600 dark:text-gray-300">
+            {getLoc('lead') && <p className="lead font-medium text-primary">{getLoc('lead')}</p>}
             {getLoc('p1') && <p className="whitespace-pre-line">{getLoc('p1')}</p>}
             {getLoc('p2') && <p className="whitespace-pre-line">{getLoc('p2')}</p>}
+            {getLoc('content') && <p className="whitespace-pre-line">{getLoc('content')}</p>}
 
-            {getLoc('quote') && (
-              <div className="pl-4 border-l-4 border-romance-pink/50 italic bg-gray-50 dark:bg-gray-800/50 p-4 rounded-r-lg">
-                {getLoc('quote')}
+            {section.type === 'info' && (
+              <div className="grid grid-cols-2 gap-4 mt-6 not-prose">
+                <div className="bg-gray-50 dark:bg-gray-800 p-4 rounded-xl">
+                  <div className="text-xs text-gray-500 uppercase tracking-wide font-bold mb-1">Genre</div>
+                  <div className="font-semibold text-gray-900 dark:text-white">
+                    {getLocalizedField(game, 'genre', locale) || game.genre_ko?.join(', ')}
+                  </div>
+                </div>
+                <div className="bg-gray-50 dark:bg-gray-800 p-4 rounded-xl">
+                  <div className="text-xs text-gray-500 uppercase tracking-wide font-bold mb-1">Platform</div>
+                  <div className="font-semibold text-gray-900 dark:text-white">
+                    {game.platforms?.join(', ')}
+                  </div>
+                </div>
               </div>
             )}
 
-            {content.characters && Array.isArray(content.characters) && (
-              <ul className="space-y-2 mt-4 text-base">
-                {content.characters.map((char: string, idx: number) => (
-                  <li key={idx} className="flex items-start gap-2">
-                    <span className="text-romance-pink mt-1"><i className="fa-solid fa-heart"></i></span>
-                    <span>{char}</span>
-                  </li>
-                ))}
-              </ul>
+            {getLoc('quote') && (
+              <div className="pl-4 border-l-4 border-romance-pink/50 italic bg-gray-50 dark:bg-gray-800/50 p-4 rounded-r-lg mt-6">
+                {getLoc('quote')}
+              </div>
             )}
+          </div>
+        </section>
+      );
+
+    case 'gallery':
+      const images = (content.images as string[]) || [];
+      if (images.length === 0) return null;
+      return (
+        <section className="scroll-mt-24" id={`section-${section.id}`}>
+          <h2 className="font-display font-bold text-2xl md:text-3xl text-gray-900 dark:text-white mb-6 flex items-center gap-3">
+            <span className="material-symbols-outlined text-primary text-3xl">photo_library</span>
+            {title}
+          </h2>
+          <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+            {images.map((img, idx) => (
+              <a
+                key={idx}
+                href={img}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="relative aspect-video rounded-xl overflow-hidden group shadow-md hover:shadow-xl transition-shadow"
+              >
+                <img
+                  src={img}
+                  alt={`Gallery image ${idx + 1}`}
+                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                />
+                <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-colors flex items-center justify-center">
+                  <span className="material-symbols-outlined text-white opacity-0 group-hover:opacity-100 transition-opacity text-3xl drop-shadow-lg">
+                    zoom_in
+                  </span>
+                </div>
+              </a>
+            ))}
           </div>
         </section>
       );
 
     case 'timeline':
+      const items = (content.items as { date: string; text_ko?: string; text_en?: string; text_ja?: string }[]) || [];
+      if (items.length === 0) return null;
       return (
         <section className="scroll-mt-24" id={`section-${section.id}`}>
           <h2 className="font-display font-bold text-2xl md:text-3xl text-gray-900 dark:text-white mb-6 flex items-center gap-3">
@@ -90,11 +107,11 @@ const SectionRenderer = ({ section, game, locale }: { section: GameSection; game
           </h2>
           <div className="bg-white dark:bg-surface-dark rounded-2xl p-6 shadow-sm border border-gray-100 dark:border-gray-800">
             <ul className="space-y-4">
-              {content.items?.map((item: any, idx: number) => (
+              {items.map((item, idx) => (
                 <li key={idx} className="flex gap-4 text-sm">
-                  <span className="font-bold text-primary min-w-[60px]">{item.date}</span>
+                  <span className="font-bold text-primary min-w-[80px]">{item.date}</span>
                   <span className="text-gray-600 dark:text-gray-400">
-                    {isKo ? item.text_ko : item.text_en}
+                    {item[`text_${locale}` as keyof typeof item] || item.text_ko || ''}
                   </span>
                 </li>
               ))}
@@ -104,6 +121,7 @@ const SectionRenderer = ({ section, game, locale }: { section: GameSection; game
       );
 
     case 'video':
+      if (!content.youtube_id) return null;
       return (
         <section className="scroll-mt-24" id={`section-${section.id}`}>
           <h2 className="font-display font-bold text-2xl md:text-3xl text-gray-900 dark:text-white mb-6 flex items-center gap-3">
@@ -111,22 +129,22 @@ const SectionRenderer = ({ section, game, locale }: { section: GameSection; game
             {title}
           </h2>
           <div className="aspect-video w-full rounded-2xl overflow-hidden shadow-lg bg-black">
-            {content.youtube_id && (
-              <iframe
-                width="100%"
-                height="100%"
-                src={`https://www.youtube.com/embed/${content.youtube_id}`}
-                title="YouTube video player"
-                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                allowFullScreen
-                className="w-full h-full"
-              ></iframe>
-            )}
+            <iframe
+              width="100%"
+              height="100%"
+              src={`https://www.youtube.com/embed/${content.youtube_id}`}
+              title={title || 'Video'}
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+              allowFullScreen
+              className="w-full h-full"
+            />
           </div>
         </section>
       );
 
     case 'store':
+      const links = (content.links as { label: string; url: string; icon?: string }[]) || [];
+      if (links.length === 0) return null;
       return (
         <section className="scroll-mt-24" id={`section-${section.id}`}>
           <h2 className="font-display font-bold text-2xl md:text-3xl text-gray-900 dark:text-white mb-6 flex items-center gap-3">
@@ -134,7 +152,7 @@ const SectionRenderer = ({ section, game, locale }: { section: GameSection; game
             {title}
           </h2>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            {content.links?.map((link: any, idx: number) => (
+            {links.map((link, idx) => (
               <a
                 key={idx}
                 href={link.url}
@@ -143,12 +161,55 @@ const SectionRenderer = ({ section, game, locale }: { section: GameSection; game
                 className="flex items-center justify-between bg-white dark:bg-surface-dark p-6 rounded-xl shadow-sm border border-gray-100 dark:border-gray-800 hover:border-primary dark:hover:border-primary transition-colors group"
               >
                 <span className="flex items-center gap-3 font-bold text-gray-900 dark:text-white">
-                  {link.icon && <i className={`${link.icon} text-xl w-6 text-center text-gray-400 group-hover:text-primary transition-colors`}></i>}
+                  {link.icon && <i className={`${link.icon} text-xl w-6 text-center text-gray-400 group-hover:text-primary transition-colors`} />}
                   {link.label}
                 </span>
                 <span className="material-symbols-outlined text-gray-400 group-hover:text-primary transition-colors">arrow_outward</span>
               </a>
             ))}
+          </div>
+        </section>
+      );
+
+    case 'credits':
+      const credits = (content.credits as { role: string; name: string }[]) || [];
+      if (credits.length === 0) return null;
+      return (
+        <section className="scroll-mt-24" id={`section-${section.id}`}>
+          <h2 className="font-display font-bold text-2xl md:text-3xl text-gray-900 dark:text-white mb-6 flex items-center gap-3">
+            <span className="material-symbols-outlined text-primary text-3xl">group</span>
+            {title}
+          </h2>
+          <div className="bg-white dark:bg-surface-dark rounded-2xl p-6 shadow-sm border border-gray-100 dark:border-gray-800">
+            <dl className="grid grid-cols-1 sm:grid-cols-2 gap-x-8 gap-y-3">
+              {credits.map((credit, idx) => (
+                <div key={idx} className="flex gap-4">
+                  <dt className="text-gray-500 dark:text-gray-400 min-w-[120px] text-sm font-medium">{credit.role}</dt>
+                  <dd className="text-gray-900 dark:text-white font-semibold">{credit.name}</dd>
+                </div>
+              ))}
+            </dl>
+          </div>
+        </section>
+      );
+
+    case 'custom':
+      const customImages = Array.isArray(content.images) ? (content.images as string[]) : [];
+      return (
+        <section className="scroll-mt-24" id={`section-${section.id}`}>
+          <h2 className="font-display font-bold text-2xl md:text-3xl text-gray-900 dark:text-white mb-6 flex items-center gap-3">
+            <span className="material-symbols-outlined text-primary text-3xl">widgets</span>
+            {title}
+          </h2>
+          <div className="prose prose-lg dark:prose-invert text-gray-600 dark:text-gray-300">
+            {getLoc('content') && <div className="whitespace-pre-line">{getLoc('content')}</div>}
+            {customImages.length > 0 && (
+              <div className="grid grid-cols-2 gap-4 mt-6 not-prose">
+                {customImages.map((img, idx) => (
+                  <img key={idx} src={img} alt="" className="rounded-xl" />
+                ))}
+              </div>
+            )}
           </div>
         </section>
       );

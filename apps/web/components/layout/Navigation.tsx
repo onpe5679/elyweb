@@ -27,7 +27,7 @@ export default function Navigation() {
                     <Link className="text-sm font-medium text-gray-700 dark:text-gray-300 hover:text-primary dark:hover:text-primary transition-colors" href="/">{t('home')}</Link>
                     <Link className="text-sm font-medium text-gray-700 dark:text-gray-300 hover:text-primary dark:hover:text-primary transition-colors" href="/about">{t('about')}</Link>
                     <Link className="text-sm font-medium text-gray-700 dark:text-gray-300 hover:text-primary dark:hover:text-primary transition-colors" href="/news">{t('news')}</Link>
-                    <Link className="text-sm font-medium text-gray-700 dark:text-gray-300 hover:text-primary dark:hover:text-primary transition-colors" href="/games/sharehouse">{t('games')}</Link>
+                    <Link className="text-sm font-medium text-gray-700 dark:text-gray-300 hover:text-primary dark:hover:text-primary transition-colors" href="/games">{t('games')}</Link>
                     <Link className="text-sm font-medium text-gray-700 dark:text-gray-300 hover:text-primary dark:hover:text-primary transition-colors" href="/contact">{t('contact')}</Link>
                     <Link className="px-4 py-2 rounded-full bg-primary text-white text-sm font-bold hover:bg-opacity-90 transition-all shadow-md" href="/press">{t('press')}</Link>
                     <LanguageSwitcher />
@@ -50,7 +50,7 @@ export default function Navigation() {
                     <Link className="block px-3 py-2 rounded-md text-base font-medium text-gray-700 dark:text-gray-300 hover:text-primary dark:hover:text-primary" href="/" onClick={() => setIsMobileMenuOpen(false)}>{t('home')}</Link>
                     <Link className="block px-3 py-2 rounded-md text-base font-medium text-gray-700 dark:text-gray-300 hover:text-primary dark:hover:text-primary" href="/about" onClick={() => setIsMobileMenuOpen(false)}>{t('about')}</Link>
                     <Link className="block px-3 py-2 rounded-md text-base font-medium text-gray-700 dark:text-gray-300 hover:text-primary dark:hover:text-primary" href="/news" onClick={() => setIsMobileMenuOpen(false)}>{t('news')}</Link>
-                    <Link className="block px-3 py-2 rounded-md text-base font-medium text-gray-700 dark:text-gray-300 hover:text-primary dark:hover:text-primary" href="/games/sharehouse" onClick={() => setIsMobileMenuOpen(false)}>{t('games')}</Link>
+                    <Link className="block px-3 py-2 rounded-md text-base font-medium text-gray-700 dark:text-gray-300 hover:text-primary dark:hover:text-primary" href="/games" onClick={() => setIsMobileMenuOpen(false)}>{t('games')}</Link>
                     <Link className="block px-3 py-2 rounded-md text-base font-medium text-gray-700 dark:text-gray-300 hover:text-primary dark:hover:text-primary" href="/contact" onClick={() => setIsMobileMenuOpen(false)}>{t('contact')}</Link>
                     <Link className="block px-3 py-2 rounded-md text-base font-medium text-gray-700 dark:text-gray-300 hover:text-primary dark:hover:text-primary" href="/press" onClick={() => setIsMobileMenuOpen(false)}>{t('press')}</Link>
                 </div>

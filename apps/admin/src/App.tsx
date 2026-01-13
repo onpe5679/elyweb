@@ -1,10 +1,11 @@
-import { Admin, Resource, ListGuesser } from 'react-admin';
+import { Admin, Resource } from 'react-admin';
 import { dataProvider } from './dataProvider';
 import { authProvider } from './authProvider';
 import { GameList, GameEdit, GameCreate } from './resources/games';
+import { GameSectionEdit, GameSectionCreate } from './resources/game_sections';
 import { NewsList, NewsEdit, NewsCreate } from './resources/news';
 import { TimelineList, TimelineEdit, TimelineCreate } from './resources/timeline';
-import { SettingsList, SettingsEdit } from './resources/settings';
+import { SettingsList, SettingsEdit, SettingsCreate } from './resources/settings';
 
 const App = () => (
   <Admin
@@ -18,6 +19,11 @@ const App = () => (
       edit={GameEdit}
       create={GameCreate}
       options={{ label: 'Games' }}
+    />
+    <Resource
+      name="game_sections"
+      edit={GameSectionEdit}
+      create={GameSectionCreate}
     />
     <Resource
       name="news"
@@ -37,6 +43,7 @@ const App = () => (
       name="company_settings"
       list={SettingsList}
       edit={SettingsEdit}
+      create={SettingsCreate}
       options={{ label: 'Settings' }}
     />
   </Admin>

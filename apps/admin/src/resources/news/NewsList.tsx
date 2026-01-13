@@ -1,9 +1,9 @@
 import { List, Datagrid, TextField, BooleanField, DateField, EditButton, DeleteButton } from 'react-admin';
 
 export const NewsList = () => (
-    <List>
+    <List sort={{ field: 'published_at', order: 'DESC' }}>
         <Datagrid rowClick="edit">
-            <TextField source="title_en" label="Title" />
+            <TextField source="title_ko" label="Title" />
             <BooleanField source="is_published" />
             <DateField source="published_at" />
             <EditButton />
