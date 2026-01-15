@@ -8,12 +8,15 @@ import { TimelineList, TimelineEdit, TimelineCreate } from './resources/timeline
 import { SettingsList, SettingsEdit, SettingsCreate } from './resources/settings';
 import { ContactSubmissionList, ContactSubmissionShow, ContactSubmissionEdit } from './resources/contact_submissions';
 import { PressKitList, PressKitEdit, PressKitCreate } from './resources/press_kits';
+import { AuthUserList, AuthUserEdit, AuthUserCreate } from './resources/auth_users';
+import LoginPage from './LoginPage';
 
 const App = () => (
   <Admin
     dataProvider={dataProvider}
     authProvider={authProvider}
     title="Studio Elysian Admin"
+    loginPage={LoginPage}
   >
     <Resource
       name="games"
@@ -61,6 +64,13 @@ const App = () => (
       edit={PressKitEdit}
       create={PressKitCreate}
       options={{ label: 'Press Kits' }}
+    />
+    <Resource
+      name="auth_users"
+      list={AuthUserList}
+      edit={AuthUserEdit}
+      create={AuthUserCreate}
+      options={{ label: 'Users' }}
     />
   </Admin>
 );

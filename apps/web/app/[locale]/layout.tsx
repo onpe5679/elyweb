@@ -24,7 +24,7 @@ export default async function LocaleLayout({ children, params: { locale } }: Pro
   }
 
   const messages = await getMessages();
-  const settings = await getSettings(['contact_email', 'twitter_url', 'youtube_url', 'instagram_url']);
+  const settings = await getSettings(['contact_email', 'twitter_url', 'youtube_url', 'instagram_url', 'favicon']);
   
   const footerSettings = {
     contactEmail: getLocalizedSettingValue(settings.contact_email, locale) || 'contact@studioelysian.com',
@@ -32,10 +32,13 @@ export default async function LocaleLayout({ children, params: { locale } }: Pro
     youtubeUrl: getLocalizedSettingValue(settings.youtube_url, locale) || 'https://youtube.com/@studioelysian',
     instagramUrl: getLocalizedSettingValue(settings.instagram_url, locale) || 'https://instagram.com/studioelysian',
   };
+  
+  const faviconUrl = settings.favicon?.value_ko || '/favicon.ico';
 
   return (
     <html lang={locale} className="dark">
       <head>
+        <link rel="icon" href={faviconUrl} />
         <link
           href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&family=Montserrat:wght@400;600;700;900&display=swap"
           rel="stylesheet"

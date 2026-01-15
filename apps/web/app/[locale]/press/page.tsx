@@ -1,11 +1,9 @@
-import { getPressKits, getLocalizedField, getSettings, getLocalizedSettingValue, PressKit } from '@/lib/supabase';
+import { getPressKits, getLocalizedField, PressKit } from '@/lib/supabase';
 import { getLocale } from 'next-intl/server';
 
 export default async function PressPage() {
   const locale = await getLocale();
   const pressKits = await getPressKits();
-  const settings = await getSettings(['press_email']);
-  const pressEmail = getLocalizedSettingValue(settings.press_email, locale) || 'press@studioelysian.com';
 
   return (
     <div className="pt-24 pb-16 bg-background-light dark:bg-background-dark min-h-screen">
@@ -17,36 +15,6 @@ export default async function PressPage() {
           <h1 className="font-display font-black text-4xl md:text-5xl text-gray-900 dark:text-white">
             Press Kit
           </h1>
-        </div>
-
-        <div className="bg-white dark:bg-surface-dark rounded-2xl p-8 shadow-lg border border-gray-100 dark:border-gray-800 mb-12">
-          <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-4">
-            About Studio Elysian
-          </h2>
-          <p className="text-gray-600 dark:text-gray-300 leading-relaxed mb-6">
-            Studio Elysian is a Korean game development studio founded in 2022, specializing in 
-            story-driven visual novels that combine video, comics, illustrations, and music. 
-            Our team brings together talented individuals from various creative fields to deliver 
-            immersive narrative experiences.
-          </p>
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm">
-            <div>
-              <div className="text-gray-500 dark:text-gray-400">Founded</div>
-              <div className="font-bold text-gray-900 dark:text-white">2022</div>
-            </div>
-            <div>
-              <div className="text-gray-500 dark:text-gray-400">Location</div>
-              <div className="font-bold text-gray-900 dark:text-white">South Korea</div>
-            </div>
-            <div>
-              <div className="text-gray-500 dark:text-gray-400">Genre</div>
-              <div className="font-bold text-gray-900 dark:text-white">Visual Novels</div>
-            </div>
-            <div>
-              <div className="text-gray-500 dark:text-gray-400">Contact</div>
-              <div className="font-bold text-gray-900 dark:text-white">{pressEmail}</div>
-            </div>
-          </div>
         </div>
 
         <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-6">

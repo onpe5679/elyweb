@@ -67,13 +67,17 @@ export async function POST(request: NextRequest) {
     }
 
     let emailSent = false;
+    let adminEmailSent = false;
+    let userEmailSent = false;
     
     if (resend) {
       const notificationEmail = await getNotificationEmail();
+      console.log('[Contact API] Resend configured, notification_email:', notificationEmail);
+      console.log('[Contact API] From email:', resendFromEmail);
 
-      try {
-        if (notificationEmail) {
-          await resend.emails.send({
+      if (notificationEmail) {
+        try {
+          const adminResult = await resend.emails.send({
             from: `Studio Elysian <${resendFromEmail}>`,
             to: notificationEmail,
             subject: `[문의] ${name}님의 새로운 문의`,
@@ -87,9 +91,15 @@ export async function POST(request: NextRequest) {
               <p style="color: #666; font-size: 12px;">이 이메일은 Studio Elysian 웹사이트 문의 폼에서 자동으로 발송되었습니다.</p>
             `,
           });
+          console.log('[Contact API] Admin email result:', adminResult);
+          adminEmailSent = true;
+        } catch (adminEmailError) {
+          console.error('[Contact API] Failed to send admin email:', adminEmailError);
         }
+      }
 
-        await resend.emails.send({
+      try {
+        const userResult = await resend.emails.send({
           from: `Studio Elysian <${resendFromEmail}>`,
           to: email,
           subject: `[Studio Elysian] 문의가 접수되었습니다`,
@@ -109,11 +119,15 @@ export async function POST(request: NextRequest) {
             </div>
           `,
         });
-        
-        emailSent = true;
-      } catch (emailError) {
-        console.error('Failed to send email:', emailError);
+        console.log('[Contact API] User confirmation email result:', userResult);
+        userEmailSent = true;
+      } catch (userEmailError) {
+        console.error('[Contact API] Failed to send user confirmation email:', userEmailError);
       }
+      
+      emailSent = adminEmailSent;
+    } else {
+      console.log('[Contact API] Resend not configured - RESEND_API_KEY missing');
     }
 
     return NextResponse.json(

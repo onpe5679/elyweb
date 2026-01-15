@@ -76,16 +76,105 @@ async function processImageFields(data: Record<string, unknown>, resource: strin
     return processed;
 }
 
+async function getAuthToken(): Promise<string | null> {
+    const { data: { session } } = await supabase.auth.getSession();
+    return session?.access_token || null;
+}
+
+const authUsersProvider = {
+    getList: async () => {
+        const token = await getAuthToken();
+        const response = await fetch(`${webApiUrl}/api/admin/users`, {
+            headers: { 'Authorization': `Bearer ${token}` },
+        });
+        const data = await response.json();
+        return { data, total: data.length };
+    },
+
+    getOne: async (_resource: string, params: { id: string }) => {
+        const token = await getAuthToken();
+        const response = await fetch(`${webApiUrl}/api/admin/users/${params.id}`, {
+            headers: { 'Authorization': `Bearer ${token}` },
+        });
+        const data = await response.json();
+        return { data };
+    },
+
+    create: async (_resource: string, params: { data: { email: string; password: string } }) => {
+        const token = await getAuthToken();
+        const response = await fetch(`${webApiUrl}/api/admin/users`, {
+            method: 'POST',
+            headers: {
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(params.data),
+        });
+        const data = await response.json();
+        if (!response.ok) throw new Error(data.error);
+        return { data };
+    },
+
+    update: async (_resource: string, params: { id: string; data: { email?: string; password?: string } }) => {
+        const token = await getAuthToken();
+        const updateData: Record<string, string> = {};
+        if (params.data.email) updateData.email = params.data.email;
+        if (params.data.password) updateData.password = params.data.password;
+        
+        const response = await fetch(`${webApiUrl}/api/admin/users/${params.id}`, {
+            method: 'PUT',
+            headers: {
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(updateData),
+        });
+        const data = await response.json();
+        if (!response.ok) throw new Error(data.error);
+        return { data };
+    },
+
+    delete: async (_resource: string, params: { id: string }) => {
+        const token = await getAuthToken();
+        const response = await fetch(`${webApiUrl}/api/admin/users/${params.id}`, {
+            method: 'DELETE',
+            headers: { 'Authorization': `Bearer ${token}` },
+        });
+        if (!response.ok) {
+            const error = await response.json();
+            throw new Error(error.error);
+        }
+        return { data: { id: params.id } };
+    },
+};
+
 export const dataProvider: DataProvider = {
     ...baseDataProvider,
 
+    getList: async (resource, params) => {
+        if (resource === 'auth_users') return authUsersProvider.getList();
+        return baseDataProvider.getList(resource, params);
+    },
+
+    getOne: async (resource, params) => {
+        if (resource === 'auth_users') return authUsersProvider.getOne(resource, { id: String(params.id) });
+        return baseDataProvider.getOne(resource, params);
+    },
+
     create: async (resource, params) => {
+        if (resource === 'auth_users') return authUsersProvider.create(resource, params as any);
         const processedData = await processImageFields(params.data, resource);
         return baseDataProvider.create(resource, { ...params, data: processedData });
     },
 
     update: async (resource, params) => {
+        if (resource === 'auth_users') return authUsersProvider.update(resource, params as any);
         const processedData = await processImageFields(params.data, resource);
         return baseDataProvider.update(resource, { ...params, data: processedData });
+    },
+
+    delete: async (resource, params) => {
+        if (resource === 'auth_users') return authUsersProvider.delete(resource, { id: String(params.id) }) as any;
+        return baseDataProvider.delete(resource, params);
     },
 };

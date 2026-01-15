@@ -1,0 +1,9 @@
+tunnel: elysian
+credentials-file: /etc/cloudflared/credentials.json
+
+ingress:
+  - hostname: studioelysian.co
+    service: http://nginx:80
+  - hostname: www.studioelysian.co
+    service: http://nginx:80
+  - service: http_status:404
