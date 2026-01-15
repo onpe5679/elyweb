@@ -1,23 +1,11 @@
-import { useTranslations } from 'next-intl';
+import { getPressKits, getLocalizedField, getSettings, getLocalizedSettingValue, PressKit } from '@/lib/supabase';
+import { getLocale } from 'next-intl/server';
 
-export default function PressPage() {
-  const pressKits = [
-    {
-      title: 'Memorial Circuit Press Kit',
-      description: 'Logos, screenshots, and press materials for Memorial Circuit.',
-      link: '#',
-    },
-    {
-      title: 'Welcome to Sharehouse Press Kit',
-      description: 'Logos, screenshots, and press materials for Welcome to Sharehouse.',
-      link: '#',
-    },
-    {
-      title: 'Studio Elysian Brand Assets',
-      description: 'Official logos, brand guidelines, and company information.',
-      link: '#',
-    },
-  ];
+export default async function PressPage() {
+  const locale = await getLocale();
+  const pressKits = await getPressKits();
+  const settings = await getSettings(['press_email']);
+  const pressEmail = getLocalizedSettingValue(settings.press_email, locale) || 'press@studioelysian.com';
 
   return (
     <div className="pt-24 pb-16 bg-background-light dark:bg-background-dark min-h-screen">
@@ -56,7 +44,7 @@ export default function PressPage() {
             </div>
             <div>
               <div className="text-gray-500 dark:text-gray-400">Contact</div>
-              <div className="font-bold text-gray-900 dark:text-white">press@studioelysian.com</div>
+              <div className="font-bold text-gray-900 dark:text-white">{pressEmail}</div>
             </div>
           </div>
         </div>
@@ -65,27 +53,42 @@ export default function PressPage() {
           Download Press Kits
         </h2>
 
-        <div className="space-y-4">
-          {pressKits.map((kit, index) => (
-            <a
-              key={index}
-              href={kit.link}
-              className="block bg-white dark:bg-surface-dark rounded-xl p-6 shadow-sm border border-gray-100 dark:border-gray-800 hover:border-primary dark:hover:border-primary transition-colors"
-            >
-              <div className="flex items-center justify-between">
-                <div>
-                  <h3 className="text-lg font-bold text-gray-900 dark:text-white mb-1">
-                    {kit.title}
-                  </h3>
-                  <p className="text-gray-500 dark:text-gray-400 text-sm">{kit.description}</p>
+        {pressKits.length === 0 ? (
+          <div className="bg-white dark:bg-surface-dark rounded-xl p-8 text-center border border-gray-100 dark:border-gray-800">
+            <i className="fa-solid fa-folder-open text-4xl text-gray-300 dark:text-gray-600 mb-4"></i>
+            <p className="text-gray-500 dark:text-gray-400">
+              No press kits available yet. Check back later!
+            </p>
+          </div>
+        ) : (
+          <div className="space-y-4">
+            {pressKits.map((kit: PressKit) => (
+              <a
+                key={kit.id}
+                href={kit.file_url || '#'}
+                target={kit.file_url ? '_blank' : undefined}
+                rel={kit.file_url ? 'noopener noreferrer' : undefined}
+                className={`block bg-white dark:bg-surface-dark rounded-xl p-6 shadow-sm border border-gray-100 dark:border-gray-800 hover:border-primary dark:hover:border-primary transition-colors ${
+                  !kit.file_url ? 'cursor-not-allowed opacity-60' : ''
+                }`}
+              >
+                <div className="flex items-center justify-between">
+                  <div>
+                    <h3 className="text-lg font-bold text-gray-900 dark:text-white mb-1">
+                      {getLocalizedField(kit, 'title', locale)}
+                    </h3>
+                    <p className="text-gray-500 dark:text-gray-400 text-sm">
+                      {getLocalizedField(kit, 'description', locale) || 'Download press materials'}
+                    </p>
+                  </div>
+                  <div className="w-10 h-10 bg-primary/10 rounded-full flex items-center justify-center flex-shrink-0">
+                    <i className={`fa-solid ${kit.file_url ? 'fa-download' : 'fa-clock'} text-primary`}></i>
+                  </div>
                 </div>
-                <div className="w-10 h-10 bg-primary/10 rounded-full flex items-center justify-center flex-shrink-0">
-                  <i className="fa-solid fa-download text-primary"></i>
-                </div>
-              </div>
-            </a>
-          ))}
-        </div>
+              </a>
+            ))}
+          </div>
+        )}
       </div>
     </div>
   );

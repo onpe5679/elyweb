@@ -6,6 +6,8 @@ import { GameSectionEdit, GameSectionCreate } from './resources/game_sections';
 import { NewsList, NewsEdit, NewsCreate } from './resources/news';
 import { TimelineList, TimelineEdit, TimelineCreate } from './resources/timeline';
 import { SettingsList, SettingsEdit, SettingsCreate } from './resources/settings';
+import { ContactSubmissionList, ContactSubmissionShow, ContactSubmissionEdit } from './resources/contact_submissions';
+import { PressKitList, PressKitEdit, PressKitCreate } from './resources/press_kits';
 
 const App = () => (
   <Admin
@@ -45,6 +47,20 @@ const App = () => (
       edit={SettingsEdit}
       create={SettingsCreate}
       options={{ label: 'Settings' }}
+    />
+    <Resource
+      name="contact_submissions"
+      list={ContactSubmissionList}
+      show={ContactSubmissionShow}
+      edit={ContactSubmissionEdit}
+      options={{ label: 'Contact' }}
+    />
+    <Resource
+      name="press_kits"
+      list={PressKitList}
+      edit={PressKitEdit}
+      create={PressKitCreate}
+      options={{ label: 'Press Kits' }}
     />
   </Admin>
 );

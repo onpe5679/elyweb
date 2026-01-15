@@ -1,7 +1,17 @@
-import { useTranslations } from 'next-intl';
+import { getTranslations } from 'next-intl/server';
+import { getSettings, getLocalizedSettingValue } from '@/lib/supabase';
+import { getLocale } from 'next-intl/server';
+import { ContactForm } from '@/components/contact/ContactForm';
 
-export default function ContactPage() {
-  const t = useTranslations('Footer');
+export default async function ContactPage() {
+  const t = await getTranslations('Footer');
+  const locale = await getLocale();
+  
+  const settings = await getSettings(['contact_email', 'twitter_url', 'youtube_url', 'instagram_url']);
+  const contactEmail = getLocalizedSettingValue(settings.contact_email, locale) || 'contact@studioelysian.com';
+  const twitterUrl = getLocalizedSettingValue(settings.twitter_url, locale) || 'https://twitter.com/studioelysian';
+  const youtubeUrl = getLocalizedSettingValue(settings.youtube_url, locale) || 'https://youtube.com/@studioelysian';
+  const instagramUrl = getLocalizedSettingValue(settings.instagram_url, locale) || 'https://instagram.com/studioelysian';
 
   return (
     <div className="pt-24 pb-16 bg-background-light dark:bg-background-dark min-h-screen">
@@ -17,47 +27,7 @@ export default function ContactPage() {
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
           <div className="bg-white dark:bg-surface-dark rounded-2xl p-8 shadow-lg border border-gray-100 dark:border-gray-800">
-            <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-6">
-              {t('contactLinks.inquiry')}
-            </h2>
-            <form className="space-y-6">
-              <div>
-                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                  Name
-                </label>
-                <input
-                  type="text"
-                  className="w-full px-4 py-3 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-white focus:ring-2 focus:ring-primary focus:border-transparent"
-                  placeholder="Your name"
-                />
-              </div>
-              <div>
-                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                  Email
-                </label>
-                <input
-                  type="email"
-                  className="w-full px-4 py-3 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-white focus:ring-2 focus:ring-primary focus:border-transparent"
-                  placeholder="your@email.com"
-                />
-              </div>
-              <div>
-                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                  Message
-                </label>
-                <textarea
-                  rows={5}
-                  className="w-full px-4 py-3 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-white focus:ring-2 focus:ring-primary focus:border-transparent"
-                  placeholder="Your message"
-                />
-              </div>
-              <button
-                type="submit"
-                className="w-full px-6 py-3 bg-primary text-white font-bold rounded-lg hover:bg-primary/90 transition-colors"
-              >
-                Send Message
-              </button>
-            </form>
+            <ContactForm inquiryLabel={t('contactLinks.inquiry')} />
           </div>
 
           <div className="space-y-8">
@@ -72,7 +42,7 @@ export default function ContactPage() {
                   </div>
                   <div>
                     <div className="text-sm text-gray-500 dark:text-gray-400">Email</div>
-                    <div className="text-gray-900 dark:text-white">contact@studioelysian.com</div>
+                    <div className="text-gray-900 dark:text-white">{contactEmail}</div>
                   </div>
                 </div>
               </div>
@@ -84,7 +54,7 @@ export default function ContactPage() {
               </h3>
               <div className="flex gap-4">
                 <a
-                  href="https://twitter.com/studioelysian"
+                  href={twitterUrl}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="w-12 h-12 bg-gray-100 dark:bg-gray-800 rounded-full flex items-center justify-center text-gray-600 dark:text-gray-400 hover:bg-primary hover:text-white transition-colors"
@@ -92,7 +62,7 @@ export default function ContactPage() {
                   <i className="fa-brands fa-twitter text-xl"></i>
                 </a>
                 <a
-                  href="https://youtube.com/@studioelysian"
+                  href={youtubeUrl}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="w-12 h-12 bg-gray-100 dark:bg-gray-800 rounded-full flex items-center justify-center text-gray-600 dark:text-gray-400 hover:bg-primary hover:text-white transition-colors"
@@ -100,7 +70,7 @@ export default function ContactPage() {
                   <i className="fa-brands fa-youtube text-xl"></i>
                 </a>
                 <a
-                  href="https://instagram.com/studioelysian"
+                  href={instagramUrl}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="w-12 h-12 bg-gray-100 dark:bg-gray-800 rounded-full flex items-center justify-center text-gray-600 dark:text-gray-400 hover:bg-primary hover:text-white transition-colors"

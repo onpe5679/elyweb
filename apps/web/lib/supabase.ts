@@ -343,6 +343,36 @@ export function getLocalizedSettingValue(
   return (setting[localizedField] as string) || setting.value_ko || '';
 }
 
+export type PressKit = {
+  id: string;
+  title_ko: string;
+  title_en?: string;
+  title_ja?: string;
+  description_ko?: string;
+  description_en?: string;
+  description_ja?: string;
+  file_url?: string;
+  game_id?: string;
+  display_order: number;
+  is_published: boolean;
+  created_at: string;
+};
+
+export async function getPressKits(): Promise<PressKit[]> {
+  const { data, error } = await supabase
+    .from('press_kits')
+    .select('*')
+    .eq('is_published', true)
+    .order('display_order', { ascending: true });
+
+  if (error) {
+    console.error('Error fetching press kits:', error);
+    return [];
+  }
+
+  return data || [];
+}
+
 // Fetch game sections from database
 export async function getGameSections(gameIdOrSlug: string): Promise<GameSection[]> {
   // First, try to get game by slug to get its UUID

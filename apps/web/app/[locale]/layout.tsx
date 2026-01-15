@@ -5,6 +5,7 @@ import { notFound } from 'next/navigation';
 import { routing } from '@/i18n/routing';
 import Navigation from '@/components/layout/Navigation';
 import Footer from '@/components/layout/Footer';
+import { getSettings, getLocalizedSettingValue } from '@/lib/supabase';
 import '../globals.css';
 
 export const metadata: Metadata = {
@@ -23,6 +24,14 @@ export default async function LocaleLayout({ children, params: { locale } }: Pro
   }
 
   const messages = await getMessages();
+  const settings = await getSettings(['contact_email', 'twitter_url', 'youtube_url', 'instagram_url']);
+  
+  const footerSettings = {
+    contactEmail: getLocalizedSettingValue(settings.contact_email, locale) || 'contact@studioelysian.com',
+    twitterUrl: getLocalizedSettingValue(settings.twitter_url, locale) || 'https://twitter.com/studioelysian',
+    youtubeUrl: getLocalizedSettingValue(settings.youtube_url, locale) || 'https://youtube.com/@studioelysian',
+    instagramUrl: getLocalizedSettingValue(settings.instagram_url, locale) || 'https://instagram.com/studioelysian',
+  };
 
   return (
     <html lang={locale} className="dark">
@@ -47,7 +56,7 @@ export default async function LocaleLayout({ children, params: { locale } }: Pro
             <main className="flex-grow">
                 {children}
             </main>
-            <Footer />
+            <Footer settings={footerSettings} />
           </div>
         </NextIntlClientProvider>
       </body>

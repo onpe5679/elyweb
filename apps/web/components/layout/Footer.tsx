@@ -3,7 +3,16 @@
 import {useTranslations} from 'next-intl';
 import {Link} from '@/i18n/routing';
 
-export default function Footer() {
+interface FooterProps {
+  settings: {
+    contactEmail: string;
+    twitterUrl: string;
+    youtubeUrl: string;
+    instagramUrl: string;
+  };
+}
+
+export default function Footer({ settings }: FooterProps) {
   const t = useTranslations('Footer');
   
   return (
@@ -23,10 +32,10 @@ export default function Footer() {
                         {t('desc')}
                     </p>
                     <div className="flex space-x-4 mt-6">
-                        <a className="text-gray-400 hover:text-white transition-colors" href="https://twitter.com/studioelysian" target="_blank" rel="noopener noreferrer"><i className="fa-brands fa-twitter text-xl"></i></a>
-                        <a className="text-gray-400 hover:text-white transition-colors" href="https://youtube.com/@studioelysian" target="_blank" rel="noopener noreferrer"><i className="fa-brands fa-youtube text-xl"></i></a>
-                        <a className="text-gray-400 hover:text-white transition-colors" href="https://instagram.com/studioelysian" target="_blank" rel="noopener noreferrer"><i className="fa-brands fa-instagram text-xl"></i></a>
-                        <a className="text-gray-400 hover:text-white transition-colors" href="mailto:contact@studioelysian.com"><i className="fa-solid fa-envelope text-xl"></i></a>
+                        <a className="text-gray-400 hover:text-white transition-colors" href={settings.twitterUrl} target="_blank" rel="noopener noreferrer"><i className="fa-brands fa-twitter text-xl"></i></a>
+                        <a className="text-gray-400 hover:text-white transition-colors" href={settings.youtubeUrl} target="_blank" rel="noopener noreferrer"><i className="fa-brands fa-youtube text-xl"></i></a>
+                        <a className="text-gray-400 hover:text-white transition-colors" href={settings.instagramUrl} target="_blank" rel="noopener noreferrer"><i className="fa-brands fa-instagram text-xl"></i></a>
+                        <a className="text-gray-400 hover:text-white transition-colors" href={`mailto:${settings.contactEmail}`}><i className="fa-solid fa-envelope text-xl"></i></a>
                     </div>
                 </div>
                 <div>
