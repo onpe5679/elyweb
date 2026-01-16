@@ -25,6 +25,7 @@ export default function VisionSection({ visionImage }: VisionSectionProps) {
                             alt="Retro futuristic room" 
                             src={imageSrc}
                             fill
+                            sizes="(max-width: 768px) 100vw, 50vw"
                             className="object-cover transform group-hover:scale-105 transition-transform duration-500"
                         />
                     </div>
