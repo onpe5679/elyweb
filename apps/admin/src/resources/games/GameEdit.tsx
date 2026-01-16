@@ -114,6 +114,7 @@ export const GameEdit = () => (
             
             <TextInput source="slug" fullWidth />
             <LocalizedInput source="title" label="Title" />
+            <LocalizedInput source="description" label="Description" multiline />
             <LocalizedInput source="series" label="Series" />
             
             <SelectInput source="status" choices={[

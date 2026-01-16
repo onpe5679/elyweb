@@ -5,7 +5,7 @@ import ProjectsSection from '@/components/sections/ProjectsSection';
 import TimelineSection from '@/components/sections/TimelineSection';
 import { getGames, getFeaturedGame, getTimelineEvents, getSettings, getLocalizedSettingValue, Game } from '@/lib/supabase';
 
-export const revalidate = 60;
+export const revalidate = 10;
 
 export default async function HomePage({ params }: { params: { locale: string } }) {
   const [games, featuredGame, timelineEvents, siteSettings] = await Promise.all([

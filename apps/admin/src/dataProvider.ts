@@ -8,6 +8,18 @@ const webApiUrl = import.meta.env.VITE_WEB_API_URL || 'http://localhost:3000';
 
 export const supabase = createClient(supabaseUrl, supabaseAnonKey);
 
+async function revalidateWebsite(): Promise<void> {
+    try {
+        await fetch(`${webApiUrl}/api/revalidate`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({}),
+        });
+    } catch (e) {
+        console.warn('Revalidation failed:', e);
+    }
+}
+
 const baseDataProvider = supabaseDataProvider({
     instanceUrl: supabaseUrl,
     apiKey: supabaseAnonKey,
@@ -164,13 +176,17 @@ export const dataProvider: DataProvider = {
     create: async (resource, params) => {
         if (resource === 'auth_users') return authUsersProvider.create(resource, params as any);
         const processedData = await processImageFields(params.data, resource);
-        return baseDataProvider.create(resource, { ...params, data: processedData });
+        const result = await baseDataProvider.create(resource, { ...params, data: processedData });
+        await revalidateWebsite();
+        return result;
     },
 
     update: async (resource, params) => {
         if (resource === 'auth_users') return authUsersProvider.update(resource, params as any);
         const processedData = await processImageFields(params.data, resource);
-        return baseDataProvider.update(resource, { ...params, data: processedData });
+        const result = await baseDataProvider.update(resource, { ...params, data: processedData });
+        await revalidateWebsite();
+        return result;
     },
 
     delete: async (resource, params) => {

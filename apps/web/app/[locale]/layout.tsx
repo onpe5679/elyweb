@@ -33,12 +33,12 @@ export default async function LocaleLayout({ children, params: { locale } }: Pro
     instagramUrl: getLocalizedSettingValue(settings.instagram_url, locale) || 'https://instagram.com/studioelysian',
   };
   
-  const faviconUrl = settings.favicon?.value_ko || '/favicon.ico';
+  const faviconUrl = settings.favicon?.value_ko;
 
   return (
     <html lang={locale} className="dark">
       <head>
-        <link rel="icon" href={faviconUrl} />
+        {faviconUrl && <link rel="icon" href={faviconUrl} />}
         <link
           href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&family=Montserrat:wght@400;600;700;900&display=swap"
           rel="stylesheet"
