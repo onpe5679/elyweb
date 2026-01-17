@@ -3,3 +3,4 @@ export * from './games';
 export * from './news';
 export * from './timeline';
 export * from './settings';
+export * from './team';

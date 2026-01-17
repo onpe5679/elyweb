@@ -358,6 +358,103 @@ export type PressKit = {
   created_at: string;
 };
 
+export type TeamMember = {
+  id: string;
+  slug: string;
+  name_ko: string;
+  name_en?: string;
+  name_ja?: string;
+  role_ko?: string;
+  role_en?: string;
+  role_ja?: string;
+  bio_ko?: string;
+  bio_en?: string;
+  bio_ja?: string;
+  profile_image?: string;
+  twitter_url?: string;
+  instagram_url?: string;
+  website_url?: string;
+  is_active: boolean;
+  display_order: number;
+  created_at: string;
+};
+
+export async function getTeamMembers(): Promise<TeamMember[]> {
+  const { data, error } = await supabase
+    .from('team_members')
+    .select('*')
+    .eq('is_active', true)
+    .order('display_order', { ascending: true });
+
+  if (error) {
+    console.error('Error fetching team members:', error);
+    return [];
+  }
+
+  return data || [];
+}
+
+export async function getTeamMemberBySlug(slug: string): Promise<TeamMember | null> {
+  const { data, error } = await supabase
+    .from('team_members')
+    .select('*')
+    .eq('slug', slug)
+    .single();
+
+  if (error) {
+    console.error('Error fetching team member:', error);
+    return null;
+  }
+
+  return data;
+}
+
+export type TeamMemberSectionType = 'text' | 'gallery' | 'video' | 'links' | 'projects' | 'skills' | 'timeline' | 'custom';
+
+export type TeamMemberSection = {
+  id: string;
+  team_member_id: string;
+  section_type: TeamMemberSectionType;
+  title_ko?: string;
+  title_en?: string;
+  title_ja?: string;
+  content_ko?: string;
+  content_en?: string;
+  content_ja?: string;
+  images?: string[];
+  video_url?: string;
+  links?: { name: string; url: string; icon?: string }[];
+  projects?: { title_ko?: string; title_en?: string; description_ko?: string; description_en?: string; image?: string; url?: string }[];
+  skills?: { name_ko?: string; name_en?: string; level?: number }[];
+  timeline_items?: { date: string; event_ko?: string; event_en?: string; event_ja?: string }[];
+  display_order: number;
+  is_visible: boolean;
+};
+
+export async function getTeamMemberSections(teamMemberIdOrSlug: string): Promise<TeamMemberSection[]> {
+  const { data: member } = await supabase
+    .from('team_members')
+    .select('id')
+    .eq('slug', teamMemberIdOrSlug)
+    .single();
+
+  const memberId = member?.id || teamMemberIdOrSlug;
+
+  const { data, error } = await supabase
+    .from('team_member_sections')
+    .select('*')
+    .eq('team_member_id', memberId)
+    .eq('is_visible', true)
+    .order('display_order', { ascending: true });
+
+  if (error) {
+    console.error('Error fetching team member sections:', error);
+    return [];
+  }
+
+  return data || [];
+}
+
 export async function getPressKits(): Promise<PressKit[]> {
   const { data, error } = await supabase
     .from('press_kits')

@@ -42,7 +42,7 @@ export const NewsCreate = () => (
 
             <LocalizedInput source="excerpt" label="Excerpt" multiline rows={3} />
             
-            <ImageInput source="cover_image" label="Cover Image" accept="image/*">
+            <ImageInput source="cover_image" label="Cover Image" accept={{ 'image/*': ['.png', '.jpg', '.jpeg', '.gif', '.webp'] }}>
                 <ImageField source="src" title="title" />
             </ImageInput>
 

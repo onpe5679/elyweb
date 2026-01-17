@@ -11,7 +11,7 @@ import { Box, Typography, Divider } from '@mui/material';
 
 const WEB_URL = (import.meta as any).env?.VITE_WEB_API_URL || 'http://localhost:3000';
 
-const IMAGE_SETTING_KEYS = ['hero_image', 'about_image', 'vision_image', 'logo_image', 'favicon'];
+const IMAGE_SETTING_KEYS = ['hero_image', 'about_image', 'vision_image', 'logo_image', 'logo_icon', 'favicon'];
 
 type ImageValue = string | { src: string; rawFile?: File } | null | undefined;
 
@@ -43,7 +43,7 @@ const SettingValueInputs = () => {
         <ImageInput
           source="value_ko"
           label="Image"
-          accept={{ 'image/*': ['.png', '.jpg', '.jpeg', '.gif', '.webp'] }}
+          accept={{ 'image/*': ['.png', '.jpg', '.jpeg', '.gif', '.webp', '.svg'] }}
           format={formatImageForDisplay}
           parse={parseImageForStorage}
         >

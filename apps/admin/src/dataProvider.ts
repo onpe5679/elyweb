@@ -96,11 +96,20 @@ async function getAuthToken(): Promise<string | null> {
 const authUsersProvider = {
     getList: async () => {
         const token = await getAuthToken();
-        const response = await fetch(`${webApiUrl}/api/admin/users`, {
-            headers: { 'Authorization': `Bearer ${token}` },
-        });
-        const data = await response.json();
-        return { data, total: data.length };
+        try {
+            const response = await fetch(`${webApiUrl}/api/admin/users`, {
+                headers: { 'Authorization': `Bearer ${token}` },
+            });
+            if (!response.ok) {
+                const error = await response.json().catch(() => ({ error: 'Network error' }));
+                throw new Error(error.error || `HTTP ${response.status}`);
+            }
+            const data = await response.json();
+            return { data: data || [], total: (data || []).length };
+        } catch (error) {
+            console.error('Failed to fetch users:', error);
+            return { data: [], total: 0 };
+        }
     },
 
     getOne: async (_resource: string, params: { id: string }) => {

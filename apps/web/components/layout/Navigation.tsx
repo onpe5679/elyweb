@@ -5,7 +5,12 @@ import {useTranslations} from 'next-intl';
 import LanguageSwitcher from './LanguageSwitcher';
 import {useState} from 'react';
 
-export default function Navigation() {
+interface NavigationProps {
+  logoImage?: string | null;
+  logoIcon?: string;
+}
+
+export default function Navigation({ logoImage, logoIcon }: NavigationProps) {
   const t = useTranslations('Navigation');
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
@@ -15,9 +20,13 @@ export default function Navigation() {
             <div className="flex justify-between items-center h-20">
                 <div className="flex-shrink-0 flex items-center gap-3">
                     <Link href="/" className="flex items-center gap-3">
-                        <div className="w-10 h-10 bg-primary rounded-full flex items-center justify-center text-white font-bold text-xl shadow-lg">
-                            <i className="fa-solid fa-book-open"></i>
-                        </div>
+                        {(logoImage || logoIcon) ? (
+                            <img src={logoImage || logoIcon} alt="Logo" className="w-10 h-10 rounded-full object-cover shadow-lg" />
+                        ) : (
+                            <div className="w-10 h-10 bg-primary rounded-full flex items-center justify-center text-white font-bold text-xl shadow-lg">
+                                <i className="fa-solid fa-gamepad"></i>
+                            </div>
+                        )}
                         <span className="font-display font-bold text-xl tracking-wider uppercase text-gray-900 dark:text-white">
                             Studio Elysian
                         </span>

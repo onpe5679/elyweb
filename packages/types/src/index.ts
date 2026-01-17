@@ -5,3 +5,4 @@ export * from './settings';
 export * from './common';
 export * from './contact';
 export * from './presskit';
+export * from './team';

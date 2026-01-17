@@ -17,4 +17,10 @@ export type SettingKey =
   | 'contact_email'
   | 'twitter_url'
   | 'youtube_url'
-  | 'instagram_url';
+  | 'instagram_url'
+  | 'hero_image'
+  | 'about_image'
+  | 'vision_image'
+  | 'logo_image'
+  | 'logo_icon'
+  | 'favicon';

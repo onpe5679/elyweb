@@ -9,6 +9,8 @@ import { SettingsList, SettingsEdit, SettingsCreate } from './resources/settings
 import { ContactSubmissionList, ContactSubmissionShow, ContactSubmissionEdit } from './resources/contact_submissions';
 import { PressKitList, PressKitEdit, PressKitCreate } from './resources/press_kits';
 import { AuthUserList, AuthUserEdit, AuthUserCreate } from './resources/auth_users';
+import { TeamMemberList, TeamMemberEdit, TeamMemberCreate } from './resources/team_members';
+import { TeamMemberSectionEdit, TeamMemberSectionCreate } from './resources/team_member_sections';
 import LoginPage from './LoginPage';
 
 const App = () => (
@@ -71,6 +73,18 @@ const App = () => (
       edit={AuthUserEdit}
       create={AuthUserCreate}
       options={{ label: 'Users' }}
+    />
+    <Resource
+      name="team_members"
+      list={TeamMemberList}
+      edit={TeamMemberEdit}
+      create={TeamMemberCreate}
+      options={{ label: 'Team' }}
+    />
+    <Resource
+      name="team_member_sections"
+      edit={TeamMemberSectionEdit}
+      create={TeamMemberSectionCreate}
     />
   </Admin>
 );

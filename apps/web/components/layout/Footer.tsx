@@ -9,6 +9,8 @@ interface FooterProps {
     twitterUrl: string;
     youtubeUrl: string;
     instagramUrl: string;
+    logoImage?: string | null;
+    logoIcon?: string;
   };
 }
 
@@ -21,9 +23,13 @@ export default function Footer({ settings }: FooterProps) {
             <div className="grid grid-cols-1 md:grid-cols-4 gap-12 mb-12">
                 <div className="col-span-1 md:col-span-2">
                     <div className="flex items-center gap-3 mb-6">
-                        <div className="w-8 h-8 bg-primary rounded-full flex items-center justify-center text-white font-bold text-sm">
-                            <i className="fa-solid fa-book-open"></i>
-                        </div>
+                        {(settings.logoImage || settings.logoIcon) ? (
+                            <img src={settings.logoImage || settings.logoIcon} alt="Logo" className="w-8 h-8 rounded-full object-cover" />
+                        ) : (
+                            <div className="w-8 h-8 bg-primary rounded-full flex items-center justify-center text-white font-bold text-sm">
+                                <i className="fa-solid fa-gamepad"></i>
+                            </div>
+                        )}
                         <span className="font-display font-bold text-xl tracking-wider uppercase">
                             Studio Elysian
                         </span>

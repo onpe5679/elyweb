@@ -1,15 +1,17 @@
 import { getTranslations } from 'next-intl/server';
-import { getLocalizedField, getTimelineEvents, getSetting } from '@/lib/supabase';
+import { getLocalizedField, getTimelineEvents, getSetting, getTeamMembers } from '@/lib/supabase';
+import Link from 'next/link';
 
 const DEFAULT_ABOUT_IMAGE = 'https://lh3.googleusercontent.com/aida-public/AB6AXuCuH9zfscNU583mjOoxQHWwtrrxL_URj8Cn-XiQYYOWO8bL_cwElK-MXAWahlUtmzmPW6cc5MtnoE29qELOumVwb9xKsYn2_Z793_xKUJkd0g3lsf0vjq-bfcVaZksoNjdBUueHpyh4FtQ_O3OVsg0_C82cJ2CWkhZKUtWUay2m47G1RayxCQbbtPMHfj6w8-j9qkNUIa3wpaQNHiPg2Vvw5HAWHGsAYfZ-_5iOcsEeYvxeVJZl7vQ6Q2g02XZhZ_O8lRo2XIF-nd4';
 
 export default async function AboutPage({ params }: { params: { locale: string } }) {
   const { locale } = params;
-  const [t, tCommon, timelineEvents, aboutImageSetting] = await Promise.all([
+  const [t, tCommon, timelineEvents, aboutImageSetting, teamMembers] = await Promise.all([
     getTranslations('Vision'),
     getTranslations('Common'),
     getTimelineEvents(),
     getSetting('about_image'),
+    getTeamMembers(),
   ]);
   
   const aboutImage = aboutImageSetting?.value_ko || DEFAULT_ABOUT_IMAGE;
@@ -64,6 +66,53 @@ export default async function AboutPage({ params }: { params: { locale: string }
               <div className="text-sm text-gray-500 uppercase tracking-wide">Reach</div>
             </div>
           </div>
+
+          {/* Team Section */}
+          {teamMembers.length > 0 && (
+            <div className="mt-16 not-prose">
+              <h2 className="font-display font-bold text-3xl text-gray-900 dark:text-white mb-8 border-b border-gray-100 dark:border-gray-800 pb-4">
+                Our Team
+              </h2>
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                {teamMembers.map((member) => (
+                  <Link
+                    key={member.id}
+                    href={`/${locale}/team/${member.slug}`}
+                    className="group bg-white dark:bg-surface-dark rounded-xl overflow-hidden shadow-sm border border-gray-100 dark:border-gray-800 hover:shadow-lg hover:border-primary/30 transition-all duration-300"
+                  >
+                    <div className="aspect-square relative overflow-hidden bg-gray-100 dark:bg-gray-800">
+                      {member.profile_image ? (
+                        <img
+                          src={member.profile_image}
+                          alt={getLocalizedField(member, 'name', locale)}
+                          className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                        />
+                      ) : (
+                        <div className="w-full h-full flex items-center justify-center">
+                          <i className="fa-solid fa-user text-6xl text-gray-300 dark:text-gray-600"></i>
+                        </div>
+                      )}
+                    </div>
+                    <div className="p-5">
+                      <h3 className="font-display font-bold text-lg text-gray-900 dark:text-white group-hover:text-primary transition-colors">
+                        {getLocalizedField(member, 'name', locale)}
+                      </h3>
+                      {(member.role_ko || member.role_en) && (
+                        <p className="text-sm text-primary font-medium mt-1">
+                          {getLocalizedField(member, 'role', locale)}
+                        </p>
+                      )}
+                      {(member.bio_ko || member.bio_en) && (
+                        <p className="text-sm text-gray-600 dark:text-gray-400 mt-2 line-clamp-2">
+                          {getLocalizedField(member, 'bio', locale)}
+                        </p>
+                      )}
+                    </div>
+                  </Link>
+                ))}
+              </div>
+            </div>
+          )}
 
           {/* History Section */}
           <div className="mt-16 not-prose">
