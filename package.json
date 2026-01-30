@@ -8,10 +8,14 @@
     "test": "turbo test",
     "test:e2e": "playwright test",
     "db:generate": "pnpm --filter @repo/db generate",
-    "clean": "turbo clean && rm -rf node_modules"
+    "clean": "turbo clean && rm -rf node_modules",
+    "migrate:images": "tsx scripts/migrate-images.ts"
   },
   "devDependencies": {
     "@playwright/test": "^1.40.0",
+    "@supabase/supabase-js": "^2.93.3",
+    "@types/node": "^20.12.12",
+    "tsx": "^4.7.0",
     "turbo": "^2.0.0",
     "typescript": "^5.3.0"
   },

@@ -1,10 +1,11 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { writeFile, mkdir } from 'fs/promises';
-import { existsSync } from 'fs';
-import path from 'path';
+import { createClient } from '@supabase/supabase-js';
 import { randomUUID } from 'crypto';
 
-const UPLOAD_DIR = path.join(process.cwd(), 'public', 'uploads');
+const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
+const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY!;
+
+const supabase = createClient(supabaseUrl, supabaseServiceKey);
 
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
@@ -29,20 +30,27 @@ export async function POST(request: NextRequest) {
     const bytes = await file.arrayBuffer();
     const buffer = Buffer.from(bytes);
 
-    const ext = path.extname(file.name) || '.jpg';
-    const filename = `${randomUUID()}${ext}`;
-    const folderPath = path.join(UPLOAD_DIR, folder);
+    const ext = file.name.split('.').pop() || 'jpg';
+    const filename = `${randomUUID()}.${ext}`;
+    const filePath = `${folder}/${filename}`;
 
-    if (!existsSync(folderPath)) {
-      await mkdir(folderPath, { recursive: true });
+    const { error: uploadError } = await supabase.storage
+      .from('uploads')
+      .upload(filePath, buffer, {
+        contentType: file.type,
+        upsert: false,
+      });
+
+    if (uploadError) {
+      console.error('Supabase upload error:', uploadError);
+      return NextResponse.json({ error: 'Upload failed' }, { status: 500, headers: corsHeaders });
     }
 
-    const filePath = path.join(folderPath, filename);
-    await writeFile(filePath, buffer);
+    const { data: { publicUrl } } = supabase.storage
+      .from('uploads')
+      .getPublicUrl(filePath);
 
-    const url = `/uploads/${folder}/${filename}`;
-
-    return NextResponse.json({ url }, { headers: corsHeaders });
+    return NextResponse.json({ url: publicUrl }, { headers: corsHeaders });
   } catch (error) {
     console.error('Upload error:', error);
     return NextResponse.json({ error: 'Upload failed' }, { status: 500, headers: corsHeaders });
@@ -52,16 +60,29 @@ export async function POST(request: NextRequest) {
 export async function DELETE(request: NextRequest) {
   try {
     const { searchParams } = new URL(request.url);
-    const filePath = searchParams.get('path');
+    const fileUrl = searchParams.get('path');
 
-    if (!filePath || !filePath.startsWith('/uploads/')) {
+    if (!fileUrl) {
       return NextResponse.json({ error: 'Invalid path' }, { status: 400, headers: corsHeaders });
     }
 
-    const fullPath = path.join(process.cwd(), 'public', filePath);
+    const urlPattern = /\/storage\/v1\/object\/public\/uploads\/(.+)$/;
+    const match = fileUrl.match(urlPattern);
     
-    const { unlink } = await import('fs/promises');
-    await unlink(fullPath);
+    if (!match) {
+      return NextResponse.json({ error: 'Invalid storage URL' }, { status: 400, headers: corsHeaders });
+    }
+
+    const filePath = match[1];
+
+    const { error } = await supabase.storage
+      .from('uploads')
+      .remove([filePath]);
+
+    if (error) {
+      console.error('Delete error:', error);
+      return NextResponse.json({ error: 'Delete failed' }, { status: 500, headers: corsHeaders });
+    }
 
     return NextResponse.json({ success: true }, { headers: corsHeaders });
   } catch (error) {
