@@ -62,11 +62,18 @@ export default function Footer({ settings }: FooterProps) {
                     </ul>
                 </div>
             </div>
-            <div className="border-t border-gray-800 pt-8 flex flex-col md:flex-row justify-between items-center text-sm text-gray-500">
-                <p>{t('rights')}</p>
-                <div className="flex space-x-6 mt-4 md:mt-0">
-                    <a className="hover:text-white transition-colors" href="#">{t('privacy')}</a>
-                    <a className="hover:text-white transition-colors" href="#">{t('terms')}</a>
+            <div className="border-t border-gray-800 pt-8 text-xs text-gray-500 leading-relaxed">
+                <div className="mb-4 space-y-1">
+                    <p>상호(법인명) : 주식회사 스튜디오엘리시안 | 사업자 등록번호 : 373-81-03729 | 대표자 : 우현제</p>
+                    <p>주소 : 경기도 성남시 분당구 대왕판교로645번길 12, 6층 27호(삼평동, 경기창조경제혁신센터)</p>
+                    <p>연락처 : 010-5344-0783 | 이메일 : stdelysian@gmail.com</p>
+                </div>
+                <div className="flex flex-col md:flex-row justify-between items-center text-sm">
+                    <p>{t('rights')}</p>
+                    <div className="flex space-x-6 mt-4 md:mt-0">
+                        <a className="hover:text-white transition-colors" href="#">{t('privacy')}</a>
+                        <a className="hover:text-white transition-colors" href="#">{t('terms')}</a>
+                    </div>
                 </div>
             </div>
         </div>
