@@ -46,7 +46,7 @@ export default async function LocaleLayout({ children, params: { locale } }: Pro
           rel="stylesheet"
         />
         <link
-          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
           rel="stylesheet"
         />
         <link

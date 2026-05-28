@@ -115,7 +115,9 @@ export async function getFeaturedGame(): Promise<Game | null> {
     .from('games')
     .select('*')
     .eq('is_featured', true)
-    .single();
+    .order('display_order', { ascending: true })
+    .limit(1)
+    .maybeSingle();
 
   if (error) {
     console.error('Error fetching featured game:', error);
@@ -149,7 +151,7 @@ export async function getTimelineEvents(): Promise<TimelineEvent[]> {
   const { data, error } = await supabase
     .from('timeline_events')
     .select('*')
-    .order('display_order', { ascending: false });
+    .order('display_order', { ascending: true });
 
   if (error) {
     console.error('Error fetching timeline events:', error);
@@ -167,7 +169,7 @@ export async function getHomeTimelineEvents(): Promise<TimelineEvent[]> {
     .from('timeline_events')
     .select('*')
     .eq('show_on_home', true)
-    .order('display_order', { ascending: false });
+    .order('display_order', { ascending: true });
 
   if (error) {
     console.error('Error fetching home timeline events:', error);

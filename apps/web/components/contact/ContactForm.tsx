@@ -30,7 +30,7 @@ export function ContactForm({ inquiryLabel }: ContactFormProps) {
         throw new Error(data.error || 'Failed to send message');
       }
 
-      setEmailSent(data.emailSent === true);
+      setEmailSent(data.userEmailSent === true);
       setStatus('success');
       setFormData({ name: '', email: '', message: '' });
     } catch (error) {

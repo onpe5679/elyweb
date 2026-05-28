@@ -66,10 +66,9 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    let emailSent = false;
     let adminEmailSent = false;
     let userEmailSent = false;
-    
+
     if (resend) {
       const notificationEmail = await getNotificationEmail();
       console.log('[Contact API] Resend configured, notification_email:', notificationEmail);
@@ -91,8 +90,12 @@ export async function POST(request: NextRequest) {
               <p style="color: #666; font-size: 12px;">이 이메일은 Studio Elysian 웹사이트 문의 폼에서 자동으로 발송되었습니다.</p>
             `,
           });
-          console.log('[Contact API] Admin email result:', adminResult);
-          adminEmailSent = true;
+          if (adminResult.error) {
+            console.error('[Contact API] Admin email rejected by Resend:', adminResult.error);
+          } else {
+            console.log('[Contact API] Admin email sent:', adminResult.data?.id);
+            adminEmailSent = true;
+          }
         } catch (adminEmailError) {
           console.error('[Contact API] Failed to send admin email:', adminEmailError);
         }
@@ -119,19 +122,21 @@ export async function POST(request: NextRequest) {
             </div>
           `,
         });
-        console.log('[Contact API] User confirmation email result:', userResult);
-        userEmailSent = true;
+        if (userResult.error) {
+          console.error('[Contact API] User confirmation email rejected by Resend:', userResult.error);
+        } else {
+          console.log('[Contact API] User confirmation email sent:', userResult.data?.id);
+          userEmailSent = true;
+        }
       } catch (userEmailError) {
         console.error('[Contact API] Failed to send user confirmation email:', userEmailError);
       }
-      
-      emailSent = adminEmailSent;
     } else {
       console.log('[Contact API] Resend not configured - RESEND_API_KEY missing');
     }
 
     return NextResponse.json(
-      { success: true, emailSent, message: emailSent ? 'Message sent successfully' : 'Message saved (email delivery pending)' },
+      { success: true, adminEmailSent, userEmailSent, message: 'Message saved' },
       { headers: corsHeaders }
     );
   } catch (error) {
