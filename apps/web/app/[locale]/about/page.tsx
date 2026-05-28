@@ -1,20 +1,27 @@
 import { getTranslations } from 'next-intl/server';
-import { getLocalizedField, getTimelineEvents, getSetting, getTeamMembers } from '@/lib/supabase';
+import { getLocalizedField, getTimelineEvents, getSetting, getSettings, getLocalizedSettingValue, getTeamMembers } from '@/lib/supabase';
 import Link from 'next/link';
 
 const DEFAULT_ABOUT_IMAGE = 'https://lh3.googleusercontent.com/aida-public/AB6AXuCuH9zfscNU583mjOoxQHWwtrrxL_URj8Cn-XiQYYOWO8bL_cwElK-MXAWahlUtmzmPW6cc5MtnoE29qELOumVwb9xKsYn2_Z793_xKUJkd0g3lsf0vjq-bfcVaZksoNjdBUueHpyh4FtQ_O3OVsg0_C82cJ2CWkhZKUtWUay2m47G1RayxCQbbtPMHfj6w8-j9qkNUIa3wpaQNHiPg2Vvw5HAWHGsAYfZ-_5iOcsEeYvxeVJZl7vQ6Q2g02XZhZ_O8lRo2XIF-nd4';
 
 export default async function AboutPage({ params }: { params: { locale: string } }) {
   const { locale } = params;
-  const [t, tCommon, timelineEvents, aboutImageSetting, teamMembers] = await Promise.all([
+  const [t, tCommon, timelineEvents, aboutImageSetting, teamMembers, siteSettings] = await Promise.all([
     getTranslations('Vision'),
     getTranslations('Common'),
     getTimelineEvents(),
     getSetting('about_image'),
     getTeamMembers(),
+    getSettings(['vision_title', 'vision_description', 'funding_percentage']),
   ]);
-  
+
   const aboutImage = aboutImageSetting?.value_ko || DEFAULT_ABOUT_IMAGE;
+  const visionTitle = getLocalizedSettingValue(siteSettings.vision_title, locale) || t('title');
+  const visionBody = getLocalizedSettingValue(siteSettings.vision_description, locale);
+  const visionParagraphs = visionBody
+    ? visionBody.split(/\n\s*\n/).map((p) => p.trim()).filter(Boolean)
+    : null;
+  const fundingValue = getLocalizedSettingValue(siteSettings.funding_percentage, locale) || '1347%';
 
   return (
     <div className="pt-24 pb-16 bg-background-light dark:bg-background-dark min-h-screen">
@@ -37,10 +44,16 @@ export default async function AboutPage({ params }: { params: { locale: string }
             />
           </div>
 
-          <h2 className="text-primary">{t('title')}</h2>
-          <p>{t('p1')}</p>
-          <p>{t('p2')}</p>
-          <p>{t('p3')}</p>
+          <h2 className="text-primary">{visionTitle}</h2>
+          {visionParagraphs ? (
+            visionParagraphs.map((p, i) => <p key={i}>{p}</p>)
+          ) : (
+            <>
+              <p>{t('p1')}</p>
+              <p>{t('p2')}</p>
+              <p>{t('p3')}</p>
+            </>
+          )}
 
           <h2 className="text-primary mt-12">Our Mission</h2>
           <p>
@@ -58,7 +71,7 @@ export default async function AboutPage({ params }: { params: { locale: string }
               <div className="text-sm text-gray-500 uppercase tracking-wide">Projects</div>
             </div>
             <div className="bg-white dark:bg-surface-dark p-6 rounded-xl text-center shadow-sm border border-gray-100 dark:border-gray-800">
-              <div className="text-3xl font-display font-black text-primary mb-2">296%</div>
+              <div className="text-3xl font-display font-black text-primary mb-2">{fundingValue}</div>
               <div className="text-sm text-gray-500 uppercase tracking-wide">Funding</div>
             </div>
             <div className="bg-white dark:bg-surface-dark p-6 rounded-xl text-center shadow-sm border border-gray-100 dark:border-gray-800">
