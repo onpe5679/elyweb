@@ -27,10 +27,10 @@ export default async function LocaleLayout({ children, params: { locale } }: Pro
   const settings = await getSettings(['contact_email', 'twitter_url', 'youtube_url', 'instagram_url', 'favicon', 'logo_image', 'logo_icon']);
   
   const footerSettings = {
-    contactEmail: getLocalizedSettingValue(settings.contact_email, locale) || 'contact@studioelysian.com',
-    twitterUrl: getLocalizedSettingValue(settings.twitter_url, locale) || 'https://twitter.com/studioelysian',
-    youtubeUrl: getLocalizedSettingValue(settings.youtube_url, locale) || 'https://youtube.com/@studioelysian',
-    instagramUrl: getLocalizedSettingValue(settings.instagram_url, locale) || 'https://instagram.com/studioelysian',
+    contactEmail: getLocalizedSettingValue(settings.contact_email, locale),
+    twitterUrl: getLocalizedSettingValue(settings.twitter_url, locale),
+    youtubeUrl: getLocalizedSettingValue(settings.youtube_url, locale),
+    instagramUrl: getLocalizedSettingValue(settings.instagram_url, locale),
     logoImage: settings.logo_image?.value_ko || null,
     logoIcon: settings.logo_icon?.value_ko || 'fa-solid fa-book-open',
   };

@@ -2,6 +2,7 @@ import {
   Edit,
   SimpleForm,
   TextInput,
+  SelectInput,
   ImageInput,
   ImageField,
   useRecordContext,
@@ -36,6 +37,25 @@ const parseImageForStorage = (value: File | { src: string; rawFile?: File } | st
 const SettingValueInputs = () => {
   const record = useRecordContext();
   const isImageSetting = record && IMAGE_SETTING_KEYS.includes(record.key);
+
+  if (record?.key === 'news_display_mode') {
+    return (
+      <Box>
+        <SelectInput
+          source="value_ko"
+          label="새소식 표시 모드"
+          choices={[
+            { id: 'manual', name: '직접 작성만 (manual)' },
+            { id: 'widget', name: 'X 위젯만 (widget)' },
+            { id: 'both', name: '둘 다 (both)' },
+          ]}
+        />
+        <Typography variant="caption" color="text.secondary">
+          widget = X 타임라인만, manual = 직접 작성 글만, both = 둘 다 표시
+        </Typography>
+      </Box>
+    );
+  }
 
   if (isImageSetting) {
     return (

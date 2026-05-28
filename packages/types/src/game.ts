@@ -24,6 +24,7 @@ export interface Game extends BaseEntity {
   synopsis_en?: string;
   synopsis_ja?: string;
   cover_image?: string;
+  thumbnail_image?: string;
   banner_image?: string;
   gallery_images: string[];
   trailer_url?: string;

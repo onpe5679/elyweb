@@ -22,6 +22,7 @@ export type Game = {
   genre_ja?: string[];
   status: string;
   cover_image?: string;
+  thumbnail_image?: string;
   banner_image?: string;
   steam_url?: string;
   official_url?: string;
@@ -55,6 +56,7 @@ export type TimelineEvent = {
   title_ja?: string;
   description?: string;
   is_active?: boolean;
+  show_on_home?: boolean;
   display_order?: number;
   created_at: string;
 };
@@ -160,9 +162,27 @@ export async function getTimelineEvents(): Promise<TimelineEvent[]> {
   }));
 }
 
+export async function getHomeTimelineEvents(): Promise<TimelineEvent[]> {
+  const { data, error } = await supabase
+    .from('timeline_events')
+    .select('*')
+    .eq('show_on_home', true)
+    .order('display_order', { ascending: false });
+
+  if (error) {
+    console.error('Error fetching home timeline events:', error);
+    return [];
+  }
+
+  return (data || []).map(event => ({
+    ...event,
+    date: event.date_label || event.date || ''
+  }));
+}
+
 export function getStatusTagColor(status: string): string {
   const colorMap: Record<string, string> = {
-    released: 'bg-black/80',
+    released: 'bg-primary/90',
     coming_soon: 'bg-primary/90',
     in_development: 'bg-primary/90',
     publishing: 'bg-pink-500',

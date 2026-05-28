@@ -94,18 +94,14 @@
       "links": {
           "about": "会社紹介",
           "projects": "プロジェクト",
-          "news": "ニュース",
-          "careers": "採用情報"
+          "news": "ニュース"
       },
       "contact": "Contact",
       "contactLinks": {
-          "inquiry": "お問い合わせ",
-          "faq": "FAQ",
-          "partnership": "提携のお問い合わせ"
+          "inquiry": "お問い合わせ"
       },
       "rights": "© 2024 Studio Elysian. All rights reserved.",
-      "privacy": "プライバシーポリシー",
-      "terms": "利用規約"
+      "privacy": "プライバシーポリシー"
   },
   "GamesPage": {
       "title": "ゲーム",

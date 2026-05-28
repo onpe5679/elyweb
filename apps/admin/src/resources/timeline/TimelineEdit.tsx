@@ -25,6 +25,7 @@ export const TimelineEdit = () => (
         <TextInput source="date_label" label="Date Label" required fullWidth />
         <SelectInput source="icon" choices={iconChoices} label="Icon" />
         <BooleanInput source="is_active" label="Active" />
+        <BooleanInput source="show_on_home" label="메인 노출 (Show on home)" />
         <NumberInput source="display_order" label="Display Order" />
       </FormTab>
       <FormTab label="Korean">

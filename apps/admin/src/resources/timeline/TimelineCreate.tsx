@@ -24,6 +24,7 @@ export const TimelineCreate = () => (
         <TextInput source="date_label" label="Date Label" required fullWidth />
         <SelectInput source="icon" choices={iconChoices} label="Icon" defaultValue="flag" />
         <BooleanInput source="is_active" label="Active" defaultValue={true} />
+        <BooleanInput source="show_on_home" label="메인 노출 (Show on home)" defaultValue={false} />
         <NumberInput source="display_order" label="Display Order" defaultValue={0} />
       </FormTab>
       <FormTab label="Korean">

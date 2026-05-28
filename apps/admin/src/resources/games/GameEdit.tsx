@@ -134,9 +134,9 @@ export const GameEdit = () => (
 
             <SectionDivider title="Images" />
 
-            <ImageInput 
-                source="cover_image" 
-                label="Cover Image" 
+            <ImageInput
+                source="cover_image"
+                label="Cover Image"
                 accept={{ 'image/*': ['.png', '.jpg', '.jpeg', '.gif', '.webp'] }}
                 format={formatImageForDisplay}
                 parse={parseImageForStorage}
@@ -144,8 +144,18 @@ export const GameEdit = () => (
                 <ImageField source="src" title="title" />
             </ImageInput>
 
-            <ImageInput 
-                source="banner_image" 
+            <ImageInput
+                source="thumbnail_image"
+                label="Thumbnail (list card)"
+                accept={{ 'image/*': ['.png', '.jpg', '.jpeg', '.gif', '.webp'] }}
+                format={formatImageForDisplay}
+                parse={parseImageForStorage}
+            >
+                <ImageField source="src" title="title" />
+            </ImageInput>
+
+            <ImageInput
+                source="banner_image"
                 label="Banner Image" 
                 accept={{ 'image/*': ['.png', '.jpg', '.jpeg', '.gif', '.webp'] }}
                 format={formatImageForDisplay}

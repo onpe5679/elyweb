@@ -98,18 +98,14 @@
       "links": {
           "about": "회사 소개",
           "projects": "프로젝트",
-          "news": "새소식",
-          "careers": "채용 정보"
+          "news": "새소식"
       },
       "contact": "Contact",
       "contactLinks": {
-          "inquiry": "문의하기",
-          "faq": "FAQ",
-          "partnership": "제휴 문의"
+          "inquiry": "문의하기"
       },
       "rights": "© 2024 Studio Elysian. All rights reserved.",
-      "privacy": "개인정보처리방침",
-      "terms": "이용약관"
+      "privacy": "개인정보처리방침"
   },
   "ProjectSharehouse": {
       "tag": "Romance Comedy",

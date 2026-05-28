@@ -10,5 +10,6 @@ export interface TimelineEvent extends BaseEntity {
   description_ja?: string;
   icon: string;
   is_active: boolean;
+  show_on_home: boolean;
   display_order: number;
 }

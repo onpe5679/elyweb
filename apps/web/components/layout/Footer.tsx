@@ -38,10 +38,18 @@ export default function Footer({ settings }: FooterProps) {
                         {t('desc')}
                     </p>
                     <div className="flex space-x-4 mt-6">
-                        <a className="text-gray-400 hover:text-white transition-colors" href={settings.twitterUrl} target="_blank" rel="noopener noreferrer"><i className="fa-brands fa-twitter text-xl"></i></a>
-                        <a className="text-gray-400 hover:text-white transition-colors" href={settings.youtubeUrl} target="_blank" rel="noopener noreferrer"><i className="fa-brands fa-youtube text-xl"></i></a>
-                        <a className="text-gray-400 hover:text-white transition-colors" href={settings.instagramUrl} target="_blank" rel="noopener noreferrer"><i className="fa-brands fa-instagram text-xl"></i></a>
-                        <a className="text-gray-400 hover:text-white transition-colors" href={`mailto:${settings.contactEmail}`}><i className="fa-solid fa-envelope text-xl"></i></a>
+                        {settings.twitterUrl && (
+                            <a className="text-gray-400 hover:text-white transition-colors" href={settings.twitterUrl} target="_blank" rel="noopener noreferrer"><i className="fa-brands fa-x-twitter text-xl"></i></a>
+                        )}
+                        {settings.youtubeUrl && (
+                            <a className="text-gray-400 hover:text-white transition-colors" href={settings.youtubeUrl} target="_blank" rel="noopener noreferrer"><i className="fa-brands fa-youtube text-xl"></i></a>
+                        )}
+                        {settings.instagramUrl && (
+                            <a className="text-gray-400 hover:text-white transition-colors" href={settings.instagramUrl} target="_blank" rel="noopener noreferrer"><i className="fa-brands fa-instagram text-xl"></i></a>
+                        )}
+                        {settings.contactEmail && (
+                            <a className="text-gray-400 hover:text-white transition-colors" href={`mailto:${settings.contactEmail}`}><i className="fa-solid fa-envelope text-xl"></i></a>
+                        )}
                     </div>
                 </div>
                 <div>
@@ -50,15 +58,12 @@ export default function Footer({ settings }: FooterProps) {
                         <li><Link className="hover:text-primary transition-colors" href="/about">{t('links.about')}</Link></li>
                         <li><Link className="hover:text-primary transition-colors" href="/games">{t('links.projects')}</Link></li>
                         <li><Link className="hover:text-primary transition-colors" href="/news">{t('links.news')}</Link></li>
-                        <li><Link className="hover:text-primary transition-colors" href="/careers">{t('links.careers')}</Link></li>
                     </ul>
                 </div>
                 <div>
                     <h5 className="text-lg font-bold mb-4 text-white">{t('contact')}</h5>
                     <ul className="space-y-2 text-sm text-gray-400">
                         <li><Link className="hover:text-primary transition-colors" href="/contact">{t('contactLinks.inquiry')}</Link></li>
-                        <li><Link className="hover:text-primary transition-colors" href="/faq">{t('contactLinks.faq')}</Link></li>
-                        <li><Link className="hover:text-primary transition-colors" href="/partnership">{t('contactLinks.partnership')}</Link></li>
                     </ul>
                 </div>
             </div>
@@ -71,8 +76,7 @@ export default function Footer({ settings }: FooterProps) {
                 <div className="flex flex-col md:flex-row justify-between items-center text-sm">
                     <p>{t('rights')}</p>
                     <div className="flex space-x-6 mt-4 md:mt-0">
-                        <a className="hover:text-white transition-colors" href="#">{t('privacy')}</a>
-                        <a className="hover:text-white transition-colors" href="#">{t('terms')}</a>
+                        <Link className="hover:text-white transition-colors" href="/privacy">{t('privacy')}</Link>
                     </div>
                 </div>
             </div>

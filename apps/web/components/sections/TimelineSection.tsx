@@ -1,6 +1,7 @@
 'use client';
 
 import { useTranslations } from 'next-intl';
+import { Link } from '@/i18n/routing';
 import { TimelineEvent, getLocalizedField } from '@/lib/supabase';
 
 interface TimelineSectionProps {
@@ -25,7 +26,7 @@ export default function TimelineSection({ events, locale }: TimelineSectionProps
         </h2>
 
         <div className="space-y-8 relative before:absolute before:inset-0 before:ml-5 before:-translate-x-px md:before:mx-auto md:before:translate-x-0 before:h-full before:w-0.5 before:bg-gradient-to-b before:from-transparent before:via-gray-300 before:to-transparent">
-          {events.slice(0, 3).map((event, index) => (
+          {events.map((event, index) => (
             <div
               key={event.id}
               className="relative flex items-center justify-between md:justify-normal md:odd:flex-row-reverse group is-active"
@@ -46,12 +47,12 @@ export default function TimelineSection({ events, locale }: TimelineSectionProps
         </div>
 
         <div className="text-center mt-10">
-          <a
-            href="#"
+          <Link
+            href="/about"
             className="text-sm text-gray-500 dark:text-gray-400 hover:text-primary dark:hover:text-primary underline"
           >
             {t('viewAll')}
-          </a>
+          </Link>
         </div>
       </div>
     </section>

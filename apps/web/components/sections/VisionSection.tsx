@@ -8,11 +8,16 @@ const DEFAULT_VISION_IMAGE = 'https://lh3.googleusercontent.com/aida-public/AB6A
 
 type VisionSectionProps = {
   visionImage?: string;
+  visionTitle?: string;
+  visionBody?: string;
 };
 
-export default function VisionSection({ visionImage }: VisionSectionProps) {
+export default function VisionSection({ visionImage, visionTitle, visionBody }: VisionSectionProps) {
   const t = useTranslations('Vision');
   const imageSrc = visionImage || DEFAULT_VISION_IMAGE;
+  const bodyParagraphs = visionBody
+    ? visionBody.split(/\n\s*\n/).map((p) => p.trim()).filter(Boolean)
+    : null;
 
   return (
     <section className="py-24 bg-surface-light dark:bg-surface-dark transition-colors duration-300">
@@ -33,12 +38,18 @@ export default function VisionSection({ visionImage }: VisionSectionProps) {
                 <div>
                     <h4 className="text-primary font-bold tracking-widest uppercase mb-2 text-sm">{t('label')}</h4>
                     <h2 className="font-display font-bold text-3xl md:text-4xl text-gray-900 dark:text-white mb-6">
-                        {t('title')}
+                        {visionTitle || t('title')}
                     </h2>
                     <div className="space-y-4 text-gray-600 dark:text-gray-300 leading-relaxed">
-                        <p>{t('p1')}</p>
-                        <p>{t('p2')}</p>
-                        <p>{t('p3')}</p>
+                        {bodyParagraphs ? (
+                            bodyParagraphs.map((p, i) => <p key={i}>{p}</p>)
+                        ) : (
+                            <>
+                                <p>{t('p1')}</p>
+                                <p>{t('p2')}</p>
+                                <p>{t('p3')}</p>
+                            </>
+                        )}
                     </div>
                     <div className="mt-8">
                         <Link className="inline-flex items-center text-primary font-bold hover:text-primary/80 transition-colors" href="/about">

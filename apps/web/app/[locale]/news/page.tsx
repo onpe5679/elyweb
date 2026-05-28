@@ -1,6 +1,9 @@
 import { getTranslations } from 'next-intl/server';
-import { getNews, getLocalizedField } from '@/lib/supabase';
+import { getNews, getLocalizedField, getSetting, getLocalizedSettingValue } from '@/lib/supabase';
 import Link from 'next/link';
+import XTimeline from '@/components/news/XTimeline';
+
+export const revalidate = 10;
 
 const DEFAULT_NEWS_IMAGE = 'https://lh3.googleusercontent.com/aida-public/AB6AXuDVHPTFZPasBZtcFBFsRlZf4vhSmH0uyRPHid_2dtW6N7nVFHK8qMryYJvTPiapEcHt3v__ZGBVm0pq9Ksh-4PNTtSOeIa2biWszDq-Vy1yAkc_QJKfml8I4kAhrKW_WXbHpZmFcWdKPw9ehmpkc6YkK9DBZaN_6DYjmUnwbjc9eOVDfDt1JR0eb5raAdiIelbQWh9ifO-cPkPWFf4ifVhmOI6IGXOrmlJK8cMuMKCkUDJg4L6Ziv-mYRjLAOvB_c2f6hnmdxTlyvQ';
 
@@ -12,8 +15,18 @@ function formatDate(dateString: string | undefined): string {
 
 export default async function NewsPage({ params }: { params: { locale: string } }) {
   const { locale } = params;
-  const t = await getTranslations('Navigation');
-  const newsItems = await getNews(true);
+  const [t, modeSetting, handleSetting, newsItems] = await Promise.all([
+    getTranslations('Navigation'),
+    getSetting('news_display_mode'),
+    getSetting('news_widget_x_handle'),
+    getNews(true),
+  ]);
+
+  const displayMode = getLocalizedSettingValue(modeSetting, locale) || 'manual';
+  const xHandle = getLocalizedSettingValue(handleSetting, locale);
+  const showWidget = (displayMode === 'widget' || displayMode === 'both') && !!xHandle;
+  const showManual = displayMode === 'manual' || displayMode === 'both';
+  const isEmpty = !showWidget && (!showManual || newsItems.length === 0);
 
   return (
     <div className="pt-24 pb-16 bg-background-light dark:bg-background-dark min-h-screen">
@@ -27,11 +40,13 @@ export default async function NewsPage({ params }: { params: { locale: string } 
           </h1>
         </div>
 
-        {newsItems.length === 0 ? (
-          <div className="text-center text-gray-500 dark:text-gray-400 py-16">
-            아직 등록된 소식이 없습니다.
+        {showWidget && (
+          <div className="mb-16">
+            <XTimeline handle={xHandle} />
           </div>
-        ) : (
+        )}
+
+        {showManual && newsItems.length > 0 && (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {newsItems.map((item) => (
               <Link
@@ -61,6 +76,12 @@ export default async function NewsPage({ params }: { params: { locale: string } 
                 </article>
               </Link>
             ))}
+          </div>
+        )}
+
+        {isEmpty && (
+          <div className="text-center text-gray-500 dark:text-gray-400 py-16">
+            아직 등록된 소식이 없습니다.
           </div>
         )}
       </div>

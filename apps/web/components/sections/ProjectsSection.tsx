@@ -41,7 +41,7 @@ export default function ProjectsSection({ games, featuredGame, locale }: Project
                 series: getLocalizedField(game, 'series', locale),
                 title: getLocalizedField(game, 'title', locale),
                 desc: getLocalizedField(game, 'description', locale),
-                image: game.cover_image || '',
+                image: game.thumbnail_image || game.cover_image || '',
                 tagColor: getStatusTagColor(game.status),
               }}
               locale={locale}
