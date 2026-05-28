@@ -30,9 +30,17 @@ export default function XTimeline({ handle, height = 600 }: XTimelineProps) {
     let pollTimer: ReturnType<typeof setTimeout>;
     let deadline: ReturnType<typeof setTimeout>;
 
+    // X always injects a 0x0 "rufous-sandbox" iframe and, on failure (429),
+    // a 0-height timeline iframe. Only treat it as rendered when the embed
+    // iframe actually has real height.
+    const isRendered = () => {
+      const f = ref.current?.querySelector('iframe');
+      return !!f && f.offsetHeight > 100;
+    };
+
     const poll = () => {
       if (cancelled) return;
-      if (ref.current?.querySelector('iframe')) {
+      if (isRendered()) {
         setStatus('rendered');
         clearTimeout(deadline);
         return;
@@ -46,8 +54,8 @@ export default function XTimeline({ handle, height = 600 }: XTimelineProps) {
     };
 
     deadline = setTimeout(() => {
-      if (!cancelled && !ref.current?.querySelector('iframe')) setStatus('failed');
-    }, 8000);
+      if (!cancelled && !isRendered()) setStatus('failed');
+    }, 10000);
 
     const SCRIPT_ID = 'twitter-widgets-js';
     if (window.twttr?.widgets) {
