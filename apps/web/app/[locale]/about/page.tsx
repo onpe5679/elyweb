@@ -55,11 +55,8 @@ export default async function AboutPage({ params }: { params: { locale: string }
             </>
           )}
 
-          <h2 className="text-primary mt-12">Our Mission</h2>
-          <p>
-            We believe in the power of stories. Through our visual novels and interactive experiences,
-            we aim to create emotional connections that transcend language and cultural barriers.
-          </p>
+          <h2 className="text-primary mt-12">{t('missionTitle')}</h2>
+          <p>{t('missionBody')}</p>
 
           <div className="grid grid-cols-2 md:grid-cols-4 gap-6 my-12 not-prose">
             <div className="bg-white dark:bg-surface-dark p-6 rounded-xl text-center shadow-sm border border-gray-100 dark:border-gray-800">

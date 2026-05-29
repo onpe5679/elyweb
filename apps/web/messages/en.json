@@ -23,7 +23,9 @@
     "p1": "Studio Elysian is a team founded in 2022 that develops story-driven games combining visual, comic, illustration, and music elements.",
     "p2": "Our team members, each with strengths in their respective fields, come together with the goal of delivering stories that both users and creators can enjoy in various ways.",
     "p3": "Starting with \"Memorial Circuit\", we are developing the \"Old Engine\" universe centered on the theme of \"war and its wounds,\" while also showcasing creative works like \"In Between All Times\" with unique worldviews and settings.",
-    "more": "Learn More About Us"
+    "more": "Learn More About Us",
+    "missionTitle": "Our Mission",
+    "missionBody": "We believe in the power of stories. Through our visual novels and interactive experiences, we aim to create emotional connections that transcend language and cultural barriers."
   },
   "Stats": {
     "year": "Founded",
