@@ -1,153 +1,253 @@
 {
-  "Navigation": {
+  "Site": {
+    "skip": "本文へスキップ",
+    "studioName": "スタジオエリシアン",
     "home": "ホーム",
-    "about": "会社紹介",
+    "works": "作品",
+    "studio": "スタジオ",
     "news": "ニュース",
-    "games": "ゲーム",
+    "press": "プレス",
     "contact": "お問い合わせ",
-    "press": "PRESS"
+    "habom": "ハボムスタジオ",
+    "menu": "メニュー",
+    "close": "閉じる",
+    "language": "言語",
+    "contents": "目次",
+    "mainNav": "メインメニュー",
+    "labelSwitch": "傘下スタジオ",
+    "external": "新しいタブで開きます",
+    "pageTop": "ページの先頭へ"
   },
-  "Hero": {
-    "label": "Immersive Visual Novels",
-    "title1_prefix": "FOR ",
-    "title1_highlight": "STORY-LOVERS",
-    "title1_suffix": ",",
-    "title2": "BY STORYTELLERS",
-    "description": "物語を創る人々、エリシアン。\n私たちはあなたの心を動かす美しい世界を創造します。",
-    "viewProjects": "プロジェクトを見る",
-    "contact": "お問い合わせ"
+  "Title": {
+    "est": "EST. {year}",
+    "menuLabel": "タイトルメニュー",
+    "start": "物語をはじめる",
+    "works": "作品一覧",
+    "studio": "スタジオ",
+    "news": "ニュース",
+    "habom": "ハボムスタジオ",
+    "contact": "お問い合わせ",
+    "keys": "↑ ↓ 選択  ·  Enter 決定",
+    "strips": "収録作",
+    "stripsLabel": "エリシアンの作品へ",
+    "scroll": "スクロール"
+  },
+  "Home": {
+    "chapter": "第{n}章",
+    "worksTitle": "作品",
+    "worksLatin": "Works",
+    "worksSummary": "{works}つの物語 · {series}つのシリーズ",
+    "worksAll": "作品一覧を見る",
+    "worksIndex": "作品索引",
+    "studioTitle": "スタジオ",
+    "studioLatin": "The Studio",
+    "studioMore": "スタジオについて",
+    "chronicleTitle": "年表",
+    "chronicleLatin": "Chronicle",
+    "chronicleAll": "沿革をすべて見る",
+    "labelsTitle": "傘下スタジオ",
+    "labelsLatin": "Studios",
+    "labelsLead": "エリシアンのもとで、それぞれの色の物語をつくっています。",
+    "labelsHere": "現在のページ",
+    "labelsElysianDesc": "戦争と傷、記憶と待つ時間。文芸的なビジュアルノベルをつくります。",
+    "labelsHabomDesc": "明るくてまるい、笑顔の多い物語をつくります。",
+    "labelsVisit": "ハボムスタジオへ",
+    "newsTitle": "ニュース",
+    "newsLatin": "News",
+    "newsBody": "最新情報は公式Xアカウントでいち早くお届けします。",
+    "newsPage": "ニュースページ",
+    "newsX": "Xで見る",
+    "contactLead": "協業・取材・お問い合わせは、いつでもお便りください。",
+    "contactCta": "お問い合わせ",
+    "pressCta": "プレスキット"
+  },
+  "Status": {
+    "released": "配信中",
+    "coming_soon": "近日公開",
+    "in_development": "開発中",
+    "publishing": "パブリッシング"
+  },
+  "Works": {
+    "title": "作品一覧",
+    "latin": "Works",
+    "count": "{count}作品",
+    "filterLabel": "スタジオ",
+    "filterSeries": "シリーズ",
+    "all": "すべて",
+    "allSeries": "すべてのシリーズ",
+    "read": "作品を見る",
+    "empty": "条件に合う作品がありません。",
+    "guest": "傘下スタジオの作品",
+    "no": "No."
+  },
+  "Detail": {
+    "works": "作品",
+    "watch": "PVを見る",
+    "steam": "Steamで見る",
+    "official": "公式サイト",
+    "copy": "リンクをコピー",
+    "copied": "リンクをコピーしました",
+    "demo": "ミニ体験",
+    "sections": "作品案内",
+    "tabAbout": "紹介",
+    "tabGallery": "画像",
+    "tabVideos": "映像",
+    "tabCredits": "スタッフ",
+    "tabHistory": "沿革",
+    "tabStore": "購入",
+    "tabDemo": "体験",
+    "infoTitle": "基本情報",
+    "infoTitleField": "タイトル",
+    "infoSeries": "シリーズ",
+    "infoGenre": "ジャンル",
+    "infoPlatform": "プラットフォーム",
+    "infoDeveloper": "開発",
+    "infoStatus": "ステータス",
+    "infoRelease": "発売日",
+    "storyFallback": "作品紹介",
+    "galleryTitle": "画像",
+    "galleryKeyArt": "公式キービジュアル",
+    "galleryOpen": "{n}枚目の画像を拡大",
+    "galleryPrev": "前の画像",
+    "galleryNext": "次の画像",
+    "galleryCount": "{n} / {total}",
+    "videosTitle": "映像",
+    "videosList": "映像一覧",
+    "videosPlay": "{title}を再生",
+    "videosNow": "再生中",
+    "creditsTitle": "スタッフ",
+    "historyTitle": "沿革",
+    "storeTitle": "購入・ストア",
+    "storePlatforms": "プラットフォーム",
+    "storeVisit": "ストアを開く",
+    "moreTitle": "ほかの作品",
+    "player": "映像プレーヤー",
+    "close": "閉じる"
+  },
+  "Habom": {
+    "wordmarkNote": "デザイン案用の仮ワードマーク · 公式ロゴに差し替え予定",
+    "navWorks": "作品",
+    "navAbout": "紹介",
+    "back": "スタジオエリシアン",
+    "backLong": "スタジオエリシアンに戻る",
+    "kicker": "STUDIO ELYSIAN 傘下スタジオ",
+    "title": "ハボムスタジオ",
+    "copy": "かるく笑って、ながくときめく物語。",
+    "worksTitle": "ハボムの作品",
+    "worksLead": "ハボムスタジオが手がけたゲームです。",
+    "detail": "詳しく見る",
+    "tryDemo": "ゲームページでミニ体験",
+    "aboutTitle": "ハボムスタジオは",
+    "aboutBody": "スタジオエリシアンの傘下スタジオです。明るくカジュアルな作品を担当しています。",
+    "lead": "チームリーダー",
+    "cofounded": "共同開発",
+    "rights": "ハボムスタジオは株式会社スタジオエリシアンの傘下スタジオです。"
+  },
+  "Demo": {
+    "title": "ミニ体験",
+    "lead": "セリフを送って、選択肢を選んでみてください。1分ほどで終わります。",
+    "badge": "SAMPLE",
+    "badgeLong": "デザイン案用のサンプル台本",
+    "note": "実際のゲーム内容ではありません。担当者が体験用台本に差し替えます。",
+    "start": "体験をはじめる",
+    "restart": "最初から",
+    "close": "体験を閉じる",
+    "next": "次のセリフ",
+    "advance": "クリック · Enter · Space で進む",
+    "choicePrompt": "どう答える？",
+    "endTitle": "体験おわり！",
+    "endBody": "続きは本編でお楽しみください。",
+    "again": "もう一度",
+    "steam": "Steamページ",
+    "progress": "{n} / {total}",
+    "dialog": "ミニ体験の会話ウィンドウ",
+    "narration": "ナレーション"
+  },
+  "About": {
+    "title": "スタジオ",
+    "latin": "About",
+    "visionLabel": "Vision",
+    "missionLabel": "Mission",
+    "facts": "数字で見るエリシアン",
+    "people": "メンバー",
+    "peopleLatin": "People",
+    "history": "沿革",
+    "historyLatin": "History",
+    "labels": "傘下スタジオ",
+    "company": "会社情報",
+    "funding": "ファンディング達成率",
+    "profile": "プロフィールを見る"
   },
   "Vision": {
-    "label": "Our Vision",
     "title": "果てしない物語の地平線",
     "p1": "スタジオエリシアンは2022年に設立された、映像、漫画、イラスト、音楽など様々な視聴覚要素が融合したストーリー中心のゲームを開発するチームです。",
     "p2": "各分野で強みを持つチームメンバーが集まり、ユーザーと制作者が共に楽しめる物語を様々な方法で届けることを目標に創作しています。",
     "p3": "「メモリアルサーキット」を皮切りに「戦争とその傷」というテーマを中心とした「オールドエンジン」世界観を展開し、「時の狭間で」のようなユニークな世界観と設定を誇る創造的な作品を発表しています。",
-    "more": "会社紹介を見る",
     "missionTitle": "私たちのミッション",
     "missionBody": "私たちは物語の力を信じています。ビジュアルノベルとインタラクティブな体験を通じて、言語や文化の壁を越える感情的なつながりを生み出すことを目指しています。"
   },
-  "Stats": {
-    "year": "設立年",
-    "projects": "進行プロジェクト",
-    "funding": "ファンディング達成率",
-    "global": "Steam発売"
+  "News": {
+    "title": "ニュース",
+    "latin": "News",
+    "lead": "最新情報は公式Xアカウントでいち早くお届けします。",
+    "empty": "まだニュースはありません。",
+    "back": "ニュース一覧",
+    "xFallbackTitle": "Xで最新情報を見る",
+    "xFallbackBody": "タイムラインを読み込めない場合は、Xで直接ご確認いただけます。",
+    "xOpen": "Xで開く",
+    "loading": "タイムラインを読み込み中"
   },
-  "Projects": {
-    "label": "Our Works",
-    "title": "ゲーム",
-    "memorialCircuit": {
-        "tag": "好評発売中",
-        "series": "Old Engine Series",
-        "title": "メモリアルサーキット",
-        "desc": "「記憶できないなら疑え。」\n戦争とその傷をテーマにしたビジュアルノベル。SF、ロマンス、ミステリーが融合した深いストーリーテリングを体験してください。",
-        "genre1": "ビジュアルノベル",
-        "genre2": "SF",
-        "genre3": "ロマンス",
-        "steam": "Steam Store",
-        "details": "詳細情報"
-    },
-    "spaceEmpathy": {
-        "tag": "近日公開",
-        "overlay": "ユニークな宇宙の世界観と日常の出会い",
-        "series": "Elysian Panorama",
-        "title": "時の狭間で",
-        "desc": "日常とファンタジーが交差する宇宙的ビジュアルノベル。2024年発売予定。",
-        "view": "View Project"
-    },
-    "festival": {
-        "tag": "開発中",
-        "overlay": "戦争の中で咲くドラマ",
-        "series": "Drama Visual Novel",
-        "title": "祭りはまだ終わっていない",
-        "desc": "戦争、恐怖、ドラマが絡み合う深い物語。",
-        "view": "View Project"
-    },
-    "sharehouse": {
-        "tag": "パブリッシング",
-        "overlay": "三人のヒロインと過ごすシェアハウス",
-        "series": "Romance Comedy",
-        "title": "ようこそシェアハウスへ！",
-        "desc": "エリシアンパブリッシング作品。ロマンス日常系ビジュアルノベル。",
-        "view": "View Project"
-    }
+  "Contact": {
+    "title": "お問い合わせ",
+    "latin": "Contact",
+    "lead": "協業・取材・パブリッシングのご相談を受け付けています。いただいたメールアドレスにご返信します。",
+    "formTitle": "お便りを書く",
+    "name": "お名前",
+    "email": "メールアドレス",
+    "message": "内容",
+    "namePlaceholder": "お名前",
+    "emailPlaceholder": "reply@example.com",
+    "messagePlaceholder": "お伝えしたいことをご記入ください。",
+    "send": "送信",
+    "sending": "送信中…",
+    "success": "お問い合わせを受け付けました。",
+    "successBody": "確認のうえ、ご記入のメールアドレスへご返信します。",
+    "successMail": "受付確認メールもお送りしました。",
+    "again": "新しく書く",
+    "previewTitle": "プレビュー環境です",
+    "previewBody": "このデザイン案サーバーでは、お問い合わせは実際に保存・送信されません。本番環境では既存の処理（保存・メール通知）がそのまま動作します。",
+    "error": "送信できませんでした。しばらくしてからもう一度お試しください。",
+    "direct": "直接のご連絡",
+    "follow": "フォロー"
   },
-  "Timeline": {
-      "title": "沿革",
-      "items": {
-          "item1": {
-              "date": "2024.04",
-              "text": "「メモリアルサーキット」Steam正式発売"
-          },
-          "item2": {
-              "date": "2023.11",
-              "text": "G-Star 2023出展（STOVEインディーショーケース選定）"
-          },
-          "item3": {
-              "date": "2022.09",
-              "text": "スタジオエリシアン設立"
-          }
-      },
-      "viewAll": "全沿革を見る"
+  "Press": {
+    "title": "プレス",
+    "latin": "Press Kit",
+    "lead": "ロゴやスクリーンショットなど、取材用の資料をダウンロードできます。",
+    "download": "資料を開く",
+    "preparing": "準備中",
+    "empty": "公開中のプレスキットはまだありません。",
+    "contact": "そのほかの資料はお問い合わせください。"
+  },
+  "Privacy": {
+    "title": "プライバシーポリシー",
+    "empty": "プライバシーポリシーはまだ登録されていません。"
+  },
+  "Team": {
+    "back": "スタジオに戻る",
+    "links": "リンク",
+    "empty": "プロフィールは準備中です。"
   },
   "Footer": {
-      "desc": "スタジオエリシアンは物語の力を信じています。\n私たちはゲームを通じてより広い世界と交流します。",
-      "quickLinks": "クイックリンク",
-      "links": {
-          "about": "会社紹介",
-          "projects": "プロジェクト",
-          "news": "ニュース"
-      },
-      "contact": "Contact",
-      "contactLinks": {
-          "inquiry": "お問い合わせ"
-      },
-      "rights": "© 2024 Studio Elysian. All rights reserved.",
-      "privacy": "プライバシーポリシー"
+    "desc": "スタジオエリシアンは物語の力を信じています。\n私たちはゲームを通じてより広い世界と交流します。",
+    "site": "サイト",
+    "company": "会社情報",
+    "follow": "SNS",
+    "rights": "© Studio Elysian. All rights reserved.",
+    "privacy": "プライバシーポリシー",
+    "colophon": "奥付"
   },
-  "GamesPage": {
-      "title": "ゲーム",
-      "subtitle": "Our Works"
-  },
-  "ProjectSharehouse": {
-      "tag": "Romance Comedy",
-      "title": "ようこそ\nシェアハウスへ！",
-      "subtitle": "三人のヒロインと過ごすドキドキシェアハウスライフ",
-      "historyTitle": "プロジェクト沿革",
-      "history": {
-          "item1": { "date": "2024.05", "text": "PlayX4 B2C & B2B出展参加" },
-          "item2": { "date": "2024.01", "text": "Tumblbugクラウドファンディング300%達成" },
-          "item3": { "date": "2023.11", "text": "プロジェクト開発着手" }
-      },
-      "gameInfo": {
-          "title": "GAME INFO",
-          "lead": "スタジオエリシアン×スタジオハボムの恋愛シミュレーションプロジェクト！",
-          "desc": "シェアハウスで繰り広げられるロマンスコメディ日常！魅力的な三人のヒロインたちと過ごす特別な同居生活が始まります。選択によって変わる彼女たちとの関係、そして隠された物語を確認してください。",
-          "genreLabel": "Genre",
-          "genreValue": "Romance Comedy / Visual Novel",
-          "releaseLabel": "Release",
-          "releaseValue": "2024 (Coming Soon)",
-          "platformLabel": "Platform",
-          "platformValue": "PC (Steam), STOVE",
-          "devLabel": "Developer",
-          "devValue": "Studio Habom / Studio Elysian"
-      },
-      "synopsis": {
-          "title": "SYNOPSIS",
-          "p1": "20XX年、いつものように無職で過ごしていたあなた。\n大学受験に失敗した後、いつものように部屋でアニメを見ていた。",
-          "p2": "モニター越しにガールフレンドたちと交流していた最中、\n後ろから飛んできた両親の一撃と共に上京することになり、他の人々と一緒に暮らすシェアハウスに引っ越すことになった。",
-          "quote": "「頑張っている人ばかりだから見て学んで来いと言われたあなたはシェアハウスの一員として暮らすことになったが、到着してみると何と可愛い女の子三人が家に...?」",
-          "char1": "活発で気が強い性格の「リュ・ジヘ」",
-          "char2": "大人っぽいけどギャップのある魅力の「パク・ユナ」",
-          "char3": "そして可愛くてツンデレな「ホン・セウン」まで。",
-          "outro": "あなたはシェアハウスで三人の可愛い女の子との同居物語を始めることになる。",
-          "credit": "（提供 - スタジオハボム）"
-      },
-      "store": {
-          "title": "STORE",
-          "status": "近日公開",
-          "wishlist": "ウィッシュリストに追加",
-          "officialSite": "公式サイト"
-      }
+  "XTimeline": {
+    "loading": "タイムラインを読み込み中"
   }
 }

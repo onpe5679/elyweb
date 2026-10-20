@@ -5,7 +5,8 @@ import { randomUUID } from 'crypto';
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
 const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY!;
 
-const supabase = createClient(supabaseUrl, supabaseServiceKey);
+// Null in the credential-less design preview, where uploads are refused.
+const supabase = supabaseUrl && supabaseServiceKey ? createClient(supabaseUrl, supabaseServiceKey) : null;
 
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
@@ -13,11 +14,14 @@ const corsHeaders = {
   'Access-Control-Allow-Headers': 'Content-Type, Authorization',
 };
 
+const notConfigured = () => NextResponse.json({ error: 'Storage is not configured' }, { status: 503, headers: corsHeaders });
+
 export async function OPTIONS() {
   return NextResponse.json({}, { headers: corsHeaders });
 }
 
 export async function POST(request: NextRequest) {
+  if (!supabase) return notConfigured();
   try {
     const formData = await request.formData();
     const file = formData.get('file') as File | null;
@@ -58,6 +62,7 @@ export async function POST(request: NextRequest) {
 }
 
 export async function DELETE(request: NextRequest) {
+  if (!supabase) return notConfigured();
   try {
     const { searchParams } = new URL(request.url);
     const fileUrl = searchParams.get('path');

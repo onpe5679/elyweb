@@ -1,7 +1,10 @@
 import type { Config } from "tailwindcss";
 
+// Colours are CSS variables (see app/globals.css) so each studio label can re-theme the
+// same components: `.theme-elysian` (paper / ink / vermilion) and `.theme-habom` (cream / pink / butter).
+const v = (name: string) => `rgb(var(--${name}) / <alpha-value>)`;
+
 const config: Config = {
-  darkMode: "class",
   content: [
     "./app/**/*.{js,ts,jsx,tsx,mdx}",
     "./components/**/*.{js,ts,jsx,tsx,mdx}",
@@ -9,46 +12,69 @@ const config: Config = {
   theme: {
     extend: {
       colors: {
-        primary: "#7C3AED", 
-        "background-light": "#F3F4F6", 
-        "background-dark": "#0F172A", 
-        "surface-light": "#FFFFFF",
-        "surface-dark": "#1E293B",
-        "text-light": "#111827",
-        "text-dark": "#E2E8F0",
-        "accent-light": "#4F46E5",
-        "accent-dark": "#818CF8",
-        "romance-pink": "#FF8DA1",
+        paper: v("paper"),
+        "paper-deep": v("paper-deep"),
+        ink: v("ink"),
+        "ink-soft": v("ink-soft"),
+        "ink-mute": v("ink-mute"),
+        rule: v("rule"),
+        accent: v("accent"),
+        "accent-ink": v("accent-ink"),
+        night: v("night"),
+        "night-2": v("night-2"),
+        "on-night": v("on-night"),
+        "on-night-mute": v("on-night-mute"),
+        "accent-night": v("accent-night"),
+        // Habom palette (also exposed as fixed colours for cross-label previews)
+        cream: "#FFF8F0",
+        blush: "#FDE7EE",
+        petal: "#F49AB5",
+        rose: "#C9416D",
+        butter: "#FFD978",
+        "butter-soft": "#FFF1C7",
+        plum: "#4A2B38",
+        "plum-soft": "#7A5866",
       },
       fontFamily: {
-        display: ["Montserrat", "sans-serif"],
-        body: ["Noto Sans KR", "sans-serif"],
+        serif: ["var(--font-serif)", "var(--font-serif-ja)", "serif"],
+        sans: ["var(--font-sans)", "var(--font-sans-ja)", "system-ui", "sans-serif"],
+        latin: ["var(--font-latin)", "var(--font-serif)", "serif"],
+        mono: ["var(--font-mono)", "ui-monospace", "monospace"],
+        round: ["var(--font-round)", "var(--font-round-latin)", "var(--font-sans)", "sans-serif"],
+        "round-latin": ["var(--font-round-latin)", "var(--font-round)", "sans-serif"],
       },
-      borderRadius: {
-        DEFAULT: "0.5rem",
-        'xl': '1rem',
-        '2xl': '1.5rem',
-        '3xl': '2rem',
+      maxWidth: {
+        page: "82rem",
       },
-      animation: {
-        'fade-in-down': 'fadeInDown 0.5s ease-out',
-        'fade-in-up': 'fadeInUp 0.5s ease-out',
+      letterSpacing: {
+        label: "0.18em",
       },
       keyframes: {
-        fadeInDown: {
-          '0%': { opacity: '0', transform: 'translateY(-10px)' },
-          '100%': { opacity: '1', transform: 'translateY(0)' },
+        "cell-in": {
+          "0%": { opacity: "0", transform: "translateY(6px)" },
+          "100%": { opacity: "1", transform: "translateY(0)" },
         },
-        fadeInUp: {
-          '0%': { opacity: '0', transform: 'translateY(10px)' },
-          '100%': { opacity: '1', transform: 'translateY(0)' },
+        "rise-in": {
+          "0%": { opacity: "0", transform: "translateY(18px)" },
+          "100%": { opacity: "1", transform: "translateY(0)" },
         },
-      }
+        blink: {
+          "0%, 49%": { opacity: "1" },
+          "50%, 100%": { opacity: "0" },
+        },
+        float: {
+          "0%, 100%": { transform: "translateY(0)" },
+          "50%": { transform: "translateY(-6px)" },
+        },
+      },
+      animation: {
+        "cell-in": "cell-in 0.5s cubic-bezier(.2,.7,.2,1) both",
+        "rise-in": "rise-in 0.8s cubic-bezier(.2,.7,.2,1) both",
+        blink: "blink 1.1s steps(1) infinite",
+        float: "float 4s ease-in-out infinite",
+      },
     },
   },
-  plugins: [
-    require('@tailwindcss/typography'),
-    require('@tailwindcss/forms'),
-  ],
+  plugins: [require("@tailwindcss/forms")({ strategy: "class" })],
 };
 export default config;

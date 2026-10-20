@@ -1,9 +1,19 @@
 import { createClient } from '@supabase/supabase-js';
+import snapshot from './snapshot/content.json';
 
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
-const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!;
+const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
+const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
 
-export const supabase = createClient(supabaseUrl, supabaseAnonKey);
+// Without Supabase credentials (local design preview) every reader below falls back to
+// lib/snapshot/content.json — a read-only capture of the public site's content.
+export const supabase = supabaseUrl && supabaseAnonKey ? createClient(supabaseUrl, supabaseAnonKey) : null;
+export const isSnapshotMode = !supabase;
+
+type SnapshotTable = keyof Omit<typeof snapshot, 'source'>;
+function fromSnapshot<T>(table: SnapshotTable): T[] {
+  return (snapshot[table] as unknown as T[]) || [];
+}
+const byOrder = <T extends { display_order?: number }>(a: T, b: T) => (a.display_order ?? 0) - (b.display_order ?? 0);
 
 export type Game = {
   id: string;
@@ -27,6 +37,12 @@ export type Game = {
   steam_url?: string;
   official_url?: string;
   platforms?: string[];
+  developer?: string | null;
+  release_date?: string | null;
+  trailer_url?: string | null;
+  gallery_images?: string[] | null;
+  project_timeline?: GameTimelineItem[] | null;
+  display_order?: number;
   is_featured: boolean;
   created_at: string;
 };
@@ -46,6 +62,8 @@ export type News = {
   created_at: string;
   display_order?: number;
 };
+
+export type GameTimelineItem = { date: string; title_ko?: string; title_en?: string; title_ja?: string };
 
 export type TimelineEvent = {
   id: string;
@@ -82,6 +100,7 @@ export function getLocalizedArray<T extends Record<string, unknown>>(
 }
 
 export async function getGames(): Promise<Game[]> {
+  if (!supabase) return fromSnapshot<Game>('games').sort(byOrder);
   const { data, error } = await supabase
     .from('games')
     .select('*')
@@ -96,6 +115,7 @@ export async function getGames(): Promise<Game[]> {
 }
 
 export async function getGameBySlug(slug: string): Promise<Game | null> {
+  if (!supabase) return fromSnapshot<Game>('games').find((g) => g.slug === slug) || null;
   const { data, error } = await supabase
     .from('games')
     .select('*')
@@ -111,6 +131,7 @@ export async function getGameBySlug(slug: string): Promise<Game | null> {
 }
 
 export async function getFeaturedGame(): Promise<Game | null> {
+  if (!supabase) return fromSnapshot<Game>('games').sort(byOrder).find((g) => g.is_featured) || null;
   const { data, error } = await supabase
     .from('games')
     .select('*')
@@ -128,6 +149,7 @@ export async function getFeaturedGame(): Promise<Game | null> {
 }
 
 export async function getNews(publishedOnly = true): Promise<News[]> {
+  if (!supabase) return fromSnapshot<News>('news').filter((n) => !publishedOnly || n.is_published);
   let query = supabase
     .from('news')
     .select('*')
@@ -148,6 +170,7 @@ export async function getNews(publishedOnly = true): Promise<News[]> {
 }
 
 export async function getTimelineEvents(): Promise<TimelineEvent[]> {
+  if (!supabase) return fromSnapshot<TimelineEvent>('timeline_events').sort(byOrder);
   const { data, error } = await supabase
     .from('timeline_events')
     .select('*')
@@ -165,6 +188,7 @@ export async function getTimelineEvents(): Promise<TimelineEvent[]> {
 }
 
 export async function getHomeTimelineEvents(): Promise<TimelineEvent[]> {
+  if (!supabase) return fromSnapshot<TimelineEvent>('timeline_events').filter((e) => e.show_on_home).sort(byOrder);
   const { data, error } = await supabase
     .from('timeline_events')
     .select('*')
@@ -322,6 +346,7 @@ export type SiteSetting = {
 
 // Fetch a single setting by key
 export async function getSetting(key: string): Promise<SiteSetting | null> {
+  if (!supabase) return fromSnapshot<SiteSetting>('company_settings').find((s) => s.key === key) || null;
   const { data, error } = await supabase
     .from('company_settings')
     .select('*')
@@ -338,6 +363,13 @@ export async function getSetting(key: string): Promise<SiteSetting | null> {
 
 // Fetch multiple settings by keys
 export async function getSettings(keys: string[]): Promise<Record<string, SiteSetting>> {
+  if (!supabase) {
+    const result: Record<string, SiteSetting> = {};
+    fromSnapshot<SiteSetting>('company_settings')
+      .filter((s) => keys.includes(s.key))
+      .forEach((s) => { result[s.key] = s; });
+    return result;
+  }
   const { data, error } = await supabase
     .from('company_settings')
     .select('*')
@@ -402,6 +434,7 @@ export type TeamMember = {
 };
 
 export async function getTeamMembers(): Promise<TeamMember[]> {
+  if (!supabase) return fromSnapshot<TeamMember>('team_members').filter((m) => m.is_active).sort(byOrder);
   const { data, error } = await supabase
     .from('team_members')
     .select('*')
@@ -417,6 +450,7 @@ export async function getTeamMembers(): Promise<TeamMember[]> {
 }
 
 export async function getTeamMemberBySlug(slug: string): Promise<TeamMember | null> {
+  if (!supabase) return fromSnapshot<TeamMember>('team_members').find((m) => m.slug === slug) || null;
   const { data, error } = await supabase
     .from('team_members')
     .select('*')
@@ -454,6 +488,13 @@ export type TeamMemberSection = {
 };
 
 export async function getTeamMemberSections(teamMemberIdOrSlug: string): Promise<TeamMemberSection[]> {
+  if (!supabase) {
+    const member = fromSnapshot<TeamMember>('team_members').find((m) => m.slug === teamMemberIdOrSlug);
+    const memberId = member?.id || teamMemberIdOrSlug;
+    return fromSnapshot<TeamMemberSection>('team_member_sections')
+      .filter((s) => s.team_member_id === memberId && s.is_visible)
+      .sort(byOrder);
+  }
   const { data: member } = await supabase
     .from('team_members')
     .select('id')
@@ -478,6 +519,7 @@ export async function getTeamMemberSections(teamMemberIdOrSlug: string): Promise
 }
 
 export async function getPressKits(): Promise<PressKit[]> {
+  if (!supabase) return fromSnapshot<PressKit>('press_kits').filter((k) => k.is_published).sort(byOrder);
   const { data, error } = await supabase
     .from('press_kits')
     .select('*')
@@ -494,6 +536,14 @@ export async function getPressKits(): Promise<PressKit[]> {
 
 // Fetch game sections from database
 export async function getGameSections(gameIdOrSlug: string): Promise<GameSection[]> {
+  if (!supabase) {
+    const game = fromSnapshot<Game>('games').find((g) => g.slug === gameIdOrSlug);
+    const gameId = game?.id || gameIdOrSlug;
+    return fromSnapshot<GameSectionDB>('game_sections')
+      .filter((s) => s.game_id === gameId && s.is_visible)
+      .sort(byOrder)
+      .map(transformSectionToLegacy);
+  }
   // First, try to get game by slug to get its UUID
   const { data: game } = await supabase
     .from('games')
@@ -521,4 +571,17 @@ export async function getGameSections(gameIdOrSlug: string): Promise<GameSection
 
   // Transform DB records to legacy format
   return (data as GameSectionDB[]).map(transformSectionToLegacy);
+}
+
+export async function getNewsBySlug(slug: string): Promise<News | null> {
+  if (!supabase) return fromSnapshot<News>('news').find((n) => n.slug === slug && n.is_published) || null;
+  const { data, error } = await supabase
+    .from('news')
+    .select('*')
+    .eq('slug', slug)
+    .eq('is_published', true)
+    .single();
+
+  if (error) return null;
+  return data;
 }

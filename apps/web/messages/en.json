@@ -1,153 +1,253 @@
 {
-  "Navigation": {
+  "Site": {
+    "skip": "Skip to content",
+    "studioName": "Studio Elysian",
     "home": "Home",
-    "about": "About",
+    "works": "Works",
+    "studio": "Studio",
     "news": "News",
-    "games": "Games",
+    "press": "Press",
     "contact": "Contact",
-    "press": "PRESS"
+    "habom": "Habom Studio",
+    "menu": "Menu",
+    "close": "Close",
+    "language": "Language",
+    "contents": "Contents",
+    "mainNav": "Main navigation",
+    "labelSwitch": "Our studios",
+    "external": "opens in a new tab",
+    "pageTop": "Back to top"
   },
-  "Hero": {
-    "label": "Immersive Visual Novels",
-    "title1_prefix": "FOR ",
-    "title1_highlight": "STORY-LOVERS",
-    "title1_suffix": ",",
-    "title2": "BY STORYTELLERS",
-    "description": "We are Studio Elysian, creators of stories.\nWe create beautiful worlds that will move your heart.",
-    "viewProjects": "View Projects",
-    "contact": "Contact Us"
+  "Title": {
+    "est": "EST. {year}",
+    "menuLabel": "Title menu",
+    "start": "Begin the story",
+    "works": "All works",
+    "studio": "The studio",
+    "news": "News",
+    "habom": "Habom Studio",
+    "contact": "Contact",
+    "keys": "↑ ↓ Select  ·  Enter Confirm",
+    "strips": "Collected works",
+    "stripsLabel": "Jump to a Studio Elysian work",
+    "scroll": "Scroll"
+  },
+  "Home": {
+    "chapter": "Chapter {n}",
+    "worksTitle": "Works",
+    "worksLatin": "Works",
+    "worksSummary": "{works} stories · {series} series",
+    "worksAll": "See all works",
+    "worksIndex": "Index of works",
+    "studioTitle": "The Studio",
+    "studioLatin": "The Studio",
+    "studioMore": "More about the studio",
+    "chronicleTitle": "Chronicle",
+    "chronicleLatin": "Chronicle",
+    "chronicleAll": "Full history",
+    "labelsTitle": "Our Studios",
+    "labelsLatin": "Studios",
+    "labelsLead": "Under Elysian, each studio writes stories in its own voice.",
+    "labelsHere": "You are here",
+    "labelsElysianDesc": "War and its wounds, memory and waiting. Literary visual novels.",
+    "labelsHabomDesc": "Bright, round stories with plenty of laughter.",
+    "labelsVisit": "Visit Habom Studio",
+    "newsTitle": "News",
+    "newsLatin": "News",
+    "newsBody": "Our official X account is the first place we share news.",
+    "newsPage": "News page",
+    "newsX": "Open X",
+    "contactLead": "For partnerships, press or questions, send us a letter any time.",
+    "contactCta": "Contact us",
+    "pressCta": "Press kit"
+  },
+  "Status": {
+    "released": "Now Available",
+    "coming_soon": "Coming Soon",
+    "in_development": "In Development",
+    "publishing": "Publishing"
+  },
+  "Works": {
+    "title": "Works",
+    "latin": "Works",
+    "count": "{count} titles",
+    "filterLabel": "Studio",
+    "filterSeries": "Series",
+    "all": "All",
+    "allSeries": "All series",
+    "read": "View work",
+    "empty": "No works match these filters.",
+    "guest": "From our studios",
+    "no": "No."
+  },
+  "Detail": {
+    "works": "Works",
+    "watch": "Watch PV",
+    "steam": "View on Steam",
+    "official": "Official site",
+    "copy": "Copy link",
+    "copied": "Link copied",
+    "demo": "Mini demo",
+    "sections": "About this work",
+    "tabAbout": "Overview",
+    "tabGallery": "Images",
+    "tabVideos": "Videos",
+    "tabCredits": "Credits",
+    "tabHistory": "History",
+    "tabStore": "Buy",
+    "tabDemo": "Try it",
+    "infoTitle": "Details",
+    "infoTitleField": "Title",
+    "infoSeries": "Series",
+    "infoGenre": "Genre",
+    "infoPlatform": "Platform",
+    "infoDeveloper": "Developer",
+    "infoStatus": "Status",
+    "infoRelease": "Release",
+    "storyFallback": "About",
+    "galleryTitle": "Images",
+    "galleryKeyArt": "Official key art",
+    "galleryOpen": "Open image {n}",
+    "galleryPrev": "Previous image",
+    "galleryNext": "Next image",
+    "galleryCount": "{n} / {total}",
+    "videosTitle": "Videos",
+    "videosList": "Video list",
+    "videosPlay": "Play {title}",
+    "videosNow": "Now playing",
+    "creditsTitle": "Credits",
+    "historyTitle": "History",
+    "storeTitle": "Where to buy",
+    "storePlatforms": "Platforms",
+    "storeVisit": "Open store",
+    "moreTitle": "More works",
+    "player": "Video player",
+    "close": "Close"
+  },
+  "Habom": {
+    "wordmarkNote": "Temporary wordmark for this mock-up · to be replaced by the official logo",
+    "navWorks": "Games",
+    "navAbout": "About",
+    "back": "Studio Elysian",
+    "backLong": "Back to Studio Elysian",
+    "kicker": "A Studio Elysian studio",
+    "title": "Habom Studio",
+    "copy": "Light laughs, lasting flutters.",
+    "worksTitle": "Habom Games",
+    "worksLead": "Games made by Habom Studio.",
+    "detail": "View details",
+    "tryDemo": "Try the mini demo on the game page",
+    "aboutTitle": "Habom Studio is",
+    "aboutBody": "a studio under Studio Elysian, in charge of bright, casual titles.",
+    "lead": "Team lead",
+    "cofounded": "Co-developed",
+    "rights": "Habom Studio is a studio of Studio Elysian Inc."
+  },
+  "Demo": {
+    "title": "Mini demo",
+    "lead": "Advance the lines and pick a reply. It takes about a minute.",
+    "badge": "SAMPLE",
+    "badgeLong": "Mock-up sample script",
+    "note": "Not actual in-game dialogue. To be replaced with an official demo script.",
+    "start": "Start demo",
+    "restart": "Restart",
+    "close": "Close demo",
+    "next": "Next line",
+    "advance": "Click · Enter · Space to continue",
+    "choicePrompt": "How do you answer?",
+    "endTitle": "That's the demo!",
+    "endBody": "The rest of the story waits in the full game.",
+    "again": "Play again",
+    "steam": "Steam page",
+    "progress": "{n} / {total}",
+    "dialog": "Mini demo dialogue",
+    "narration": "Narration"
+  },
+  "About": {
+    "title": "The Studio",
+    "latin": "About",
+    "visionLabel": "Vision",
+    "missionLabel": "Mission",
+    "facts": "Elysian in numbers",
+    "people": "People",
+    "peopleLatin": "People",
+    "history": "History",
+    "historyLatin": "History",
+    "labels": "Our studios",
+    "company": "Company",
+    "funding": "Funding rate",
+    "profile": "View profile"
   },
   "Vision": {
-    "label": "Our Vision",
     "title": "Endless Horizons of Stories",
     "p1": "Studio Elysian is a team founded in 2022 that develops story-driven games combining visual, comic, illustration, and music elements.",
     "p2": "Our team members, each with strengths in their respective fields, come together with the goal of delivering stories that both users and creators can enjoy in various ways.",
     "p3": "Starting with \"Memorial Circuit\", we are developing the \"Old Engine\" universe centered on the theme of \"war and its wounds,\" while also showcasing creative works like \"In Between All Times\" with unique worldviews and settings.",
-    "more": "Learn More About Us",
     "missionTitle": "Our Mission",
     "missionBody": "We believe in the power of stories. Through our visual novels and interactive experiences, we aim to create emotional connections that transcend language and cultural barriers."
   },
-  "Stats": {
-    "year": "Founded",
-    "projects": "Active Projects",
-    "funding": "Funding Rate",
-    "global": "Steam Release"
+  "News": {
+    "title": "News",
+    "latin": "News",
+    "lead": "Our official X account is the first place we share news.",
+    "empty": "No news has been posted yet.",
+    "back": "All news",
+    "xFallbackTitle": "Latest news on X",
+    "xFallbackBody": "If the timeline can't load, you can read it directly on X.",
+    "xOpen": "Open on X",
+    "loading": "Loading timeline"
   },
-  "Projects": {
-    "label": "Our Works",
-    "title": "Games",
-    "memorialCircuit": {
-        "tag": "Now Available",
-        "series": "Old Engine Series",
-        "title": "Memorial Circuit",
-        "desc": "\"If you cannot remember, doubt.\"\nA visual novel themed around war and its scars. Experience deep storytelling that combines SF, romance, and mystery.",
-        "genre1": "Visual Novel",
-        "genre2": "SF",
-        "genre3": "Romance",
-        "steam": "Steam Store",
-        "details": "Details"
-    },
-    "spaceEmpathy": {
-        "tag": "Coming Soon",
-        "overlay": "A unique cosmic worldview meets everyday life",
-        "series": "Elysian Panorama",
-        "title": "In Between All Times",
-        "desc": "A cosmic visual novel where everyday life and fantasy intersect. Coming 2024.",
-        "view": "View Project"
-    },
-    "festival": {
-        "tag": "In Development",
-        "overlay": "Drama blooming in war",
-        "series": "Drama Visual Novel",
-        "title": "The Festival Is Not Over Yet",
-        "desc": "Deep narrative interweaving war, horror, and drama.",
-        "view": "View Project"
-    },
-    "sharehouse": {
-        "tag": "Publishing",
-        "overlay": "A sharehouse with three heroines",
-        "series": "Romance Comedy",
-        "title": "Welcome to Sharehouse!",
-        "desc": "An Elysian Publishing work. A romance slice-of-life visual novel.",
-        "view": "View Project"
-    }
+  "Contact": {
+    "title": "Contact",
+    "latin": "Contact",
+    "lead": "We welcome partnership, press and publishing enquiries, and reply to the email you leave.",
+    "formTitle": "Write to us",
+    "name": "Name",
+    "email": "Email",
+    "message": "Message",
+    "namePlaceholder": "Your name",
+    "emailPlaceholder": "reply@example.com",
+    "messagePlaceholder": "Tell us what's on your mind.",
+    "send": "Send",
+    "sending": "Sending…",
+    "success": "Your message was received.",
+    "successBody": "We'll reply to the email address you provided.",
+    "successMail": "A confirmation email has been sent as well.",
+    "again": "Write another",
+    "previewTitle": "This is a preview environment",
+    "previewBody": "Messages sent from this mock-up server are not stored or emailed. In production the existing contact pipeline (storage and email alerts) works as before.",
+    "error": "We couldn't send your message. Please try again shortly.",
+    "direct": "Direct",
+    "follow": "Follow"
   },
-  "Timeline": {
-      "title": "Milestones",
-      "items": {
-          "item1": {
-              "date": "2024.04",
-              "text": "\"Memorial Circuit\" Official Steam Release"
-          },
-          "item2": {
-              "date": "2023.11",
-              "text": "G-Star 2023 Exhibition (STOVE Indie Showcase)"
-          },
-          "item3": {
-              "date": "2022.09",
-              "text": "Studio Elysian Founded"
-          }
-      },
-      "viewAll": "View All Milestones"
+  "Press": {
+    "title": "Press",
+    "latin": "Press Kit",
+    "lead": "Logos, screenshots and other materials for coverage.",
+    "download": "Open materials",
+    "preparing": "In preparation",
+    "empty": "No press kits have been published yet.",
+    "contact": "Need something else? Get in touch."
+  },
+  "Privacy": {
+    "title": "Privacy Policy",
+    "empty": "The privacy policy has not been published yet."
+  },
+  "Team": {
+    "back": "Back to the studio",
+    "links": "Links",
+    "empty": "Profile coming soon."
   },
   "Footer": {
-      "desc": "Studio Elysian believes in the power of stories.\nWe communicate with the wider world through games.",
-      "quickLinks": "Quick Links",
-      "links": {
-          "about": "About Us",
-          "projects": "Projects",
-          "news": "News"
-      },
-      "contact": "Contact",
-      "contactLinks": {
-          "inquiry": "Inquiry"
-      },
-      "rights": "© 2024 Studio Elysian. All rights reserved.",
-      "privacy": "Privacy Policy"
+    "desc": "Studio Elysian believes in the power of stories.\nWe communicate with the wider world through games.",
+    "site": "Site",
+    "company": "Company",
+    "follow": "Follow",
+    "rights": "© Studio Elysian. All rights reserved.",
+    "privacy": "Privacy Policy",
+    "colophon": "Colophon"
   },
-  "GamesPage": {
-      "title": "Games",
-      "subtitle": "Our Works"
-  },
-  "ProjectSharehouse": {
-      "tag": "Romance Comedy",
-      "title": "Welcome to\nSharehouse!",
-      "subtitle": "Exciting sharehouse life with three heroines",
-      "historyTitle": "Project Timeline",
-      "history": {
-          "item1": { "date": "2024.05", "text": "PlayX4 B2C & B2B Exhibition" },
-          "item2": { "date": "2024.01", "text": "Tumblbug Crowdfunding 300% Achieved" },
-          "item3": { "date": "2023.11", "text": "Project Development Started" }
-      },
-      "gameInfo": {
-          "title": "GAME INFO",
-          "lead": "Studio Elysian X Studio Habom Dating Sim Project!",
-          "desc": "Romance comedy daily life in a sharehouse! A special cohabitation life with three charming heroines begins. Discover the changing relationships and hidden stories based on your choices.",
-          "genreLabel": "Genre",
-          "genreValue": "Romance Comedy / Visual Novel",
-          "releaseLabel": "Release",
-          "releaseValue": "2024 (Coming Soon)",
-          "platformLabel": "Platform",
-          "platformValue": "PC (Steam), STOVE",
-          "devLabel": "Developer",
-          "devValue": "Studio Habom / Studio Elysian"
-      },
-      "synopsis": {
-          "title": "SYNOPSIS",
-          "p1": "20XX, you've been living as a jobless homebody.\nAfter failing college entrance exams, you've been watching anime in your room as usual.",
-          "p2": "While communicating with your online girlfriends through the monitor,\nyou got smacked by your parents and sent to Seoul, moving into a sharehouse with other people.",
-          "quote": "\"Told to learn from hardworking people, you start living as a sharehouse member, but upon arrival, three pretty girls are at home...?\"",
-          "char1": "The lively and spirited 'Ryu Ji-hye'",
-          "char2": "The mature but surprisingly charming 'Park Yun-ha'",
-          "char3": "And the cute yet aloof 'Hong Se-eun'.",
-          "outro": "You begin your cohabitation story with three beautiful girls at the sharehouse.",
-          "credit": "(Provided by - Studio Habom)"
-      },
-      "store": {
-          "title": "STORE",
-          "status": "Coming Soon",
-          "wishlist": "Wishlist Now",
-          "officialSite": "Official Site"
-      }
+  "XTimeline": {
+    "loading": "Loading timeline"
   }
 }

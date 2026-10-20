@@ -7,8 +7,11 @@ const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY!;
 const resendApiKey = process.env.RESEND_API_KEY;
 const resendFromEmail = process.env.RESEND_FROM_EMAIL || 'onboarding@resend.dev';
 
-const supabaseAdmin = createClient(supabaseUrl, supabaseServiceKey);
-const resend = resendApiKey ? new Resend(resendApiKey) : null;
+// Without Supabase credentials (design preview) nothing is stored or emailed; the request is
+// validated and answered with `preview: true` so the form can say so honestly.
+const isConfigured = Boolean(supabaseUrl && supabaseServiceKey);
+const supabaseAdmin = isConfigured ? createClient(supabaseUrl, supabaseServiceKey) : null;
+const resend = isConfigured && resendApiKey ? new Resend(resendApiKey) : null;
 
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
@@ -17,6 +20,7 @@ const corsHeaders = {
 };
 
 async function getNotificationEmail(): Promise<string | null> {
+  if (!supabaseAdmin) return null;
   const { data } = await supabaseAdmin
     .from('company_settings')
     .select('value_ko')
@@ -46,6 +50,13 @@ export async function POST(request: NextRequest) {
       return NextResponse.json(
         { error: 'Invalid email format' },
         { status: 400, headers: corsHeaders }
+      );
+    }
+
+    if (!supabaseAdmin) {
+      return NextResponse.json(
+        { success: true, preview: true, adminEmailSent: false, userEmailSent: false, message: 'Preview mode: not stored or sent' },
+        { headers: corsHeaders }
       );
     }
 

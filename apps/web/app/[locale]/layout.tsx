@@ -1,16 +1,23 @@
-import type { Metadata } from 'next';
+import type { Metadata, Viewport } from 'next';
 import { NextIntlClientProvider } from 'next-intl';
 import { getMessages } from 'next-intl/server';
 import { notFound } from 'next/navigation';
 import { routing } from '@/i18n/routing';
-import Navigation from '@/components/layout/Navigation';
-import Footer from '@/components/layout/Footer';
-import { getSettings, getLocalizedSettingValue } from '@/lib/supabase';
+import { getSetting } from '@/lib/supabase';
+import { fontVariables, googleFontsHref } from '../fonts';
 import '../globals.css';
 
-export const metadata: Metadata = {
-  title: 'Studio Elysian',
-  description: 'For Story-Lovers, By Storytellers',
+export async function generateMetadata(): Promise<Metadata> {
+  const favicon = await getSetting('favicon');
+  return {
+    title: { default: 'Studio Elysian', template: '%s — Studio Elysian' },
+    description: 'For Story-Lovers, By Storytellers',
+    icons: favicon?.value_ko ? { icon: favicon.value_ko } : undefined,
+  };
+}
+
+export const viewport: Viewport = {
+  themeColor: '#F4F0E8',
 };
 
 type Props = {
@@ -22,48 +29,18 @@ export default async function LocaleLayout({ children, params: { locale } }: Pro
   if (!routing.locales.includes(locale as 'ko' | 'en' | 'ja')) {
     notFound();
   }
-
   const messages = await getMessages();
-  const settings = await getSettings(['contact_email', 'twitter_url', 'youtube_url', 'instagram_url', 'favicon', 'logo_image', 'logo_icon']);
-  
-  const footerSettings = {
-    contactEmail: getLocalizedSettingValue(settings.contact_email, locale),
-    twitterUrl: getLocalizedSettingValue(settings.twitter_url, locale),
-    youtubeUrl: getLocalizedSettingValue(settings.youtube_url, locale),
-    instagramUrl: getLocalizedSettingValue(settings.instagram_url, locale),
-    logoImage: settings.logo_image?.value_ko || null,
-    logoIcon: settings.logo_icon?.value_ko || 'fa-solid fa-book-open',
-  };
-  
-  const faviconUrl = settings.favicon?.value_ko;
 
   return (
-    <html lang={locale} className="dark">
+    <html lang={locale} className={fontVariables}>
       <head>
-        {faviconUrl && <link rel="icon" href={faviconUrl} />}
-        <link
-          href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&family=Montserrat:wght@400;600;700;900&display=swap"
-          rel="stylesheet"
-        />
-        <link
-          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
-          rel="stylesheet"
-        />
-        <link
-          href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap"
-          rel="stylesheet"
-        />
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
+        {/* eslint-disable-next-line @next/next/no-page-custom-font */}
+        <link rel="stylesheet" href={googleFontsHref(locale)} />
       </head>
-      <body className="bg-background-light dark:bg-background-dark text-text-light dark:text-text-dark font-body transition-colors duration-300">
-        <NextIntlClientProvider messages={messages}>
-          <div className="min-h-screen flex flex-col">
-            <Navigation logoImage={footerSettings.logoImage} logoIcon={footerSettings.logoIcon} />
-            <main className="flex-grow">
-                {children}
-            </main>
-            <Footer settings={footerSettings} />
-          </div>
-        </NextIntlClientProvider>
+      <body className="min-h-screen">
+        <NextIntlClientProvider messages={messages}>{children}</NextIntlClientProvider>
       </body>
     </html>
   );

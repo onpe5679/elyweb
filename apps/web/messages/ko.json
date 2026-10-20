@@ -1,153 +1,253 @@
 {
-  "Navigation": {
-    "home": "홈",
-    "about": "회사 소개",
-    "news": "새소식",
-    "games": "게임 소개",
-    "contact": "문의하기",
-    "press": "PRESS"
+  "Site": {
+    "skip": "본문 바로가기",
+    "studioName": "스튜디오 엘리시안",
+    "home": "처음으로",
+    "works": "작품",
+    "studio": "스튜디오",
+    "news": "소식",
+    "press": "프레스",
+    "contact": "문의",
+    "habom": "하봄 스튜디오",
+    "menu": "메뉴",
+    "close": "닫기",
+    "language": "언어",
+    "contents": "차례",
+    "mainNav": "주요 메뉴",
+    "labelSwitch": "산하 스튜디오",
+    "external": "새 창에서 열림",
+    "pageTop": "맨 위로"
   },
-  "Hero": {
-    "label": "Immersive Visual Novels",
-    "title1_prefix": "FOR ",
-    "title1_highlight": "STORY-LOVERS",
-    "title1_suffix": ",",
-    "title2": "BY STORYTELLERS",
-    "description": "이야기를 만드는 사람들, 엘리시안.\n우리는 당신의 마음을 움직일 아름다운 세계를 창조합니다.",
-    "viewProjects": "프로젝트 보기",
-    "contact": "문의하기"
+  "Title": {
+    "est": "EST. {year}",
+    "menuLabel": "타이틀 메뉴",
+    "start": "이야기 시작",
+    "works": "작품 목록",
+    "studio": "스튜디오",
+    "news": "소식",
+    "habom": "하봄 스튜디오",
+    "contact": "문의하기",
+    "keys": "↑ ↓ 선택  ·  Enter 결정",
+    "strips": "수록작",
+    "stripsLabel": "엘리시안의 작품 바로가기",
+    "scroll": "아래로"
+  },
+  "Home": {
+    "chapter": "제{n}장",
+    "worksTitle": "작품",
+    "worksLatin": "Works",
+    "worksSummary": "{works}편의 이야기 · {series}개의 시리즈",
+    "worksAll": "작품 목록 전체 보기",
+    "worksIndex": "작품 색인",
+    "studioTitle": "스튜디오",
+    "studioLatin": "The Studio",
+    "studioMore": "스튜디오 소개 더 보기",
+    "chronicleTitle": "연표",
+    "chronicleLatin": "Chronicle",
+    "chronicleAll": "전체 연혁 보기",
+    "labelsTitle": "산하 스튜디오",
+    "labelsLatin": "Studios",
+    "labelsLead": "엘리시안 아래에서 서로 다른 결의 이야기를 만듭니다.",
+    "labelsHere": "지금 보고 계신 곳",
+    "labelsElysianDesc": "전쟁과 상처, 기억과 기다림. 문예적인 비주얼 노벨을 만듭니다.",
+    "labelsHabomDesc": "밝고 둥근, 웃음이 많은 이야기를 만듭니다.",
+    "labelsVisit": "하봄 스튜디오로 가기",
+    "newsTitle": "소식",
+    "newsLatin": "News",
+    "newsBody": "새소식은 X 공식 계정에서 가장 먼저 전합니다.",
+    "newsPage": "소식 페이지",
+    "newsX": "X에서 보기",
+    "contactLead": "협업·취재·문의는 언제든 편지를 보내 주세요.",
+    "contactCta": "문의하기",
+    "pressCta": "프레스 키트"
+  },
+  "Status": {
+    "released": "출시",
+    "coming_soon": "출시 예정",
+    "in_development": "개발 중",
+    "publishing": "퍼블리싱"
+  },
+  "Works": {
+    "title": "작품 목록",
+    "latin": "Works",
+    "count": "{count}편 수록",
+    "filterLabel": "레이블",
+    "filterSeries": "시리즈",
+    "all": "전체",
+    "allSeries": "모든 시리즈",
+    "read": "작품 보기",
+    "empty": "조건에 맞는 작품이 없습니다.",
+    "guest": "산하 스튜디오 작품",
+    "no": "No."
+  },
+  "Detail": {
+    "works": "작품",
+    "watch": "PV 보기",
+    "steam": "Steam에서 보기",
+    "official": "공식 사이트",
+    "copy": "링크 복사",
+    "copied": "링크를 복사했습니다",
+    "demo": "미니 체험",
+    "sections": "작품 안내",
+    "tabAbout": "소개",
+    "tabGallery": "이미지",
+    "tabVideos": "영상",
+    "tabCredits": "제작진",
+    "tabHistory": "연혁",
+    "tabStore": "구매",
+    "tabDemo": "체험",
+    "infoTitle": "기본 정보",
+    "infoTitleField": "제목",
+    "infoSeries": "시리즈",
+    "infoGenre": "장르",
+    "infoPlatform": "플랫폼",
+    "infoDeveloper": "개발",
+    "infoStatus": "상태",
+    "infoRelease": "출시일",
+    "storyFallback": "작품 소개",
+    "galleryTitle": "이미지",
+    "galleryKeyArt": "공식 키 비주얼",
+    "galleryOpen": "{n}번째 이미지 크게 보기",
+    "galleryPrev": "이전 이미지",
+    "galleryNext": "다음 이미지",
+    "galleryCount": "{n} / {total}",
+    "videosTitle": "영상",
+    "videosList": "영상 목록",
+    "videosPlay": "{title} 재생",
+    "videosNow": "재생 중",
+    "creditsTitle": "제작진",
+    "historyTitle": "연혁",
+    "storeTitle": "구매·스토어",
+    "storePlatforms": "플랫폼",
+    "storeVisit": "스토어 열기",
+    "moreTitle": "다른 작품",
+    "player": "영상 플레이어",
+    "close": "닫기"
+  },
+  "Habom": {
+    "wordmarkNote": "시안용 임시 워드마크 · 공식 로고로 교체 예정",
+    "navWorks": "작품",
+    "navAbout": "소개",
+    "back": "스튜디오 엘리시안",
+    "backLong": "스튜디오 엘리시안으로 돌아가기",
+    "kicker": "STUDIO ELYSIAN 산하 스튜디오",
+    "title": "하봄 스튜디오",
+    "copy": "가볍게 웃고, 오래 설레는 이야기.",
+    "worksTitle": "하봄의 작품",
+    "worksLead": "하봄 스튜디오가 만든 게임을 소개합니다.",
+    "detail": "자세히 보기",
+    "tryDemo": "게임 페이지에서 미니 체험하기",
+    "aboutTitle": "하봄 스튜디오는",
+    "aboutBody": "스튜디오 엘리시안의 산하 스튜디오입니다. 밝고 캐주얼한 작품을 담당합니다.",
+    "lead": "팀장",
+    "cofounded": "공동 개발",
+    "rights": "하봄 스튜디오는 주식회사 스튜디오엘리시안의 산하 스튜디오입니다."
+  },
+  "Demo": {
+    "title": "미니 체험",
+    "lead": "대사를 넘기고 선택지를 골라 보세요. 1분이면 끝나요.",
+    "badge": "SAMPLE",
+    "badgeLong": "시안용 예시 대본",
+    "note": "실제 게임 대사·내용이 아닙니다. 담당자가 체험용 대본으로 교체합니다.",
+    "start": "체험 시작",
+    "restart": "처음부터",
+    "close": "체험 닫기",
+    "next": "다음 대사",
+    "advance": "클릭 · Enter · Space로 넘기기",
+    "choicePrompt": "어떻게 대답할까?",
+    "endTitle": "체험 끝!",
+    "endBody": "이어지는 이야기는 본편에서 만나요.",
+    "again": "다시 하기",
+    "steam": "Steam 페이지",
+    "progress": "{n} / {total}",
+    "dialog": "미니 체험 대화창",
+    "narration": "내레이션"
+  },
+  "About": {
+    "title": "스튜디오",
+    "latin": "About",
+    "visionLabel": "Vision",
+    "missionLabel": "Mission",
+    "facts": "숫자로 본 엘리시안",
+    "people": "사람들",
+    "peopleLatin": "People",
+    "history": "연혁",
+    "historyLatin": "History",
+    "labels": "산하 스튜디오",
+    "company": "회사 정보",
+    "funding": "펀딩 달성률",
+    "profile": "프로필 보기"
   },
   "Vision": {
-    "label": "Our Vision",
     "title": "무궁한 이야기의 지평선",
     "p1": "스튜디오 엘리시안은 2022년에 설립된 영상, 만화, 일러스트와 음악 등 여러 시청각적 요소들이 어우러진 스토리-중심 게임들을 개발하는 팀입니다.",
     "p2": "각 분야에서 강점을 가진 팀원들이 모여, 유저와 제작사가 함께 즐길 수 있는 이야기들을 다양한 방식으로 전달하고자 하는 목표로 창작하고 있습니다.",
     "p3": "「메모리얼 서킷」을 시작으로 \"전쟁과 그로 인한 상처들\"이라는 테마를 중심으로 한 「올드엔진」 세계관을 전개하며 이외에도 「우주공강」 같은 독특한 세계관과 설정을 자랑하는 여러 창의적인 작품들을 선보이고 있습니다.",
-    "more": "회사 소개 더보기",
     "missionTitle": "우리의 미션",
     "missionBody": "우리는 이야기의 힘을 믿습니다. 비주얼 노벨과 인터랙티브 경험을 통해, 언어와 문화의 장벽을 넘어서는 정서적 연결을 만들어내고자 합니다."
   },
-  "Stats": {
-    "year": "설립 연도",
-    "projects": "진행 프로젝트",
-    "funding": "펀딩 달성률",
-    "global": "스팀 출시"
+  "News": {
+    "title": "소식",
+    "latin": "News",
+    "lead": "새소식은 X 공식 계정에서 가장 먼저 전합니다.",
+    "empty": "아직 등록된 소식이 없습니다.",
+    "back": "소식 목록",
+    "xFallbackTitle": "X에서 최신 소식 보기",
+    "xFallbackBody": "타임라인을 불러오지 못했을 때는 X에서 바로 확인할 수 있습니다.",
+    "xOpen": "X에서 열기",
+    "loading": "타임라인을 불러오는 중"
   },
-  "GamesPage": {
-    "title": "게임",
-    "subtitle": "Our Works"
+  "Contact": {
+    "title": "문의",
+    "latin": "Contact",
+    "lead": "협업, 취재, 퍼블리싱 문의를 받습니다. 남겨 주신 메일로 답장을 드립니다.",
+    "formTitle": "편지 쓰기",
+    "name": "이름",
+    "email": "이메일",
+    "message": "내용",
+    "namePlaceholder": "보내는 분",
+    "emailPlaceholder": "reply@example.com",
+    "messagePlaceholder": "전하고 싶은 이야기를 적어 주세요.",
+    "send": "보내기",
+    "sending": "보내는 중…",
+    "success": "문의가 접수되었습니다.",
+    "successBody": "확인 후 남겨 주신 이메일로 답장을 드리겠습니다.",
+    "successMail": "접수 확인 메일도 발송했습니다.",
+    "again": "새 문의 쓰기",
+    "previewTitle": "미리보기 환경입니다",
+    "previewBody": "이 시안 서버에서는 문의가 실제로 저장·발송되지 않습니다. 운영 환경에서는 기존 문의 처리(저장·메일 알림)가 그대로 동작합니다.",
+    "error": "전송하지 못했습니다. 잠시 후 다시 시도해 주세요.",
+    "direct": "직접 연락",
+    "follow": "팔로우"
   },
-  "Projects": {
-    "label": "Our Works",
-    "title": "게임",
-    "memorialCircuit": {
-        "tag": "Now Available",
-        "series": "Old Engine Series",
-        "title": "메모리얼 서킷",
-        "desc": "\"기억할 수 없다면 의심하라.\"\n전쟁과 그로 인한 상처를 테마로 한 비주얼 노벨. SF와 로맨스, 그리고 미스터리가 결합된 깊이 있는 스토리텔링을 경험하세요.",
-        "genre1": "비주얼 노벨",
-        "genre2": "SF",
-        "genre3": "로맨스",
-        "steam": "Steam Store",
-        "details": "상세 정보"
-    },
-    "spaceEmpathy": {
-        "tag": "Coming Soon",
-        "overlay": "독특한 우주 세계관과 일상의 만남",
-        "series": "Elysian Panorama",
-        "title": "우주공강",
-        "desc": "일상과 판타지가 교차하는 우주적 비주얼 노벨. 2024년 출시 예정.",
-        "view": "View Project"
-    },
-    "festival": {
-        "tag": "In Development",
-        "overlay": "전쟁 속 피어나는 드라마",
-        "series": "Drama Visual Novel",
-        "title": "축제는 아직 끝나지 않았다",
-        "desc": "전쟁, 공포, 드라마가 어우러진 깊은 서사.",
-        "view": "View Project"
-    },
-    "sharehouse": {
-        "tag": "Publishing",
-        "overlay": "세 명의 히로인과 함께하는 쉐어하우스",
-        "series": "Romance Comedy",
-        "title": "어서오세요 쉐어하우스에!",
-        "desc": "엘리시안 퍼블리싱 작품. 로맨스 일상물 비주얼 노벨.",
-        "view": "View Project"
-    }
+  "Press": {
+    "title": "프레스",
+    "latin": "Press Kit",
+    "lead": "로고, 스크린샷 등 취재용 자료를 내려받을 수 있습니다.",
+    "download": "자료 열기",
+    "preparing": "준비 중",
+    "empty": "아직 공개된 프레스 키트가 없습니다.",
+    "contact": "추가 자료가 필요하면 문의해 주세요."
   },
-  "Timeline": {
-      "title": "주요 연혁",
-      "items": {
-          "item1": {
-              "date": "2024.04",
-              "text": "「메모리얼 서킷」 스팀 정식 출시"
-          },
-          "item2": {
-              "date": "2023.11",
-              "text": "지스타 2023 전시 (스토브 인디쇼케이스 선정)"
-          },
-          "item3": {
-              "date": "2022.09",
-              "text": "스튜디오 엘리시안 설립"
-          }
-      },
-      "viewAll": "전체 연혁 보기"
+  "Privacy": {
+    "title": "개인정보처리방침",
+    "empty": "개인정보처리방침이 아직 등록되지 않았습니다."
+  },
+  "Team": {
+    "back": "스튜디오로 돌아가기",
+    "links": "링크",
+    "empty": "소개가 준비 중입니다."
   },
   "Footer": {
-      "desc": "스튜디오 엘리시안은 이야기가 가진 힘을 믿습니다.\n우리는 게임을 통해 더 넓은 세상과 소통합니다.",
-      "quickLinks": "바로가기",
-      "links": {
-          "about": "회사 소개",
-          "projects": "프로젝트",
-          "news": "새소식"
-      },
-      "contact": "Contact",
-      "contactLinks": {
-          "inquiry": "문의하기"
-      },
-      "rights": "© 2024 Studio Elysian. All rights reserved.",
-      "privacy": "개인정보처리방침"
+    "desc": "스튜디오 엘리시안은 이야기가 가진 힘을 믿습니다.\n우리는 게임을 통해 더 넓은 세상과 소통합니다.",
+    "site": "사이트",
+    "company": "회사 정보",
+    "follow": "SNS",
+    "rights": "© Studio Elysian. All rights reserved.",
+    "privacy": "개인정보처리방침",
+    "colophon": "판권"
   },
-  "ProjectSharehouse": {
-      "tag": "Romance Comedy",
-      "title": "어서오세요\n쉐어하우스에!",
-      "subtitle": "세 명의 히로인과 함께하는 두근두근 쉐어하우스 라이프",
-      "historyTitle": "프로젝트 연혁",
-      "history": {
-          "item1": { "date": "2024.05", "text": "플레이엑스포 B2C & B2B 전시 참가" },
-          "item2": { "date": "2024.01", "text": "텀블벅 크라우드 펀딩 300% 달성" },
-          "item3": { "date": "2023.11", "text": "프로젝트 개발 착수" }
-      },
-      "gameInfo": {
-          "title": "GAME INFO",
-          "lead": "스튜디오 엘리시안 X 스튜디오 하봄의 미연시 프로젝트!",
-          "desc": "쉐어하우스에서 펼쳐지는 로맨스코미디 일상! 매력적인 세 명의 히로인들과 함께하는 특별한 동거 생활이 시작됩니다. 선택에 따라 달라지는 그녀들과의 관계, 그리고 숨겨진 이야기를 확인해보세요.",
-          "genreLabel": "Genre",
-          "genreValue": "Romance Comedy / Visual Novel",
-          "releaseLabel": "Release",
-          "releaseValue": "2024 (Coming Soon)",
-          "platformLabel": "Platform",
-          "platformValue": "PC (Steam), STOVE",
-          "devLabel": "Developer",
-          "devValue": "Studio Habom / Studio Elysian"
-      },
-      "synopsis": {
-          "title": "SYNOPSIS",
-          "p1": "20XX년, 평소처럼 무직 백수로 살고 있던 당신.\n수능을 망쳐 대학 입시에 실패한 후, 여느 때처럼 방구석에서 애니메이션만 보고 있었다.",
-          "p2": "여자친구들과 모니터로 소통을 하던 도중.\n뒤에서 날아오는 부모님의 등짝 스매싱과 함께 서울로 상경하게 되었는데, 다른 사람들과 함께 사는 쉐어하우스로 이사를 가게 된다.",
-          "quote": "\"열심히 사는 사람들만 있으니 보고 배워오라는 말을 들은 당신은 쉐어하우스의 일원으로 써 살아가게 되지만, 도착하니 웬 예쁜 여자 세명이 집에...?\"",
-          "char1": "활기차고 당찬 성격의 '류지혜'",
-          "char2": "어른스럽지만 반전 매력이 있는 '박윤하'",
-          "char3": "그리고 귀여우면서도 새침한 '홍세은' 까지.",
-          "outro": "당신은 쉐어하우스에서 이쁜 여자 세명과의 동거 이야기를 시작하게 된다.",
-          "credit": "(제공 - 스튜디오 하봄)"
-      },
-      "store": {
-          "title": "STORE",
-          "status": "Coming Soon",
-          "wishlist": "Wishlist Now",
-          "officialSite": "Official Site"
-      }
+  "XTimeline": {
+    "loading": "타임라인을 불러오는 중"
   }
 }

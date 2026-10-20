@@ -1,6 +1,8 @@
 'use client';
 
 import { useEffect, useRef, useState } from 'react';
+import { useTranslations } from 'next-intl';
+import Icon from '@/components/ui/Icon';
 
 declare global {
   interface Window {
@@ -17,7 +19,8 @@ type XTimelineProps = {
 // endpoint intermittently rate-limits (429); when the widget fails to render
 // within the deadline we show a graceful "View on X" fallback card instead of
 // the bare placeholder link, so the page never looks broken.
-export default function XTimeline({ handle, height = 600 }: XTimelineProps) {
+export default function XTimeline({ handle, height = 640 }: XTimelineProps) {
+  const t = useTranslations('News');
   const ref = useRef<HTMLDivElement>(null);
   const [status, setStatus] = useState<'loading' | 'rendered' | 'failed'>('loading');
 
@@ -88,32 +91,26 @@ export default function XTimeline({ handle, height = 600 }: XTimelineProps) {
 
   if (status === 'failed') {
     return (
-      <a
-        href={profileUrl}
-        target="_blank"
-        rel="noopener noreferrer"
-        className="block max-w-xl mx-auto bg-white dark:bg-surface-dark border border-gray-100 dark:border-gray-800 rounded-2xl p-10 text-center hover:border-primary/40 transition-colors"
-      >
-        <i className="fa-brands fa-x-twitter text-4xl text-gray-900 dark:text-white mb-4"></i>
-        <h3 className="text-lg font-bold text-gray-900 dark:text-white mb-2">@{clean}</h3>
-        <p className="text-gray-500 dark:text-gray-400 text-sm mb-6">
-          X(트위터)에서 스튜디오 엘리시안의 최신 소식을 확인하세요.
-        </p>
-        <span className="inline-flex items-center gap-2 px-5 py-2.5 bg-primary text-white rounded-lg font-bold text-sm">
-          X에서 보기 <i className="fa-solid fa-arrow-right"></i>
+      <a href={profileUrl} target="_blank" rel="noopener noreferrer" className="group flex flex-col items-start border border-ink p-8 transition-colors hover:bg-ink hover:text-paper md:p-10">
+        <Icon name="x" size={32} />
+        <span className="mt-6 font-serif text-2xl font-semibold">{t('xFallbackTitle')}</span>
+        <span className="mt-2 font-mono text-sm">@{clean}</span>
+        <span className="mt-4 text-[0.9375rem] leading-relaxed opacity-80">{t('xFallbackBody')}</span>
+        <span className="mt-8 inline-flex items-center gap-2 text-[0.9375rem]">
+          <span className="link-underline">{t('xOpen')}</span> <Icon name="arrowUpRight" size={16} />
         </span>
       </a>
     );
   }
 
   return (
-    <div ref={ref} className="relative min-h-[160px] max-w-xl mx-auto">
-      <a className="twitter-timeline" data-theme="dark" data-height={height} href={`https://twitter.com/${clean}`}>
+    <div ref={ref} className="relative min-h-[200px] border border-ink/20 bg-white/50">
+      <a className="twitter-timeline" data-theme="light" data-chrome="noheader nofooter transparent" data-height={height} href={`https://twitter.com/${clean}`}>
         @{clean}
       </a>
       {status === 'loading' && (
-        <div className="absolute inset-0 flex items-center justify-center bg-background-light dark:bg-background-dark">
-          <i className="fa-solid fa-spinner fa-spin text-primary text-2xl"></i>
+        <div className="absolute inset-0 flex items-center justify-center bg-paper">
+          <span className="label animate-pulse text-ink-mute">{t('loading')}</span>
         </div>
       )}
     </div>
