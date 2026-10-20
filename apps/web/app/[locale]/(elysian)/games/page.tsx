@@ -1,5 +1,5 @@
 import type { Metadata } from 'next';
-import { getTranslations } from 'next-intl/server';
+import { getTranslations, setRequestLocale } from 'next-intl/server';
 import PageHeader from '@/components/elysian/PageHeader';
 import WorksCatalog from '@/components/works/WorksCatalog';
 import { LABELS } from '@/lib/labels';
@@ -8,12 +8,13 @@ import { toWorkSummary } from '@/lib/works';
 
 export const revalidate = 10;
 
-export async function generateMetadata(): Promise<Metadata> {
-  const t = await getTranslations('Works');
+export async function generateMetadata({ params: { locale } }: { params: { locale: string } }): Promise<Metadata> {
+  const t = await getTranslations({ locale, namespace: 'Works' });
   return { title: t('title') };
 }
 
 export default async function GamesPage({ params: { locale } }: { params: { locale: string } }) {
+  setRequestLocale(locale);
   const [t, ts, games] = await Promise.all([getTranslations('Works'), getTranslations('Site'), getGames()]);
   const works = games.map((g) => toWorkSummary(g, locale));
 

@@ -1,4 +1,4 @@
-import { getTranslations } from 'next-intl/server';
+import { getTranslations, setRequestLocale } from 'next-intl/server';
 import { Link } from '@/i18n/routing';
 import LanguageSwitch from '@/components/ui/LanguageSwitch';
 import Icon from '@/components/ui/Icon';
@@ -9,6 +9,7 @@ import { LABELS } from '@/lib/labels';
 // Habom Studio has its own chrome and theme. It lives under /habom so it could later be
 // served from its own sub-domain with a middleware rewrite, without touching these pages.
 export default async function HabomLayout({ children, params: { locale } }: { children: React.ReactNode; params: { locale: string } }) {
+  setRequestLocale(locale);
   const [t, ts, tf] = await Promise.all([getTranslations('Habom'), getTranslations('Site'), getTranslations('Footer')]);
   const localName = LABELS.habom.localName[locale] || LABELS.habom.name;
 

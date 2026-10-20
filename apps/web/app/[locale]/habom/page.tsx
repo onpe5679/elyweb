@@ -1,5 +1,5 @@
 import type { Metadata } from 'next';
-import { getTranslations } from 'next-intl/server';
+import { getTranslations, setRequestLocale } from 'next-intl/server';
 import { Link } from '@/i18n/routing';
 import Icon from '@/components/ui/Icon';
 import { LABELS } from '@/lib/labels';
@@ -13,6 +13,7 @@ export async function generateMetadata({ params: { locale } }: { params: { local
 }
 
 export default async function HabomHome({ params: { locale } }: { params: { locale: string } }) {
+  setRequestLocale(locale);
   const [t, ts, tw, games, team] = await Promise.all([getTranslations('Habom'), getTranslations('Status'), getTranslations('Works'), getGames(), getTeamMembers()]);
   const works = games.map((g) => toWorkSummary(g, locale)).filter((w) => w.label === 'habom');
   const hero = works[0];

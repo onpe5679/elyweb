@@ -1,6 +1,6 @@
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
-import { getTranslations } from 'next-intl/server';
+import { getTranslations, setRequestLocale } from 'next-intl/server';
 import { Link } from '@/i18n/routing';
 import Icon from '@/components/ui/Icon';
 import { YouTubeFrame } from '@/components/detail/TrailerButton';
@@ -20,6 +20,7 @@ export async function generateStaticParams() {
 }
 
 export default async function TeamMemberPage({ params: { locale, slug } }: Props) {
+  setRequestLocale(locale);
   const [member, sections] = await Promise.all([getTeamMemberBySlug(slug), getTeamMemberSections(slug)]);
   if (!member) notFound();
 

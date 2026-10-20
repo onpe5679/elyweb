@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { useTranslations } from 'next-intl';
 import Icon from '@/components/ui/Icon';
+import { IS_STATIC_PREVIEW } from '@/lib/preview';
 
 declare global {
   interface Window {
@@ -22,10 +23,10 @@ type XTimelineProps = {
 export default function XTimeline({ handle, height = 640 }: XTimelineProps) {
   const t = useTranslations('News');
   const ref = useRef<HTMLDivElement>(null);
-  const [status, setStatus] = useState<'loading' | 'rendered' | 'failed'>('loading');
+  const [status, setStatus] = useState<'loading' | 'rendered' | 'failed'>(IS_STATIC_PREVIEW ? 'failed' : 'loading');
 
   useEffect(() => {
-    if (!handle) {
+    if (!handle || IS_STATIC_PREVIEW) {
       setStatus('failed');
       return;
     }

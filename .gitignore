@@ -37,3 +37,6 @@ pnpm-debug.log*
 # Misc
 *.tsbuildinfo
 .vercel
+
+# Static design-preview export (scripts/static-preview.mjs)
+apps/.static-preview/

@@ -1,5 +1,5 @@
 import type { Metadata } from 'next';
-import { getTranslations } from 'next-intl/server';
+import { getTranslations, setRequestLocale } from 'next-intl/server';
 import { Link } from '@/i18n/routing';
 import PageHeader from '@/components/elysian/PageHeader';
 import { COMPANY_LINES } from '@/components/elysian/SiteFooter';
@@ -9,12 +9,13 @@ import { getLocalizedField, getLocalizedSettingValue, getSettings, getTeamMember
 
 export const revalidate = 10;
 
-export async function generateMetadata(): Promise<Metadata> {
-  const t = await getTranslations('About');
+export async function generateMetadata({ params: { locale } }: { params: { locale: string } }): Promise<Metadata> {
+  const t = await getTranslations({ locale, namespace: 'About' });
   return { title: t('title') };
 }
 
 export default async function AboutPage({ params: { locale } }: { params: { locale: string } }) {
+  setRequestLocale(locale);
   const [t, tv, ts, timeline, team, settings] = await Promise.all([
     getTranslations('About'),
     getTranslations('Vision'),

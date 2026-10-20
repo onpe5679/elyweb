@@ -1,16 +1,17 @@
 import type { Metadata } from 'next';
-import { getTranslations } from 'next-intl/server';
+import { getTranslations, setRequestLocale } from 'next-intl/server';
 import PageHeader from '@/components/elysian/PageHeader';
 import { SocialLinks } from '@/components/elysian/SiteFooter';
 import { ContactForm } from '@/components/contact/ContactForm';
 import { getLocalizedSettingValue, getSettings, isSnapshotMode } from '@/lib/supabase';
 
-export async function generateMetadata(): Promise<Metadata> {
-  const t = await getTranslations('Contact');
+export async function generateMetadata({ params: { locale } }: { params: { locale: string } }): Promise<Metadata> {
+  const t = await getTranslations({ locale, namespace: 'Contact' });
   return { title: t('title') };
 }
 
 export default async function ContactPage({ params: { locale } }: { params: { locale: string } }) {
+  setRequestLocale(locale);
   const [t, ts, settings] = await Promise.all([
     getTranslations('Contact'),
     getTranslations('Site'),

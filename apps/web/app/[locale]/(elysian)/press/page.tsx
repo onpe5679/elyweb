@@ -1,12 +1,12 @@
 import type { Metadata } from 'next';
-import { getTranslations } from 'next-intl/server';
+import { getTranslations, setRequestLocale } from 'next-intl/server';
 import { Link } from '@/i18n/routing';
 import PageHeader from '@/components/elysian/PageHeader';
 import Icon from '@/components/ui/Icon';
 import { getLocalizedField, getPressKits, type PressKit } from '@/lib/supabase';
 
-export async function generateMetadata(): Promise<Metadata> {
-  const t = await getTranslations('Press');
+export async function generateMetadata({ params: { locale } }: { params: { locale: string } }): Promise<Metadata> {
+  const t = await getTranslations({ locale, namespace: 'Press' });
   return { title: t('title') };
 }
 
@@ -22,6 +22,7 @@ function isRealUrl(url?: string) {
 }
 
 export default async function PressPage({ params: { locale } }: { params: { locale: string } }) {
+  setRequestLocale(locale);
   const [t, ts, kits] = await Promise.all([getTranslations('Press'), getTranslations('Site'), getPressKits()]);
 
   return (

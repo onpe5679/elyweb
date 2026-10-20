@@ -5,6 +5,7 @@ import { useTranslations } from 'next-intl';
 import Icon from '@/components/ui/Icon';
 import type { VideoItem } from '@/lib/game-spec';
 import { YouTubeFrame } from './TrailerButton';
+import { IS_STATIC_PREVIEW } from '@/lib/preview';
 
 // Videos are listed like episodes: a main screen plus a numbered list. The YouTube player is
 // only loaded once someone presses play.
@@ -14,6 +15,31 @@ export default function VideoShelf({ videos, variant }: { videos: VideoItem[]; v
   const [playing, setPlaying] = useState(false);
   const habom = variant === 'habom';
   const video = videos[current];
+
+  if (IS_STATIC_PREVIEW) {
+    return (
+      <ol aria-label={t('videosList')} className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+        {videos.map((v, i) => (
+          <li key={v.id + i}>
+            <a
+              href={`https://www.youtube.com/watch?v=${v.youtubeId}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              className={`group flex aspect-video flex-col justify-between p-5 transition-colors ${habom ? 'rounded-[24px] bg-plum text-cream hover:bg-rose' : 'bg-night text-on-night hover:bg-ink'}`}
+            >
+              <span className="font-mono text-xs opacity-70">{String(i + 1).padStart(2, '0')} · YouTube</span>
+              <span className="flex items-end justify-between gap-4">
+                <span className={`text-xl ${habom ? 'font-round' : 'font-serif font-semibold'}`}>{v.title}</span>
+                <span className={`flex h-12 w-12 shrink-0 items-center justify-center ${habom ? 'rounded-full bg-white text-rose' : 'bg-on-night text-night'}`}>
+                  <Icon name="play" size={20} />
+                </span>
+              </span>
+            </a>
+          </li>
+        ))}
+      </ol>
+    );
+  }
 
   const select = (i: number) => {
     setCurrent(i);

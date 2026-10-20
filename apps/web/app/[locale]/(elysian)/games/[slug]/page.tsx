@@ -1,5 +1,6 @@
 import type { Metadata } from 'next';
 import { notFound, redirect } from 'next/navigation';
+import { setRequestLocale } from 'next-intl/server';
 import GameDetailView from '@/components/detail/GameDetailView';
 import { buildGameSpec } from '@/lib/game-spec';
 import { getGameLabel, LABELS } from '@/lib/labels';
@@ -21,6 +22,7 @@ export async function generateMetadata({ params: { locale, slug } }: Props): Pro
 }
 
 export default async function GameDetailPage({ params: { locale, slug } }: Props) {
+  setRequestLocale(locale);
   const game = await getGameBySlug(slug);
   if (!game) notFound();
 

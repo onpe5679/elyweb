@@ -1,5 +1,5 @@
 import { notFound } from 'next/navigation';
-import { getTranslations } from 'next-intl/server';
+import { getTranslations, setRequestLocale } from 'next-intl/server';
 import { Link } from '@/i18n/routing';
 import Icon from '@/components/ui/Icon';
 import { getLocalizedField, getNewsBySlug } from '@/lib/supabase';
@@ -20,6 +20,7 @@ function formatDate(dateString: string | undefined, locale: string): string {
 
 export default async function NewsDetailPage({ params }: Props) {
   const { locale, slug } = params;
+  setRequestLocale(locale);
   const news = await getNewsBySlug(decodeURIComponent(slug));
   if (!news) notFound();
 

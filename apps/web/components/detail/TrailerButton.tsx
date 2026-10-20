@@ -4,6 +4,7 @@ import { useState } from 'react';
 import { useTranslations } from 'next-intl';
 import Modal from '@/components/ui/Modal';
 import Icon from '@/components/ui/Icon';
+import { IS_STATIC_PREVIEW } from '@/lib/preview';
 
 export function YouTubeFrame({ id, title, autoplay = true }: { id: string; title: string; autoplay?: boolean }) {
   return (
@@ -20,6 +21,14 @@ export function YouTubeFrame({ id, title, autoplay = true }: { id: string; title
 export default function TrailerButton({ youtubeId, title, className }: { youtubeId: string; title: string; className: string }) {
   const t = useTranslations('Detail');
   const [open, setOpen] = useState(false);
+
+  if (IS_STATIC_PREVIEW) {
+    return (
+      <a href={`https://www.youtube.com/watch?v=${youtubeId}`} target="_blank" rel="noopener noreferrer" className={className}>
+        <Icon name="play" size={18} /> {t('watch')} <Icon name="arrowUpRight" size={14} />
+      </a>
+    );
+  }
 
   return (
     <>

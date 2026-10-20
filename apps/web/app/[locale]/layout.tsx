@@ -1,6 +1,6 @@
 import type { Metadata, Viewport } from 'next';
 import { NextIntlClientProvider } from 'next-intl';
-import { getMessages } from 'next-intl/server';
+import { getMessages, setRequestLocale } from 'next-intl/server';
 import { notFound } from 'next/navigation';
 import { routing } from '@/i18n/routing';
 import { getSetting } from '@/lib/supabase';
@@ -26,6 +26,7 @@ type Props = {
 };
 
 export default async function LocaleLayout({ children, params: { locale } }: Props) {
+  setRequestLocale(locale);
   if (!routing.locales.includes(locale as 'ko' | 'en' | 'ja')) {
     notFound();
   }

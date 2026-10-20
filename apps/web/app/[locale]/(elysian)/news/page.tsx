@@ -1,5 +1,5 @@
 import type { Metadata } from 'next';
-import { getTranslations } from 'next-intl/server';
+import { getTranslations, setRequestLocale } from 'next-intl/server';
 import { Link } from '@/i18n/routing';
 import PageHeader from '@/components/elysian/PageHeader';
 import XTimeline from '@/components/news/XTimeline';
@@ -8,8 +8,8 @@ import { getLocalizedField, getLocalizedSettingValue, getNews, getSetting } from
 
 export const revalidate = 10;
 
-export async function generateMetadata(): Promise<Metadata> {
-  const t = await getTranslations('News');
+export async function generateMetadata({ params: { locale } }: { params: { locale: string } }): Promise<Metadata> {
+  const t = await getTranslations({ locale, namespace: 'News' });
   return { title: t('title') };
 }
 
@@ -20,6 +20,7 @@ function formatDate(dateString: string | undefined): string {
 }
 
 export default async function NewsPage({ params: { locale } }: { params: { locale: string } }) {
+  setRequestLocale(locale);
   const [t, ts, modeSetting, handleSetting, newsItems] = await Promise.all([
     getTranslations('News'),
     getTranslations('Site'),

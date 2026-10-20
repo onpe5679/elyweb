@@ -1,9 +1,10 @@
-import { getTranslations } from 'next-intl/server';
+import { getTranslations, setRequestLocale } from 'next-intl/server';
 import SiteHeader from '@/components/elysian/SiteHeader';
 import SiteFooter from '@/components/elysian/SiteFooter';
 import { getLocalizedSettingValue, getSettings } from '@/lib/supabase';
 
 export default async function ElysianLayout({ children, params: { locale } }: { children: React.ReactNode; params: { locale: string } }) {
+  setRequestLocale(locale);
   const [t, settings] = await Promise.all([
     getTranslations('Site'),
     getSettings(['contact_email', 'twitter_url', 'youtube_url', 'instagram_url']),

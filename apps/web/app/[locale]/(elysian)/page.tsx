@@ -1,4 +1,4 @@
-import { getTranslations } from 'next-intl/server';
+import { getTranslations, setRequestLocale } from 'next-intl/server';
 import { Link } from '@/i18n/routing';
 import TitleScreen from '@/components/elysian/TitleScreen';
 import WorksIndex from '@/components/elysian/WorksIndex';
@@ -17,6 +17,7 @@ import { stripEmphasis, toWorkSummary } from '@/lib/works';
 export const revalidate = 10;
 
 export default async function HomePage({ params: { locale } }: { params: { locale: string } }) {
+  setRequestLocale(locale);
   const [t, tv, games, timeline, settings] = await Promise.all([
     getTranslations('Home'),
     getTranslations('Vision'),

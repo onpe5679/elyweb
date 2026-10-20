@@ -1,6 +1,6 @@
 import type { Metadata } from 'next';
 import { notFound, redirect } from 'next/navigation';
-import { getTranslations } from 'next-intl/server';
+import { getTranslations, setRequestLocale } from 'next-intl/server';
 import GameDetailView from '@/components/detail/GameDetailView';
 import DialogueDemo, { DemoLauncher } from '@/components/habom/DialogueDemo';
 import { DEMO_SCRIPTS } from '@/lib/habom/demo-script';
@@ -23,6 +23,7 @@ export async function generateMetadata({ params: { locale, slug } }: Props): Pro
 }
 
 export default async function HabomGamePage({ params: { locale, slug } }: Props) {
+  setRequestLocale(locale);
   const game = await getGameBySlug(slug);
   if (!game) notFound();
   const label = getGameLabel(game);

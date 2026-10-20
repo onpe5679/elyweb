@@ -1,16 +1,17 @@
 import type { Metadata } from 'next';
-import { getTranslations } from 'next-intl/server';
+import { getTranslations, setRequestLocale } from 'next-intl/server';
 import PageHeader from '@/components/elysian/PageHeader';
 import { getLocalizedSettingValue, getSetting } from '@/lib/supabase';
 
 export const revalidate = 10;
 
-export async function generateMetadata(): Promise<Metadata> {
-  const t = await getTranslations('Privacy');
+export async function generateMetadata({ params: { locale } }: { params: { locale: string } }): Promise<Metadata> {
+  const t = await getTranslations({ locale, namespace: 'Privacy' });
   return { title: t('title') };
 }
 
 export default async function PrivacyPage({ params: { locale } }: { params: { locale: string } }) {
+  setRequestLocale(locale);
   const [t, ts, setting] = await Promise.all([getTranslations('Privacy'), getTranslations('Site'), getSetting('privacy_policy')]);
   const body = getLocalizedSettingValue(setting, locale);
   // The policy is only published in Korean; mark the language so it is read correctly.
