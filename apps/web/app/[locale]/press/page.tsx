@@ -1,62 +1,114 @@
-import { getPressKits, getLocalizedField, PressKit } from '@/lib/supabase';
-import { getLocale } from 'next-intl/server';
+import Link from "next/link";
+import { getPressKits, getLocalizedField } from "@/lib/supabase";
+import { getLocale } from "next-intl/server";
+import { EditorialPageHeader } from "@/components/editorial/EditorialPageHeader";
+import styles from "@/components/editorial/EditorialPages.module.css";
 
 export default async function PressPage() {
-  const locale = await getLocale();
-  const pressKits = await getPressKits();
+  const [locale, pressKits] = await Promise.all([getLocale(), getPressKits()]);
+  const labels =
+    locale === "en"
+      ? {
+          label: "Media resources",
+          description: "Press materials for Studio Elysian and our games.",
+          download: "DOWNLOAD",
+          pending: "COMING SOON",
+          fallback: "Press materials",
+          empty: "Press materials are being prepared.",
+          note: "For press inquiries or additional materials, please contact us.",
+          contact: "Contact us",
+        }
+      : locale === "ja"
+        ? {
+            label: "メディア向け資料",
+            description:
+              "スタジオエリシアンと作品のプレス資料をご覧いただけます。",
+            download: "ダウンロード",
+            pending: "準備中",
+            fallback: "プレス資料",
+            empty: "プレス資料を準備しています。",
+            note: "取材や資料に関するご相談は、お問い合わせください。",
+            contact: "お問い合わせ",
+          }
+        : {
+            label: "프레스 자료",
+            description:
+              "스튜디오 엘리시안과 작품을 소개하는 자료를 모았습니다.",
+            download: "다운로드",
+            pending: "준비 중",
+            fallback: "작품 소개 및 미디어 자료",
+            empty: "프레스 자료를 준비하고 있습니다.",
+            note: "취재 및 추가 자료가 필요하신 경우 문의해 주세요.",
+            contact: "문의하기",
+          };
 
   return (
-    <div className="pt-24 pb-16 bg-background-light dark:bg-background-dark min-h-screen">
-      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="text-center mb-16">
-          <h4 className="text-primary font-bold tracking-widest uppercase mb-2 text-sm">
-            Media Resources
-          </h4>
-          <h1 className="font-display font-black text-4xl md:text-5xl text-gray-900 dark:text-white">
-            Press Kit
-          </h1>
-        </div>
-
-        <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-6">
-          Download Press Kits
-        </h2>
-
-        {pressKits.length === 0 ? (
-          <div className="bg-white dark:bg-surface-dark rounded-xl p-8 text-center border border-gray-100 dark:border-gray-800">
-            <i className="fa-solid fa-folder-open text-4xl text-gray-300 dark:text-gray-600 mb-4"></i>
-            <p className="text-gray-500 dark:text-gray-400">
-              No press kits available yet. Check back later!
-            </p>
-          </div>
-        ) : (
-          <div className="space-y-4">
-            {pressKits.map((kit: PressKit) => (
-              <a
-                key={kit.id}
-                href={kit.file_url || '#'}
-                target={kit.file_url ? '_blank' : undefined}
-                rel={kit.file_url ? 'noopener noreferrer' : undefined}
-                className={`block bg-white dark:bg-surface-dark rounded-xl p-6 shadow-sm border border-gray-100 dark:border-gray-800 hover:border-primary dark:hover:border-primary transition-colors ${
-                  !kit.file_url ? 'cursor-not-allowed opacity-60' : ''
-                }`}
-              >
-                <div className="flex items-center justify-between">
+    <div className={styles.page}>
+      <div className="editorial-container">
+        <EditorialPageHeader
+          index="06"
+          title="Press & media."
+          label={labels.label}
+          description={labels.description}
+        />
+        <div className={styles.pressList}>
+          {pressKits.length === 0 ? (
+            <p className={styles.empty}>{labels.empty}</p>
+          ) : (
+            pressKits.map((kit, index) => {
+              const fileUrl =
+                kit.file_url &&
+                !/^https?:\/\/(?:www\.)?example\.(?:com|org|net)(?:\/|$)/i.test(
+                  kit.file_url,
+                )
+                  ? kit.file_url
+                  : null;
+              const contents = (
+                <>
+                  <span className={styles.pressNumber}>
+                    {String(index + 1).padStart(2, "0")}
+                  </span>
                   <div>
-                    <h3 className="text-lg font-bold text-gray-900 dark:text-white mb-1">
-                      {getLocalizedField(kit, 'title', locale)}
-                    </h3>
-                    <p className="text-gray-500 dark:text-gray-400 text-sm">
-                      {getLocalizedField(kit, 'description', locale) || 'Download press materials'}
+                    <h2>{getLocalizedField(kit, "title", locale)}</h2>
+                    <p>
+                      {getLocalizedField(kit, "description", locale) ||
+                        labels.fallback}
                     </p>
                   </div>
-                  <div className="w-10 h-10 bg-primary/10 rounded-full flex items-center justify-center flex-shrink-0">
-                    <i className={`fa-solid ${kit.file_url ? 'fa-download' : 'fa-clock'} text-primary`}></i>
+                  <div className={styles.download}>
+                    {fileUrl ? labels.download : labels.pending}
+                    <span aria-hidden="true">{fileUrl ? "↓" : "—"}</span>
                   </div>
-                </div>
-              </a>
-            ))}
-          </div>
-        )}
+                </>
+              );
+              return fileUrl ? (
+                <a
+                  key={kit.id}
+                  href={fileUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className={styles.pressRow}
+                >
+                  {contents}
+                </a>
+              ) : (
+                <article
+                  key={kit.id}
+                  className={styles.pressRow}
+                  aria-disabled="true"
+                >
+                  {contents}
+                </article>
+              );
+            })
+          )}
+        </div>
+        <div className={styles.pressNote}>
+          <p>{labels.note}</p>
+          <Link href={`/${locale}/contact`} className="text-link">
+            {labels.contact} <span aria-hidden="true">↗</span>
+          </Link>
+        </div>
       </div>
     </div>
   );
