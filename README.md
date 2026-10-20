@@ -1,3 +1,5 @@
+> 이 브랜치는 **독립 리디자인 작업의 출발점**입니다. 새 에이전트는 [DESIGN_BRIEF.md](DESIGN_BRIEF.md)부터 읽으세요. 기존 시안 결과물은 포함하지 않습니다.
+
 # Studio Elysian (elyweb)
 
 [![English](https://img.shields.io/badge/lang-English-blue.svg)](#english)
