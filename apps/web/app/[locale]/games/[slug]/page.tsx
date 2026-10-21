@@ -1,334 +1,271 @@
-import { getTranslations } from 'next-intl/server';
+import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
-import {
-  getGameBySlug,
-  getGames,
-  getLocalizedField,
-  getStatusText,
-  getGameSections,
-  GameSection,
-  Game
-} from '@/lib/supabase';
+import { getTranslations, setRequestLocale } from 'next-intl/server';
+import { getGameBySlug, getGameSectionRows, getGames } from '@/lib/supabase';
+import { toCard, toDetail } from '@/lib/game-model';
+import { hasExperience } from '@/lib/brands';
+import { fmtDate } from '@/lib/format';
+import { Link } from '@/i18n/routing';
+import Shell from '@/components/shell/Shell';
+import StatusMarker from '@/components/ui/StatusMarker';
+import DetailNav from '@/components/game/DetailNav';
+import Gallery from '@/components/game/Gallery';
+import VideoCard from '@/components/game/VideoCard';
+import RichText from '@/components/game/RichText';
+import RememberGame from '@/components/game/RememberGame';
+import ExperienceLauncher from '@/components/habom/ExperienceLauncher';
 
-const SectionRenderer = ({ section, game, locale }: { section: GameSection; game: Game; locale: string }) => {
-  const content = section.content || {};
-  const getLoc = (key: string): string => {
-    const val = content[`${key}_${locale}`] || content[`${key}_ko`] || '';
-    return typeof val === 'string' ? val : '';
-  };
-  const title = getLocalizedField(section, 'title', locale);
+export const revalidate = 10;
 
-  switch (section.type) {
-    case 'text':
-    case 'info':
-    case 'synopsis':
-      return (
-        <section className="scroll-mt-24" id={`section-${section.id}`}>
-          <h2 className="font-display font-bold text-2xl md:text-3xl text-gray-900 dark:text-white mb-6 flex items-center gap-3">
-            <span className="material-symbols-outlined text-primary text-3xl">
-              {section.type === 'info' ? 'info' : section.type === 'synopsis' ? 'auto_stories' : 'article'}
-            </span>
-            {title}
-          </h2>
-          <div className="prose prose-lg dark:prose-invert text-gray-600 dark:text-gray-300">
-            {getLoc('lead') && <p className="lead font-medium text-primary">{getLoc('lead')}</p>}
-            {getLoc('p1') && <p className="whitespace-pre-line">{getLoc('p1')}</p>}
-            {getLoc('p2') && <p className="whitespace-pre-line">{getLoc('p2')}</p>}
-            {getLoc('content') && <p className="whitespace-pre-line">{getLoc('content')}</p>}
+type Props = { params: { locale: string; slug: string } };
 
-            {section.type === 'info' && (
-              <div className="grid grid-cols-2 gap-4 mt-6 not-prose">
-                <div className="bg-gray-50 dark:bg-gray-800 p-4 rounded-xl">
-                  <div className="text-xs text-gray-500 uppercase tracking-wide font-bold mb-1">Genre</div>
-                  <div className="font-semibold text-gray-900 dark:text-white">
-                    {getLocalizedField(game, 'genre', locale) || game.genre_ko?.join(', ')}
-                  </div>
-                </div>
-                <div className="bg-gray-50 dark:bg-gray-800 p-4 rounded-xl">
-                  <div className="text-xs text-gray-500 uppercase tracking-wide font-bold mb-1">Platform</div>
-                  <div className="font-semibold text-gray-900 dark:text-white">
-                    {game.platforms?.join(', ')}
-                  </div>
-                </div>
-              </div>
-            )}
-
-            {getLoc('quote') && (
-              <div className="pl-4 border-l-4 border-romance-pink/50 italic bg-gray-50 dark:bg-gray-800/50 p-4 rounded-r-lg mt-6">
-                {getLoc('quote')}
-              </div>
-            )}
-          </div>
-        </section>
-      );
-
-    case 'gallery':
-      const images = (content.images as string[]) || [];
-      if (images.length === 0) return null;
-      return (
-        <section className="scroll-mt-24" id={`section-${section.id}`}>
-          <h2 className="font-display font-bold text-2xl md:text-3xl text-gray-900 dark:text-white mb-6 flex items-center gap-3">
-            <span className="material-symbols-outlined text-primary text-3xl">photo_library</span>
-            {title}
-          </h2>
-          <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
-            {images.map((img, idx) => (
-              <a
-                key={idx}
-                href={img}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="relative aspect-video rounded-xl overflow-hidden group shadow-md hover:shadow-xl transition-shadow"
-              >
-                <img
-                  src={img}
-                  alt={`Gallery image ${idx + 1}`}
-                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
-                />
-                <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-colors flex items-center justify-center">
-                  <span className="material-symbols-outlined text-white opacity-0 group-hover:opacity-100 transition-opacity text-3xl drop-shadow-lg">
-                    zoom_in
-                  </span>
-                </div>
-              </a>
-            ))}
-          </div>
-        </section>
-      );
-
-    case 'timeline':
-      const items = (content.items as { date: string; text_ko?: string; text_en?: string; text_ja?: string }[]) || [];
-      if (items.length === 0) return null;
-      return (
-        <section className="scroll-mt-24" id={`section-${section.id}`}>
-          <h2 className="font-display font-bold text-2xl md:text-3xl text-gray-900 dark:text-white mb-6 flex items-center gap-3">
-            <span className="material-symbols-outlined text-primary text-3xl">history</span>
-            {title}
-          </h2>
-          <div className="bg-white dark:bg-surface-dark rounded-2xl p-6 shadow-sm border border-gray-100 dark:border-gray-800">
-            <ul className="space-y-4">
-              {items.map((item, idx) => (
-                <li key={idx} className="flex gap-4 text-sm">
-                  <span className="font-bold text-primary min-w-[80px]">{item.date}</span>
-                  <span className="text-gray-600 dark:text-gray-400">
-                    {item[`text_${locale}` as keyof typeof item] || item.text_ko || ''}
-                  </span>
-                </li>
-              ))}
-            </ul>
-          </div>
-        </section>
-      );
-
-    case 'video':
-      if (!content.youtube_id) return null;
-      return (
-        <section className="scroll-mt-24" id={`section-${section.id}`}>
-          <h2 className="font-display font-bold text-2xl md:text-3xl text-gray-900 dark:text-white mb-6 flex items-center gap-3">
-            <span className="material-symbols-outlined text-primary text-3xl">play_circle</span>
-            {title}
-          </h2>
-          <div className="aspect-video w-full rounded-2xl overflow-hidden shadow-lg bg-black">
-            <iframe
-              width="100%"
-              height="100%"
-              src={`https://www.youtube.com/embed/${content.youtube_id}`}
-              title={title || 'Video'}
-              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-              allowFullScreen
-              className="w-full h-full"
-            />
-          </div>
-        </section>
-      );
-
-    case 'store':
-      const links = (content.links as { label: string; url: string; icon?: string }[]) || [];
-      if (links.length === 0) return null;
-      return (
-        <section className="scroll-mt-24" id={`section-${section.id}`}>
-          <h2 className="font-display font-bold text-2xl md:text-3xl text-gray-900 dark:text-white mb-6 flex items-center gap-3">
-            <span className="material-symbols-outlined text-primary text-3xl">shopping_cart</span>
-            {title}
-          </h2>
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            {links.map((link, idx) => (
-              <a
-                key={idx}
-                href={link.url}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="flex items-center justify-between bg-white dark:bg-surface-dark p-6 rounded-xl shadow-sm border border-gray-100 dark:border-gray-800 hover:border-primary dark:hover:border-primary transition-colors group"
-              >
-                <span className="flex items-center gap-3 font-bold text-gray-900 dark:text-white">
-                  {link.icon && <i className={`${link.icon} text-xl w-6 text-center text-gray-400 group-hover:text-primary transition-colors`} />}
-                  {link.label}
-                </span>
-                <span className="material-symbols-outlined text-gray-400 group-hover:text-primary transition-colors">arrow_outward</span>
-              </a>
-            ))}
-          </div>
-        </section>
-      );
-
-    case 'credits':
-      const credits = (content.credits as { role: string; name: string }[]) || [];
-      if (credits.length === 0) return null;
-      return (
-        <section className="scroll-mt-24" id={`section-${section.id}`}>
-          <h2 className="font-display font-bold text-2xl md:text-3xl text-gray-900 dark:text-white mb-6 flex items-center gap-3">
-            <span className="material-symbols-outlined text-primary text-3xl">group</span>
-            {title}
-          </h2>
-          <div className="bg-white dark:bg-surface-dark rounded-2xl p-6 shadow-sm border border-gray-100 dark:border-gray-800">
-            <dl className="grid grid-cols-1 sm:grid-cols-2 gap-x-8 gap-y-3">
-              {credits.map((credit, idx) => (
-                <div key={idx} className="flex gap-4">
-                  <dt className="text-gray-500 dark:text-gray-400 min-w-[120px] text-sm font-medium">{credit.role}</dt>
-                  <dd className="text-gray-900 dark:text-white font-semibold">{credit.name}</dd>
-                </div>
-              ))}
-            </dl>
-          </div>
-        </section>
-      );
-
-    case 'custom':
-      const customImages = Array.isArray(content.images) ? (content.images as string[]) : [];
-      return (
-        <section className="scroll-mt-24" id={`section-${section.id}`}>
-          <h2 className="font-display font-bold text-2xl md:text-3xl text-gray-900 dark:text-white mb-6 flex items-center gap-3">
-            <span className="material-symbols-outlined text-primary text-3xl">widgets</span>
-            {title}
-          </h2>
-          <div className="prose prose-lg dark:prose-invert text-gray-600 dark:text-gray-300">
-            {getLoc('content') && <div className="whitespace-pre-line">{getLoc('content')}</div>}
-            {customImages.length > 0 && (
-              <div className="grid grid-cols-2 gap-4 mt-6 not-prose">
-                {customImages.map((img, idx) => (
-                  <img key={idx} src={img} alt="" className="rounded-xl" />
-                ))}
-              </div>
-            )}
-          </div>
-        </section>
-      );
-
-    default:
-      return null;
-  }
-};
-
-export default async function GameDetailPage({ params }: { params: { locale: string; slug: string } }) {
-  const { locale, slug } = params;
-
-  // Still fetch common translations for standard UI elements
-  const t = await getTranslations('Common');
-
+export async function generateMetadata({ params: { locale, slug } }: Props): Promise<Metadata> {
   const game = await getGameBySlug(slug);
-  if (!game) {
-    notFound();
-  }
-
-  const sections = await getGameSections(slug);
-  const title = getLocalizedField(game, 'title', locale);
-
-  return (
-    <div className="bg-white dark:bg-background-dark text-text-light dark:text-text-dark font-body transition-colors duration-300">
-      <header className="relative h-[60vh] min-h-[500px] flex items-end pb-12 justify-center overflow-hidden">
-        <div className="absolute inset-0 z-0" data-testid="game-banner">
-          <img
-            alt="Game Banner"
-            className="w-full h-full object-cover object-center"
-            src={game.banner_image || game.cover_image}
-          />
-          <div className="absolute inset-0 bg-gradient-to-t from-background-light dark:from-background-dark via-transparent to-transparent opacity-100"></div>
-          <div className="absolute inset-0 bg-black/10"></div>
-        </div>
-        <div className="relative z-10 text-center px-4 max-w-5xl mx-auto w-full">
-          <div className="mb-4 inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-primary/90 text-white text-xs font-bold uppercase tracking-widest shadow-lg backdrop-blur-sm">
-            {getStatusText(game.status, locale)}
-          </div>
-          <h1 className="font-display font-black text-5xl md:text-7xl text-white mb-4 leading-tight drop-shadow-xl text-shadow whitespace-pre-line">
-            {title}
-          </h1>
-          <p className="text-lg text-white/90 font-medium drop-shadow-md max-w-2xl mx-auto">
-            {getLocalizedField(game, 'series', locale)}
-          </p>
-        </div>
-      </header>
-
-      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 -mt-8 relative z-20 pb-24">
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 mb-24">
-          <div className="lg:col-span-5 flex flex-col gap-8">
-            {/* Left Column: Cover & Sticky Meta */}
-            <div className="sticky top-24 space-y-8">
-              <div className="relative rounded-3xl overflow-hidden shadow-2xl ring-1 ring-black/5 group">
-                {game.cover_image && (
-                  <img
-                    alt="Game Poster"
-                    className="w-full h-auto object-cover transform group-hover:scale-105 transition-transform duration-700"
-                    src={game.cover_image}
-                  />
-                )}
-              </div>
-
-              {/* External Links */}
-              <div className="flex flex-col gap-3">
-                {game.steam_url && (
-                  <a
-                    href={game.steam_url}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="flex items-center justify-center gap-2 bg-gray-900 dark:bg-white text-white dark:text-gray-900 px-6 py-4 rounded-xl font-bold hover:opacity-90 transition-opacity"
-                  >
-                    <i className="fa-brands fa-steam text-xl"></i>
-                    Steam Store
-                  </a>
-                )}
-                {game.official_url && (
-                  <a
-                    href={game.official_url}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="flex items-center justify-center gap-2 bg-primary text-white px-6 py-4 rounded-xl font-bold hover:opacity-90 transition-opacity"
-                  >
-                    <i className="fa-solid fa-globe text-xl"></i>
-                    Official Site
-                  </a>
-                )}
-              </div>
-            </div>
-          </div>
-
-          <div className="lg:col-span-7 space-y-16 pt-4">
-            {/* Dynamic Sections */}
-            {sections.length > 0 ? (
-              sections.map(section => (
-                <div key={section.id}>
-                  <SectionRenderer section={section} game={game} locale={locale} />
-                  <hr className="border-gray-100 dark:border-gray-800 mt-16" />
-                </div>
-              ))
-            ) : (
-              // Fallback if no sections defined
-              <section>
-                <h2 className="font-display font-bold text-2xl md:text-3xl text-gray-900 dark:text-white mb-6">
-                  Game Information
-                </h2>
-                <p className="text-gray-600 dark:text-gray-300 leading-relaxed whitespace-pre-line">
-                  {getLocalizedField(game, 'description', locale)}
-                </p>
-              </section>
-            )}
-          </div>
-        </div>
-      </main>
-    </div>
-  );
+  if (!game) return {};
+  const m = toCard(game, locale);
+  return { title: m.title, description: m.desc.replace(/\s+/g, ' ').slice(0, 140), openGraph: { images: m.wide ? [m.wide] : [] } };
 }
 
 export async function generateStaticParams() {
   const games = await getGames();
-  return games.map((game) => ({ slug: game.slug }));
+  return games.map((g) => ({ slug: g.slug }));
+}
+
+export default async function GameDetailPage({ params: { locale, slug } }: Props) {
+  setRequestLocale(locale);
+  const game = await getGameBySlug(slug);
+  if (!game) notFound();
+  const [t, rows, all] = await Promise.all([getTranslations('Game'), getGameSectionRows(slug), getGames()]);
+
+  const m = toDetail(game, rows, locale);
+  const habom = m.brand === 'habom';
+  const experience = hasExperience(game);
+  const primaryStore = m.stores[0];
+  const related = all
+    .filter((g) => g.slug !== slug)
+    .map((g) => toCard(g, locale))
+    .filter((c) => c.brand === m.brand);
+  const sameSeries = related.filter((c) => c.series === m.series);
+  const relatedList = (sameSeries.length ? sameSeries : related).slice(0, 3);
+
+  const plates = [
+    ...(m.keyArt.length > 1 ? m.keyArt.map((src, i) => ({ src, caption: i === 0 ? t('keyart.visual') : t('keyart.poster') })) : []),
+    ...m.gallery.flatMap((g) => g.images.map((src) => ({ src, caption: g.title }))),
+  ];
+
+  const tabs = [
+    { id: 'overview', label: t('tabs.overview'), show: true },
+    { id: 'gallery', label: t('tabs.gallery'), show: plates.length > 0 },
+    { id: 'video', label: t('tabs.video'), show: m.videos.length > 0 },
+    { id: 'credits', label: t('tabs.credits'), show: m.credits.length > 0 },
+    { id: 'history', label: t('tabs.history'), show: m.timeline.length > 0 },
+    { id: 'related', label: t('tabs.related'), show: relatedList.length > 0 },
+  ].filter((x) => x.show);
+
+  const info: { label: string; value: React.ReactNode }[] = [
+    { label: t('info.series'), value: m.series },
+    { label: t('info.status'), value: <StatusMarker status={m.status} /> },
+    { label: t('info.platform'), value: m.platforms.join(', ') },
+    { label: t('info.genre'), value: m.genres.join(' · ') },
+    { label: t('info.release'), value: m.release ? fmtDate(m.release.date, locale) : '' },
+    {
+      label: t('info.staff'),
+      value: m.keyStaff.length ? (
+        <ul className="space-y-1">
+          {m.keyStaff.slice(0, 3).map((s) => (
+            <li key={s.role + s.name}><span className="text-ink-3">{s.role}</span> {s.name}</li>
+          ))}
+        </ul>
+      ) : '',
+    },
+  ].filter((r) => r.value);
+
+  return (
+    <Shell brand={m.brand} locale={locale}>
+      <RememberGame slug={m.slug} title={m.title} />
+
+      {/* 히어로: 큰 작품 비주얼 · 작품명 · 주요 버튼 */}
+      <header className="on-dark relative isolate overflow-hidden bg-[#0b0d14] text-white">
+        <div className="absolute inset-0 -z-10">
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img src={m.hero || m.tall} alt="" data-testid="game-banner" className="h-full w-full object-cover object-[50%_30%]" />
+          <div className="absolute inset-0 bg-gradient-to-r from-black/85 via-black/45 to-black/10" />
+          <div className="absolute inset-0 bg-gradient-to-t from-[#0b0d14] via-transparent to-black/30" />
+        </div>
+        <div className="mx-auto grid min-h-[min(84svh,820px)] max-w-page items-end gap-10 px-5 pb-12 pt-28 md:px-10 lg:grid-cols-[minmax(0,1fr)_300px] lg:pb-16">
+          <div className="min-w-0">
+            <nav aria-label={t('breadcrumb')} className="mb-6 font-mono text-[12px] uppercase tracking-[.14em] text-white/70">
+              <Link href="/games" className="hover:text-white">{t('breadcrumbWorks')}</Link>
+              <span aria-hidden> / </span>
+              <span>{m.series}</span>
+            </nav>
+            <div className="flex flex-wrap items-center gap-2">
+              <span className={`marker ${habom ? 'marker--sub' : ''} !bg-white !text-black`} style={habom ? { background: 'rgb(var(--c-sub))', color: 'rgb(59 36 51)' } : undefined}>{m.series}</span>
+              <StatusMarker status={m.status} className="!bg-transparent !text-white !shadow-[inset_0_0_0_1px_rgba(255,255,255,.7)]" />
+            </div>
+            <h1 className="t-display mt-5 whitespace-pre-line text-[clamp(40px,7.4vw,112px)] text-white [text-shadow:0_2px_30px_rgba(0,0,0,.45)]">{m.title}</h1>
+            <p className="mt-6 max-w-xl whitespace-pre-line break-keep font-serif text-[clamp(16px,1.4vw,20px)] leading-8 text-white/85">{m.desc}</p>
+            <p className="mt-5 font-mono text-[12px] uppercase tracking-[.14em] text-white/70">
+              {[m.platforms.join(', '), m.genres.join(' · ')].filter(Boolean).join('   ·   ')}
+            </p>
+            <div className="mt-9 flex flex-wrap gap-3">
+              {primaryStore && (
+                <a href={primaryStore.url} target="_blank" rel="noopener noreferrer" className={`btn btn--on-dark ${habom ? '!border-ink' : ''}`}>
+                  {t('buy', { name: primaryStore.name })} <span aria-hidden>↗</span>
+                </a>
+              )}
+              {experience && <ExperienceLauncher slug={m.slug} title={m.title} image={m.wide || m.tall} variant="primary" />}
+              {m.videos.length > 0 && (
+                <a href="#video" className="btn btn--on-dark-ghost">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" aria-hidden><path d="M8 5v14l11-7z" /></svg>
+                  {t('watch')}
+                </a>
+              )}
+              {m.officialUrl && (
+                <a href={m.officialUrl} target="_blank" rel="noopener noreferrer" className="btn btn--on-dark-ghost">{t('official')} ↗</a>
+              )}
+            </div>
+          </div>
+          {m.tall && (
+            <div className="hidden lg:block">
+              <div className="plate rotate-[1.5deg]">
+                <div className="aspect-[3/4] overflow-hidden" style={{ borderRadius: 'calc(var(--radius-card) - 8px)' }}>
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img src={m.tall} alt={m.title} className="plate__img" />
+                </div>
+              </div>
+            </div>
+          )}
+        </div>
+      </header>
+
+      <DetailNav items={tabs.map(({ id, label }) => ({ id, label }))} label={t('tabsLabel')} />
+
+      <div className="mx-auto max-w-page px-5 md:px-10">
+        {/* 소개: 시놉시스·특징(글) + 작품 정보(오른쪽 열) */}
+        <section id="overview" className="scroll-mt-[calc(var(--header-h)+60px)] grid gap-14 py-16 md:py-24 lg:grid-cols-12">
+          <div className="lg:col-span-7">
+            {m.story.length === 0 ? (
+              <p className="t-prose whitespace-pre-line break-keep">{m.desc}</p>
+            ) : (
+              m.story.map((s, i) => (
+                <div key={s.id} className={i > 0 ? 'mt-16 border-t border-ink/15 pt-12' : ''}>
+                  <p className="t-eyebrow">{s.kind === 'synopsis' ? t('synopsis') : t('about')}</p>
+                  <h2 className="t-display mt-3 mb-7 text-[clamp(26px,3vw,38px)]">{s.title}</h2>
+                  <RichText text={s.body} />
+                </div>
+              ))
+            )}
+          </div>
+          <aside className="lg:col-span-4 lg:col-start-9" aria-label={t('info.title')}>
+            <div className="sticky top-[calc(var(--header-h)+80px)]">
+              <h2 className="t-eyebrow mb-4">{t('info.title')}</h2>
+              <dl className="border-t border-ink">
+                {info.map((r) => (
+                  <div key={r.label} className="grid grid-cols-[6.5rem_minmax(0,1fr)] gap-4 border-b border-ink/15 py-4 text-[15px]">
+                    <dt className="font-mono text-[12px] uppercase tracking-wider text-ink-3">{r.label}</dt>
+                    <dd className="min-w-0 break-keep">{r.value}</dd>
+                  </div>
+                ))}
+              </dl>
+              {m.stores.length > 0 && (
+                <div className="mt-8 flex flex-col gap-3">
+                  {m.stores.map((s) => (
+                    <a key={s.url} href={s.url} target="_blank" rel="noopener noreferrer" className="btn btn--ghost justify-between">
+                      <span>{s.name}</span><span aria-hidden>↗</span>
+                    </a>
+                  ))}
+                </div>
+              )}
+              {experience && (
+                <div className="mt-8 rounded-card bg-paper-2 p-6 ring-2 ring-ink">
+                  <p className="font-display text-[22px]">{t('experience.title')}</p>
+                  <p className="mt-2 break-keep text-[14px] leading-7 text-ink-2">{t('experience.body')}</p>
+                  <div className="mt-5"><ExperienceLauncher slug={m.slug} title={m.title} image={m.wide || m.tall} variant="card" /></div>
+                </div>
+              )}
+            </div>
+          </aside>
+        </section>
+
+        {plates.length > 0 && (
+          <section id="gallery" className="scroll-mt-[calc(var(--header-h)+60px)] border-t border-ink/15 py-16 md:py-24">
+            <h2 className="t-display mb-3 text-[clamp(26px,3vw,38px)]">{t('keyart.title')}</h2>
+            <p className="mb-10 max-w-xl break-keep font-serif text-[15px] leading-8 text-ink-2">{t('keyart.lead')}</p>
+            <Gallery items={plates} title={m.title} />
+          </section>
+        )}
+
+        {m.videos.length > 0 && (
+          <section id="video" className="scroll-mt-[calc(var(--header-h)+60px)] border-t border-ink/15 py-16 md:py-24">
+            <h2 className="t-display mb-10 text-[clamp(26px,3vw,38px)]">{t('videos.title')}</h2>
+            <div className="grid gap-10 sm:grid-cols-2">
+              {m.videos.map((v, i) => (
+                <VideoCard key={v.id} id={`v-${v.id}`} title={v.title} youtubeId={v.youtubeId} url={v.url} poster={m.wide || m.tall} large={i === 0 && m.videos.length % 2 === 1} />
+              ))}
+            </div>
+          </section>
+        )}
+
+        {m.credits.length > 0 && (
+          <section id="credits" className="scroll-mt-[calc(var(--header-h)+60px)] border-t border-ink/15 py-16 md:py-24">
+            <h2 className="t-display mb-10 text-[clamp(26px,3vw,38px)]">{t('credits.title')}</h2>
+            <div className="gap-x-14 lg:columns-2">
+              {m.credits.map((g) => (
+                <section key={g.id} className="mb-12 break-inside-avoid">
+                  <h3 className="mb-3 font-mono text-[12px] uppercase tracking-[.14em] text-accent-text">{g.title}</h3>
+                  <dl className="border-t border-ink">
+                    {g.rows.map((r, i) => (
+                      <div key={i} className="grid grid-cols-[minmax(7rem,40%)_minmax(0,1fr)] gap-4 border-b border-ink/12 py-2.5 text-[15px]">
+                        <dt className="text-ink-3">{r.role}</dt>
+                        <dd className="font-medium">{r.name}</dd>
+                      </div>
+                    ))}
+                  </dl>
+                </section>
+              ))}
+            </div>
+          </section>
+        )}
+
+        {m.timeline.length > 0 && (
+          <section id="history" className="scroll-mt-[calc(var(--header-h)+60px)] border-t border-ink/15 py-16 md:py-24">
+            <h2 className="t-display mb-10 text-[clamp(26px,3vw,38px)]">{t('history.title')}</h2>
+            {m.timeline.map((g) => (
+              <ol key={g.id} className="max-w-3xl border-t border-ink">
+                {g.items.map((it, i) => (
+                  <li key={i} className="grid grid-cols-[8.5rem_minmax(0,1fr)] gap-6 border-b border-ink/15 py-4">
+                    <span className="font-display text-[22px] font-extrabold text-accent-text">{fmtDate(it.date, locale)}</span>
+                    <span className="break-keep font-serif text-[17px] leading-8 text-ink-2">{it.text}</span>
+                  </li>
+                ))}
+              </ol>
+            ))}
+          </section>
+        )}
+
+        {relatedList.length > 0 && (
+          <section id="related" className="scroll-mt-[calc(var(--header-h)+60px)] border-t border-ink/15 py-16 md:py-24">
+            <h2 className="t-display mb-10 text-[clamp(26px,3vw,38px)]">{sameSeries.length ? t('related.series') : t('related.other')}</h2>
+            <ul className="grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
+              {relatedList.map((c) => (
+                <li key={c.slug}>
+                  <Link href={`/games/${c.slug}`} className="group block">
+                    <div className="plate">
+                      <div className="aspect-[16/10] overflow-hidden" style={{ borderRadius: 'calc(var(--radius-card) - 8px)' }}>
+                        {/* eslint-disable-next-line @next/next/no-img-element */}
+                        <img src={c.wide} alt="" loading="lazy" className="plate__img zoom-img object-[50%_28%]" />
+                      </div>
+                    </div>
+                    <p className="mt-4 font-mono text-[12px] uppercase tracking-wider text-ink-3">{c.series}</p>
+                    <p className="t-display mt-1 text-[22px]"><span className="link-u">{c.title}</span></p>
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </section>
+        )}
+      </div>
+    </Shell>
+  );
 }

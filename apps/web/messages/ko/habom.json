@@ -1,1 +1,92 @@
-{}
+{
+  "Habom": {
+    "meta": {
+      "title": "스튜디오 하봄",
+      "description": "스튜디오 엘리시안의 산하 스튜디오 하봄. 밝고 둥글고 말랑한, 가볍게 즐기는 이야기를 만듭니다."
+    },
+    "hero": {
+      "badge": "스튜디오 엘리시안 산하 스튜디오",
+      "wordmarkLabel": "스튜디오 하봄",
+      "wordmarkNote": "※ 공식 로고를 찾지 못해 서체로 만든 임시 워드마크입니다.",
+      "tagline": "밝고, 둥글고, 말랑하게.\n가볍게 펼쳐 보는 이야기를 만듭니다.",
+      "stickerA": "밝고",
+      "stickerB": "둥글게",
+      "stickerC": "말랑하게",
+      "artSticker": "바로 체험해 볼 수 있어요",
+      "ctaGame": "작품 페이지 보기",
+      "toElysian": "스튜디오 엘리시안으로"
+    },
+    "works": {
+      "eyebrow": "Our Games",
+      "title": "하봄의 작품",
+      "lead": "하봄이 만든 이야기들이에요. 카드를 눌러 작품을 자세히 보거나, 바로 체험해 볼 수 있어요.",
+      "count": "작품 {count}편",
+      "open": "작품 보기",
+      "play": "체험하기",
+      "playable": "체험 가능",
+      "empty": "아직 공개된 하봄 작품이 없어요."
+    },
+    "experience": {
+      "eyebrow": "Dialogue & Choices",
+      "title": "대사와 선택지를\n직접 눌러 보세요",
+      "body": "하봄 작품의 분위기를 맛볼 수 있는 짧은 체험이에요. 대사를 한 줄씩 넘기고, 선택지를 골라 이야기가 어디로 흘러가는지 확인해 보세요.",
+      "step1Title": "대사를 넘겨요",
+      "step1Body": "글자가 나오는 동안 누르면 한 번에 보이고, 한 번 더 누르면 다음 대사로 넘어가요.",
+      "step2Title": "선택지를 골라요",
+      "step2Body": "마우스·터치로 누르거나 키보드 1 · 2 · 3 키로 고를 수 있어요. 선택은 세 번 나와요.",
+      "step3Title": "엔딩을 만나요",
+      "step3Body": "고른 선택에 따라 엔딩이 갈라져요. 엔딩 카드에서 내 선택을 돌아보고 다시 해 볼 수 있어요.",
+      "roommates": "체험 속에서 만나는 룸메이트",
+      "roommatesNote": "이름과 성격은 공식 시놉시스에 소개된 내용이에요.",
+      "noticeTag": "시안",
+      "noticeTitle": "시안용 예시 대본이에요",
+      "noticeBody": "대사와 장면은 이 시안을 위해 새로 쓴 예시이며, 공식 게임의 내용이 아닙니다. 실제 대본·캐릭터·분량·사운드가 정해지면 교체돼요. 소리는 나오지 않아요.",
+      "only": "하봄 소속 게임에서만 제공돼요.",
+      "keys": "Enter · Space 다음 / 1 · 2 · 3 선택 / R 다시 하기 / Esc 닫기",
+      "previewLabel": "예시 화면"
+    },
+    "studio": {
+      "eyebrow": "About Habom",
+      "title": "스튜디오 하봄",
+      "body": "하봄은 스튜디오 엘리시안의 산하 스튜디오예요. 엘리시안과는 다른 결의, 밝고 둥글고 캐주얼한 분위기의 작품을 만듭니다.",
+      "teamEyebrow": "Team",
+      "elysianNote": "엘리시안의 다른 작품과 스튜디오 소개는 스튜디오 엘리시안에서 볼 수 있어요.",
+      "toElysian": "스튜디오 엘리시안 보기",
+      "toAbout": "엘리시안 소개",
+      "toContact": "협업·문의하기"
+    }
+  },
+  "Experience": {
+    "eyebrow": "대사·선택지 체험",
+    "draftBadge": "시안용 예시 대본 · 공식 게임 내용이 아닙니다",
+    "draftNote": "이 대사와 엔딩은 시안을 위해 새로 쓴 예시이며, 공식 게임의 대본·캐릭터 설정이 아닙니다.",
+    "replayHint": "다른 선택을 하면 다른 엔딩을 만날 수 있어요.",
+    "progress": "진행도",
+    "choiceCount": "선택 {done}/{total}",
+    "choiceNow": "선택 {n}/{total}",
+    "chooseHint": "선택지를 골라 주세요",
+    "next": "다음",
+    "restart": "다시 하기",
+    "restartAria": "처음부터 다시 하기 (R)",
+    "close": "닫기",
+    "closeAria": "체험 닫기 (Esc)",
+    "keys": "Enter · Space 다음  ·  1 2 3 선택  ·  R 다시 하기  ·  Esc 닫기",
+    "endingLabel": "엔딩 {n}/{total}",
+    "endingAnnounce": "엔딩에 도착했어요. {title}",
+    "yourChoices": "내가 고른 선택",
+    "closeness": "룸메이트와의 거리",
+    "closenessItem": "{name}: {count}/{total}",
+    "collection": "발견한 엔딩 {found}/{total}",
+    "locked": "???",
+    "lockedLabel": "아직 찾지 못한 엔딩",
+    "toGame": "게임 페이지로",
+    "closeEnd": "닫기",
+    "launcher": {
+      "label": "대사·선택지 체험하기",
+      "badge": "시안용 예시",
+      "cardTitle": "대사·선택지 체험",
+      "cardBody": "대사를 한 줄씩 넘기고 선택지를 골라, 이야기의 끝을 만나 보세요.",
+      "cardMeta": "짧은 체험 · 소리 없음"
+    }
+  }
+}

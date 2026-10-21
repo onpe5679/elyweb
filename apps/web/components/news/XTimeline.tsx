@@ -1,6 +1,8 @@
 'use client';
 
 import { useEffect, useRef, useState } from 'react';
+import { useTranslations } from 'next-intl';
+import { ArrowUpRightIcon, XIcon } from '@/components/pages/Icons';
 
 declare global {
   interface Window {
@@ -13,13 +15,18 @@ type XTimelineProps = {
   height?: number;
 };
 
-// Renders the official X (Twitter) profile timeline embed. X's syndication
-// endpoint intermittently rate-limits (429); when the widget fails to render
-// within the deadline we show a graceful "View on X" fallback card instead of
-// the bare placeholder link, so the page never looks broken.
+/**
+ * 공식 X(트위터) 프로필 타임라인 임베드.
+ * X 의 syndication 서버는 가끔 429 로 막히거나, 네트워크/광고 차단으로 스크립트가 아예 못 뜨는 환경이 있다.
+ * 그래서 임베드가 실제로 높이를 갖고 그려졌을 때만 "rendered" 로 보고, 그 전(불러오는 중)과
+ * 실패했을 때는 같은 모양의 "X 프로필 카드" 를 보여 준다 — 어느 쪽이든 페이지가 깨져 보이거나 막다른 길이 되지 않는다.
+ */
 export default function XTimeline({ handle, height = 600 }: XTimelineProps) {
+  const t = useTranslations('News.x');
+  const tp = useTranslations('Pages');
   const ref = useRef<HTMLDivElement>(null);
   const [status, setStatus] = useState<'loading' | 'rendered' | 'failed'>('loading');
+  const [night, setNight] = useState(false);
 
   useEffect(() => {
     if (!handle) {
@@ -30,9 +37,13 @@ export default function XTimeline({ handle, height = 600 }: XTimelineProps) {
     let pollTimer: ReturnType<typeof setTimeout>;
     let deadline: ReturnType<typeof setTimeout>;
 
-    // X always injects a 0x0 "rufous-sandbox" iframe and, on failure (429),
-    // a 0-height timeline iframe. Only treat it as rendered when the embed
-    // iframe actually has real height.
+    // 사이트 테마(종이/밤)에 맞춰 임베드 테마를 정한다.
+    const isNight = document.documentElement.getAttribute('data-theme') === 'night';
+    setNight(isNight);
+    ref.current?.querySelector('a.twitter-timeline')?.setAttribute('data-theme', isNight ? 'dark' : 'light');
+
+    // X 는 항상 0x0 "rufous-sandbox" iframe 을 넣고, 실패(429)하면 높이 0 의 타임라인 iframe 을 남긴다.
+    // 실제 높이가 있을 때만 그려진 것으로 본다.
     const isRendered = () => {
       const f = ref.current?.querySelector('iframe');
       return !!f && f.offsetHeight > 100;
@@ -55,7 +66,7 @@ export default function XTimeline({ handle, height = 600 }: XTimelineProps) {
 
     deadline = setTimeout(() => {
       if (!cancelled && !isRendered()) setStatus('failed');
-    }, 10000);
+    }, 8000);
 
     const SCRIPT_ID = 'twitter-widgets-js';
     if (window.twttr?.widgets) {
@@ -64,6 +75,7 @@ export default function XTimeline({ handle, height = 600 }: XTimelineProps) {
       const existing = document.getElementById(SCRIPT_ID) as HTMLScriptElement | null;
       if (existing) {
         existing.addEventListener('load', run);
+        existing.addEventListener('error', () => !cancelled && setStatus('failed'));
       } else {
         const script = document.createElement('script');
         script.id = SCRIPT_ID;
@@ -86,36 +98,55 @@ export default function XTimeline({ handle, height = 600 }: XTimelineProps) {
   const clean = handle.replace(/^@/, '');
   const profileUrl = `https://x.com/${clean}`;
 
-  if (status === 'failed') {
-    return (
-      <a
-        href={profileUrl}
-        target="_blank"
-        rel="noopener noreferrer"
-        className="block max-w-xl mx-auto bg-white dark:bg-surface-dark border border-gray-100 dark:border-gray-800 rounded-2xl p-10 text-center hover:border-primary/40 transition-colors"
-      >
-        <i className="fa-brands fa-x-twitter text-4xl text-gray-900 dark:text-white mb-4"></i>
-        <h3 className="text-lg font-bold text-gray-900 dark:text-white mb-2">@{clean}</h3>
-        <p className="text-gray-500 dark:text-gray-400 text-sm mb-6">
-          X(트위터)에서 스튜디오 엘리시안의 최신 소식을 확인하세요.
-        </p>
-        <span className="inline-flex items-center gap-2 px-5 py-2.5 bg-primary text-white rounded-lg font-bold text-sm">
-          X에서 보기 <i className="fa-solid fa-arrow-right"></i>
-        </span>
-      </a>
-    );
-  }
-
-  return (
-    <div ref={ref} className="relative min-h-[160px] max-w-xl mx-auto">
-      <a className="twitter-timeline" data-theme="dark" data-height={height} href={`https://twitter.com/${clean}`}>
-        @{clean}
-      </a>
-      {status === 'loading' && (
-        <div className="absolute inset-0 flex items-center justify-center bg-background-light dark:bg-background-dark">
-          <i className="fa-solid fa-spinner fa-spin text-primary text-2xl"></i>
+  // 불러오는 중 / 실패: 같은 카드. 불러오는 중에는 위쪽에 진행 안내만 더한다.
+  const card = (loading: boolean) => (
+    <div className="relative bg-paper-3 p-6 sm:p-10" data-testid="x-fallback" aria-busy={loading}>
+      <div aria-hidden className="ruled absolute inset-0 opacity-30" />
+      <div className="relative">
+        <div className="flex items-center gap-3 text-ink">
+          <span className="grid h-12 w-12 place-items-center border border-ink bg-paper-3">
+            <XIcon className="h-5 w-5" />
+          </span>
+          <p className="font-mono text-[12px] uppercase tracking-[.14em] text-ink-3">
+            {loading ? <span role="status">{t('loading')}</span> : t('frame')}
+          </p>
         </div>
-      )}
+        <p className="mt-6 break-all font-display text-[clamp(28px,4vw,44px)] font-extrabold leading-tight">@{clean}</p>
+        <p className="mt-4 max-w-md break-keep font-serif text-[16px] leading-8 text-ink-2">{t('fallbackBody')}</p>
+        <a
+          href={profileUrl}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="btn btn--accent mt-8"
+        >
+          {t('open')}
+          <ArrowUpRightIcon />
+          <span className="sr-only">{tp('external')}</span>
+        </a>
+      </div>
+    </div>
+  );
+
+  if (status === 'failed') return <div className="plate !p-0 sm:!p-2">{card(false)}</div>;
+
+  const rendered = status === 'rendered';
+  return (
+    <div className="plate !p-0 sm:!p-2">
+      <div ref={ref} className={rendered ? 'bg-paper-3' : 'relative min-h-[320px]'}>
+        {/* 위젯이 이 링크를 타임라인 iframe 으로 바꿔 넣는다. 그려지기 전에는 보이지 않게 두고 카드가 자리를 채운다. */}
+        <div className={rendered ? '' : 'invisible absolute inset-x-0 top-0 h-0 overflow-hidden'}>
+          <a
+            className="twitter-timeline"
+            data-theme={night ? 'dark' : 'light'}
+            data-height={height}
+            data-chrome="transparent"
+            href={`https://twitter.com/${clean}`}
+          >
+            @{clean}
+          </a>
+        </div>
+        {status === 'loading' && card(true)}
+      </div>
     </div>
   );
 }

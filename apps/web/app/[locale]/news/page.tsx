@@ -1,90 +1,38 @@
-import { getTranslations } from 'next-intl/server';
-import { getNews, getLocalizedField, getSetting, getLocalizedSettingValue } from '@/lib/supabase';
-import Link from 'next/link';
-import XTimeline from '@/components/news/XTimeline';
+import type { Metadata } from 'next';
+import { getTranslations, setRequestLocale } from 'next-intl/server';
+import { getLocalizedSettingValue, getNews, getSettings } from '@/lib/supabase';
+import Shell from '@/components/shell/Shell';
+import PageHeader from '@/components/pages/PageHeader';
+import NewsView from '@/components/pages/NewsView';
 
 export const revalidate = 10;
 
-const DEFAULT_NEWS_IMAGE = 'https://lh3.googleusercontent.com/aida-public/AB6AXuDVHPTFZPasBZtcFBFsRlZf4vhSmH0uyRPHid_2dtW6N7nVFHK8qMryYJvTPiapEcHt3v__ZGBVm0pq9Ksh-4PNTtSOeIa2biWszDq-Vy1yAkc_QJKfml8I4kAhrKW_WXbHpZmFcWdKPw9ehmpkc6YkK9DBZaN_6DYjmUnwbjc9eOVDfDt1JR0eb5raAdiIelbQWh9ifO-cPkPWFf4ifVhmOI6IGXOrmlJK8cMuMKCkUDJg4L6Ziv-mYRjLAOvB_c2f6hnmdxTlyvQ';
-
-function formatDate(dateString: string | undefined): string {
-  if (!dateString) return '';
-  const date = new Date(dateString);
-  return `${date.getFullYear()}.${String(date.getMonth() + 1).padStart(2, '0')}`;
+export async function generateMetadata({ params: { locale } }: { params: { locale: string } }): Promise<Metadata> {
+  const tm = await getTranslations({ locale, namespace: 'News' });
+  return { title: tm('metaTitle') };
 }
 
-export default async function NewsPage({ params }: { params: { locale: string } }) {
-  const { locale } = params;
-  const [t, modeSetting, handleSetting, newsItems] = await Promise.all([
-    getTranslations('Navigation'),
-    getSetting('news_display_mode'),
-    getSetting('news_widget_x_handle'),
+export default async function NewsPage({ params: { locale } }: { params: { locale: string } }) {
+  setRequestLocale(locale);
+  const [t, items, s] = await Promise.all([
+    getTranslations('News'),
     getNews(true),
+    getSettings(['news_display_mode', 'news_widget_x_handle', 'twitter_url']),
   ]);
 
-  const displayMode = getLocalizedSettingValue(modeSetting, locale) || 'manual';
-  const xHandle = getLocalizedSettingValue(handleSetting, locale);
-  const showWidget = (displayMode === 'widget' || displayMode === 'both') && !!xHandle;
+  // 표시 방식은 어드민 설정(news_display_mode / news_widget_x_handle)을 따른다.
+  const displayMode = getLocalizedSettingValue(s.news_display_mode, locale) || 'manual';
+  const handle = getLocalizedSettingValue(s.news_widget_x_handle, locale).replace(/^@/, '');
+  const showWidget = (displayMode === 'widget' || displayMode === 'both') && !!handle;
   const showManual = displayMode === 'manual' || displayMode === 'both';
-  const isEmpty = !showWidget && (!showManual || newsItems.length === 0);
+
+  // 빈 화면에서 이어 줄 X 주소: 위젯 계정 → 공식 X 링크 설정
+  const xUrl = handle ? `https://x.com/${handle}` : getLocalizedSettingValue(s.twitter_url, locale) || undefined;
 
   return (
-    <div className="pt-24 pb-16 bg-background-light dark:bg-background-dark min-h-screen">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="text-center mb-16">
-          <h4 className="text-primary font-bold tracking-widest uppercase mb-2 text-sm">
-            Latest Updates
-          </h4>
-          <h1 className="font-display font-black text-4xl md:text-5xl text-gray-900 dark:text-white">
-            {t('news')}
-          </h1>
-        </div>
-
-        {showWidget && (
-          <div className="mb-16">
-            <XTimeline handle={xHandle} />
-          </div>
-        )}
-
-        {showManual && newsItems.length > 0 && (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {newsItems.map((item) => (
-              <Link
-                key={item.id}
-                href={`/${locale}/news/${item.slug}`}
-                className="group"
-              >
-                <article className="bg-white dark:bg-surface-dark rounded-xl overflow-hidden shadow-lg border border-gray-100 dark:border-gray-800 hover:shadow-xl hover:border-primary/30 transition-all duration-300">
-                  <div className="h-48 overflow-hidden">
-                    <img
-                      alt={getLocalizedField(item, 'title', locale)}
-                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
-                      src={item.cover_image || DEFAULT_NEWS_IMAGE}
-                    />
-                  </div>
-                  <div className="p-6">
-                    <div className="text-sm text-primary font-bold mb-2">
-                      {formatDate(item.published_at)}
-                    </div>
-                    <h3 className="text-lg font-bold text-gray-900 dark:text-white mb-2 group-hover:text-primary transition-colors">
-                      {getLocalizedField(item, 'title', locale)}
-                    </h3>
-                    <p className="text-gray-500 dark:text-gray-400 text-sm line-clamp-3">
-                      {getLocalizedField(item, 'excerpt', locale) || getLocalizedField(item, 'content', locale)}
-                    </p>
-                  </div>
-                </article>
-              </Link>
-            ))}
-          </div>
-        )}
-
-        {isEmpty && (
-          <div className="text-center text-gray-500 dark:text-gray-400 py-16">
-            아직 등록된 소식이 없습니다.
-          </div>
-        )}
-      </div>
-    </div>
+    <Shell locale={locale}>
+      <PageHeader eyebrow={t('eyebrow')} title={t('title')} lead={t('lead')} />
+      <NewsView locale={locale} items={items} handle={handle} showWidget={showWidget} showManual={showManual} xUrl={xUrl} />
+    </Shell>
   );
 }

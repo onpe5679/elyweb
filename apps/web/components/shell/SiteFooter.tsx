@@ -32,7 +32,7 @@ export default async function SiteFooter({ brand, logoSrc, contactEmail, twitter
               <HabomWordmark />
             ) : (
               <div className="flex items-center gap-3 text-ink">
-                <LogoMark src={logoSrc} className="h-9 w-9" />
+                <LogoMark src={logoSrc} className="h-9 w-12" />
                 <span className="font-display text-lg font-extrabold uppercase tracking-[.12em]">Studio Elysian</span>
               </div>
             )}

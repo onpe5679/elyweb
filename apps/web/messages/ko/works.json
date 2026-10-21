@@ -1,1 +1,71 @@
-{}
+{
+  "Works": {
+    "eyebrow": "Our Works",
+    "title": "작품",
+    "lead": "엘리시안과 하봄이 펼쳐 온 이야기들입니다. 이미지나 제목을 눌러 작품 상세로 들어가 보세요.",
+    "filterLabel": "시리즈",
+    "filterAll": "전체",
+    "count": "{count}편",
+    "open": "작품 보기",
+    "habomLink": "스튜디오 하봄"
+  },
+  "Game": {
+    "breadcrumb": "현재 위치",
+    "breadcrumbWorks": "작품",
+    "tabsLabel": "작품 상세 구역",
+    "buy": "{name}에서 보기",
+    "watch": "영상 보기",
+    "official": "공식 사이트",
+    "synopsis": "Synopsis",
+    "about": "About",
+    "tabs": {
+      "overview": "소개",
+      "gallery": "도판",
+      "video": "영상",
+      "credits": "제작진",
+      "history": "연혁",
+      "related": "다른 작품"
+    },
+    "info": {
+      "title": "작품 정보",
+      "series": "시리즈",
+      "status": "상태",
+      "platform": "플랫폼",
+      "genre": "장르",
+      "release": "출시",
+      "staff": "주요 제작진"
+    },
+    "keyart": {
+      "title": "도판",
+      "lead": "작품의 대표 이미지입니다. 누르면 크게 볼 수 있어요.",
+      "visual": "키 비주얼",
+      "poster": "포스터"
+    },
+    "videos": {
+      "title": "영상",
+      "play": "재생",
+      "youtube": "YouTube에서 보기"
+    },
+    "credits": {
+      "title": "제작진"
+    },
+    "history": {
+      "title": "프로젝트 연혁"
+    },
+    "related": {
+      "series": "같은 시리즈의 작품",
+      "other": "다른 작품"
+    },
+    "experience": {
+      "title": "대사·선택지 체험",
+      "body": "하봄 작품의 분위기를 짧은 대사와 선택지로 먼저 느껴 보세요. 시안용 예시이며 공식 게임 내용이 아닙니다."
+    },
+    "lightbox": {
+      "open": "크게 보기",
+      "close": "닫기",
+      "prev": "이전 이미지",
+      "next": "다음 이미지",
+      "counter": "{current} / {total}"
+    }
+  }
+}

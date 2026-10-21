@@ -37,7 +37,7 @@
 }
 
 /* ja 에서는 일본어 명조를 먼저 쓴다 */
-:lang(ja) {
+html:lang(ja) {
   --font-serif: "Shippori Mincho", "Hahmlet", "Noto Serif JP", "Noto Serif KR", serif;
 }
 
@@ -63,7 +63,7 @@
   --c-paper-3: 255 255 255;
   --c-ink: 59 36 51;
   --c-ink-2: 107 76 92;
-  --c-ink-3: 140 100 118;
+  --c-ink-3: 125 85 103;
   --c-accent: 247 143 174;
   --c-accent-text: 190 52 98;
   --c-accent-ink: 59 36 51;
@@ -112,8 +112,12 @@ body {
   overflow-x: clip;
 }
 
-:lang(ko) body, :lang(ko) .break-keep { word-break: keep-all; }
-:lang(ja) body { line-break: strict; }
+:lang(ko) body { word-break: keep-all; }
+/* Tailwind 의 break-keep 은 한국어에만 적용한다(일본어는 공백이 없어 keep-all 이면 줄바꿈이 사라진다). */
+:lang(ja) .break-keep, :lang(en) .break-keep { word-break: normal; overflow-wrap: break-word; }
+:lang(ja) body { line-break: strict; overflow-wrap: break-word; }
+/* 그리드 자식이 긴 글 때문에 열을 밀어내지 않도록 */
+.grid > *, .flex > * { min-width: 0; }
 
 ::selection {
   background: rgb(var(--c-accent));
@@ -125,6 +129,8 @@ body {
   outline-offset: 3px;
   border-radius: 2px;
 }
+
+.on-dark :focus-visible { outline-color: #fff; }
 
 .skip-link {
   position: fixed;
@@ -184,6 +190,7 @@ img { max-width: 100%; }
   max-width: 38em;
 }
 .t-prose p + p { margin-top: 1.2em; }
+.t-prose p, .t-prose li { text-wrap: pretty; }
 .t-prose strong { color: rgb(var(--c-ink)); font-weight: 700; }
 
 .hairline { border-color: rgb(var(--c-ink) / .16); }
@@ -216,6 +223,8 @@ img { max-width: 100%; }
 }
 .cells--sm { --cell: clamp(30px, 4.6vw, 52px); }
 .cells--md { --cell: clamp(36px, 5.6vw, 72px); }
+.cells--fit6 { --cell: clamp(34px, 6.4vw, 92px); }
+.cells--fit8 { --cell: clamp(30px, 4.9vw, 76px); }
 
 .cell {
   box-sizing: border-box;
@@ -406,6 +415,10 @@ img { max-width: 100%; }
 .title-menu__item:hover::before, .title-menu__item:focus-visible::before { opacity: 1; left: -1.5rem; }
 .title-menu__item[aria-disabled="true"] { color: rgb(var(--c-ink-3)); cursor: not-allowed; }
 .title-menu__dots { align-self: end; margin-bottom: .45em; border-bottom: 1px dotted currentColor; opacity: .4; }
+@media (max-width: 639px) {
+  .title-menu__item { grid-template-columns: 2rem minmax(0, 1fr) auto; }
+  .title-menu__dots { display: none; }
+}
 
 /* ==========================================================================
    Page transitions & reveal

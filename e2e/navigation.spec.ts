@@ -1,102 +1,79 @@
 import { test, expect } from '@playwright/test';
 
-test.describe('Navigation', () => {
+test.describe('Header navigation (Elysian)', () => {
+  test.skip(({ isMobile }) => isMobile, '데스크톱 전용: 휴대폰에서는 햄버거 메뉴(home.spec)로 이동한다');
   test.beforeEach(async ({ page }) => {
-    await page.goto('/');
+    await page.goto('/ko');
   });
 
-  test('logo should link to home', async ({ page }) => {
+  const nav = (page: import('@playwright/test').Page) => page.getByRole('navigation', { name: '주 메뉴' });
+
+  test('logo links to home', async ({ page }) => {
     await page.goto('/ko/about');
-    await page.locator('nav').getByRole('link').first().click();
+    await page.getByRole('link', { name: 'Studio Elysian' }).first().click();
     await expect(page).toHaveURL(/\/ko\/?$/);
   });
 
-  test('should navigate to About page', async ({ page }) => {
-    await page.locator('nav').getByRole('link', { name: /회사 소개|About|会社紹介/i }).click();
-    await expect(page).toHaveURL(/\/about/);
+  for (const [label, url] of [
+    ['작품', /\/ko\/games\/?$/],
+    ['스튜디오', /\/ko\/about\/?$/],
+    ['새소식', /\/ko\/news\/?$/],
+    ['하봄', /\/ko\/habom\/?$/],
+    ['문의', /\/ko\/contact\/?$/],
+  ] as const) {
+    test(`header link "${label}" navigates`, async ({ page }) => {
+      await nav(page).getByRole('link', { name: label }).click();
+      await expect(page).toHaveURL(url);
+    });
+  }
+
+  test('current page is marked in the header', async ({ page }) => {
+    await page.goto('/ko/games');
+    await expect(nav(page).getByRole('link', { name: '작품' })).toHaveAttribute('aria-current', 'page');
   });
 
-  test('should navigate to Games page', async ({ page }) => {
-    await page.locator('nav').getByRole('link', { name: /게임 소개|Games|ゲーム紹介/i }).click();
-    await expect(page).toHaveURL(/\/games/);
-  });
-
-  test('should navigate to News page', async ({ page }) => {
-    await page.locator('nav').getByRole('link', { name: /새소식|News|お知らせ/i }).click();
-    await expect(page).toHaveURL(/\/news/);
-  });
-
-  test('should navigate to Contact page', async ({ page }) => {
-    await page.locator('nav').getByRole('link', { name: /문의하기|Contact|お問い合わせ/i }).click();
-    await expect(page).toHaveURL(/\/contact/);
-  });
-
-  test('Press button should be visible', async ({ page }) => {
-    await expect(page.locator('nav').getByRole('link', { name: 'PRESS' })).toBeVisible();
-  });
-});
-
-test.describe('Footer Navigation', () => {
-  test('footer should have quick links', async ({ page }) => {
-    await page.goto('/');
-    const footer = page.locator('footer');
-    
-    await expect(footer.getByText(/회사 소개|About/i)).toBeVisible();
-    await expect(footer.getByText(/프로젝트|Projects/i)).toBeVisible();
-  });
-
-  test('footer should have social links', async ({ page }) => {
-    await page.goto('/');
-    const footer = page.locator('footer');
-    
-    // Check for social icons
-    await expect(footer.locator('a[href*="twitter"], a[href*="x.com"]')).toBeVisible();
-    await expect(footer.locator('a[href*="youtube"]')).toBeVisible();
-    await expect(footer.locator('a[href*="instagram"]')).toBeVisible();
-  });
-
-  test('footer should have copyright notice', async ({ page }) => {
-    await page.goto('/');
-    await expect(page.locator('footer')).toContainText(/© 2024 Studio Elysian/);
+  test('press kit is reachable from the footer', async ({ page }) => {
+    await page.locator('footer').getByRole('link', { name: '프레스' }).click();
+    await expect(page).toHaveURL(/\/press/);
   });
 });
 
-test.describe('Mobile Navigation', () => {
-  test.beforeEach(async ({ page }) => {
-    await page.setViewportSize({ width: 375, height: 667 });
-    await page.goto('/');
+test.describe('Footer', () => {
+  test('sitemap, social links and copyright', async ({ page }) => {
+    await page.goto('/ko');
+    const footer = page.locator('footer');
+    for (const name of ['작품', '스튜디오', '새소식', '하봄', '문의', '프레스']) {
+      await expect(footer.getByRole('link', { name, exact: true })).toBeVisible();
+    }
+    await expect(footer).toContainText(/© \d{4} Studio Elysian/);
+    await expect(footer.getByRole('link', { name: '개인정보처리방침' })).toBeVisible();
+  });
+});
+
+test.describe('Secondary pages render', () => {
+  for (const [path, text] of [
+    ['/ko/about', /무궁한 이야기의 지평선/],
+    ['/ko/news', /새소식|News/],
+    ['/ko/press', /프레스|Press/i],
+    ['/ko/contact', /문의|Contact/i],
+    ['/ko/privacy', /개인정보/],
+    ['/ko/team/gwon-yohan', /권요한/],
+  ] as const) {
+    test(`${path}`, async ({ page }) => {
+      const res = await page.goto(path);
+      expect(res?.status()).toBe(200);
+      await expect(page.getByRole('main')).toContainText(text);
+      await expect(page.getByRole('heading', { level: 1 })).toHaveCount(1);
+    });
+  }
+
+  test('about page has the history anchor used by the home page', async ({ page }) => {
+    await page.goto('/ko/about');
+    await expect(page.locator('#history')).toBeVisible();
   });
 
-  test('should show mobile menu button', async ({ page }) => {
-    const menuButton = page.locator('[data-testid="mobile-menu-button"]');
-    await expect(menuButton).toBeVisible();
-  });
-
-  test('should open mobile menu on click', async ({ page }) => {
-    const menuButton = page.locator('[data-testid="mobile-menu-button"]');
-    await menuButton.click();
-    
-    const mobileMenu = page.locator('[data-testid="mobile-menu"]');
-    await expect(mobileMenu).toBeVisible();
-  });
-
-  test('mobile menu should have all navigation items', async ({ page }) => {
-    const menuButton = page.locator('[data-testid="mobile-menu-button"]');
-    await menuButton.click();
-    
-    const mobileMenu = page.locator('[data-testid="mobile-menu"]');
-    await expect(mobileMenu.getByRole('link', { name: /홈|Home/i })).toBeVisible();
-    await expect(mobileMenu.getByRole('link', { name: /회사 소개|About/i })).toBeVisible();
-    await expect(mobileMenu.getByRole('link', { name: /게임|Games/i })).toBeVisible();
-  });
-
-  test('should close mobile menu after navigation', async ({ page }) => {
-    const menuButton = page.locator('[data-testid="mobile-menu-button"]');
-    await menuButton.click();
-    
-    const mobileMenu = page.locator('[data-testid="mobile-menu"]');
-    await mobileMenu.getByRole('link', { name: /회사 소개|About/i }).click();
-    
-    await expect(mobileMenu).not.toBeVisible();
+  test('unknown route shows a branded 404', async ({ page }) => {
+    const res = await page.goto('/ko/this-page-does-not-exist');
+    expect(res?.status()).toBe(404);
   });
 });

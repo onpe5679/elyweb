@@ -1,1 +1,71 @@
-{}
+{
+  "Works": {
+    "eyebrow": "Our Works",
+    "title": "Works",
+    "lead": "Stories opened by Elysian and Habom. Choose an image or a title to enter the work.",
+    "filterLabel": "Series",
+    "filterAll": "All",
+    "count": "{count} works",
+    "open": "Open the work",
+    "habomLink": "Studio Habom"
+  },
+  "Game": {
+    "breadcrumb": "You are here",
+    "breadcrumbWorks": "Works",
+    "tabsLabel": "Sections of this work",
+    "buy": "View on {name}",
+    "watch": "Watch video",
+    "official": "Official site",
+    "synopsis": "Synopsis",
+    "about": "About",
+    "tabs": {
+      "overview": "Overview",
+      "gallery": "Plates",
+      "video": "Video",
+      "credits": "Credits",
+      "history": "History",
+      "related": "More works"
+    },
+    "info": {
+      "title": "Details",
+      "series": "Series",
+      "status": "Status",
+      "platform": "Platform",
+      "genre": "Genre",
+      "release": "Release",
+      "staff": "Key staff"
+    },
+    "keyart": {
+      "title": "Plates",
+      "lead": "The key images of this work. Select one to view it larger.",
+      "visual": "Key visual",
+      "poster": "Poster"
+    },
+    "videos": {
+      "title": "Video",
+      "play": "Play",
+      "youtube": "Watch on YouTube"
+    },
+    "credits": {
+      "title": "Credits"
+    },
+    "history": {
+      "title": "Project history"
+    },
+    "related": {
+      "series": "More from this series",
+      "other": "More works"
+    },
+    "experience": {
+      "title": "Dialogue & choices demo",
+      "body": "Get a taste of this Habom title through a few lines and choices. A draft sample, not official game content."
+    },
+    "lightbox": {
+      "open": "View larger",
+      "close": "Close",
+      "prev": "Previous image",
+      "next": "Next image",
+      "counter": "{current} / {total}"
+    }
+  }
+}

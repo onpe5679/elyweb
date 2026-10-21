@@ -55,7 +55,7 @@ export default function SiteHeader({ brand, logoSrc, experienceHref }: Props) {
             <HabomWordmark />
           ) : (
             <>
-              <LogoMark src={logoSrc} className="h-8 w-8" />
+              <LogoMark src={logoSrc} className="h-7 w-10" />
               <span className="font-display text-[15px] font-extrabold uppercase tracking-[.12em]">Studio Elysian</span>
             </>
           )}

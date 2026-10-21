@@ -1,12 +1,23 @@
+import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
-import Link from 'next/link';
-import { 
-  getTeamMemberBySlug, 
-  getLocalizedField, 
-  getTeamMembers, 
+import { getTranslations, setRequestLocale } from 'next-intl/server';
+import { Link } from '@/i18n/routing';
+import {
+  getLocalizedField,
+  getTeamMemberBySlug,
+  getTeamMembers,
   getTeamMemberSections,
-  TeamMemberSection 
+  type TeamMemberSection,
 } from '@/lib/supabase';
+import { resolveBrand } from '@/lib/brands';
+import Shell from '@/components/shell/Shell';
+import Cells from '@/components/ui/Cells';
+import CellTitle from '@/components/pages/CellTitle';
+import RichText from '@/components/pages/RichText';
+import { ArrowLeftIcon, ArrowUpRightIcon, SocialIcon } from '@/components/pages/Icons';
+import { handleOf, safeUrl, toEmbedUrl } from '@/components/pages/text';
+
+export const revalidate = 10;
 
 type Props = {
   params: { locale: string; slug: string };
@@ -19,266 +30,267 @@ export async function generateStaticParams() {
   }));
 }
 
-export default async function TeamMemberPage({ params }: Props) {
-  const { locale, slug } = params;
-  const [member, sections] = await Promise.all([
-    getTeamMemberBySlug(slug),
-    getTeamMemberSections(slug)
-  ]);
+export async function generateMetadata({ params: { locale, slug } }: Props): Promise<Metadata> {
+  const member = await getTeamMemberBySlug(slug);
+  if (!member) return {};
+  return { title: getLocalizedField(member, 'name', locale) };
+}
 
-  if (!member) {
-    notFound();
-  }
+export default async function TeamMemberPage({ params: { locale, slug } }: Props) {
+  setRequestLocale(locale);
+  const [member, sections, t, tp] = await Promise.all([
+    getTeamMemberBySlug(slug),
+    getTeamMemberSections(slug),
+    getTranslations('Team'),
+    getTranslations('Pages'),
+  ]);
+  if (!member) notFound();
 
   const name = getLocalizedField(member, 'name', locale);
   const role = getLocalizedField(member, 'role', locale);
   const bio = getLocalizedField(member, 'bio', locale);
+  const habom = resolveBrand({ developer: [member.role_ko, member.role_en, member.role_ja].filter(Boolean).join(' ') }) === 'habom';
+
+  const links = [
+    { id: 'x', label: 'X', url: safeUrl(member.twitter_url) },
+    { id: 'instagram', label: 'Instagram', url: safeUrl(member.instagram_url) },
+    { id: 'website', label: t('website'), url: safeUrl(member.website_url) },
+  ].filter((l): l is { id: string; label: string; url: string } => !!l.url);
 
   return (
-    <div className="pt-24 pb-16 bg-background-light dark:bg-background-dark min-h-screen">
-      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-        <Link
-          href={`/${locale}/about`}
-          className="inline-flex items-center text-sm text-gray-500 hover:text-primary mb-8 transition-colors"
-        >
-          <i className="fa-solid fa-arrow-left mr-2"></i>
-          Back to About
-        </Link>
+    <Shell locale={locale}>
+      <div className="relative isolate overflow-hidden">
+        <div aria-hidden className="ruled ruled-fade absolute inset-0 -z-10 opacity-40" />
+        <div className="mx-auto max-w-page px-5 pb-16 pt-10 md:px-10 md:pb-24 md:pt-14">
+          <Link href="/about" className="link-u inline-flex min-h-[44px] items-center gap-2 text-[14px] font-bold">
+            <ArrowLeftIcon />
+            {t('back')}
+          </Link>
 
-        <div className="bg-white dark:bg-surface-dark rounded-2xl shadow-lg overflow-hidden">
-          <div className="md:flex">
-            <div className="md:w-1/3">
-              <div className="aspect-square relative overflow-hidden bg-gray-100 dark:bg-gray-800">
-                {member.profile_image ? (
-                  <img
-                    src={member.profile_image}
-                    alt={name}
-                    className="w-full h-full object-cover"
-                  />
-                ) : (
-                  <div className="w-full h-full flex items-center justify-center">
-                    <i className="fa-solid fa-user text-8xl text-gray-300 dark:text-gray-600"></i>
-                  </div>
-                )}
+          <div className="mt-8 grid gap-10 md:grid-cols-12 md:gap-12">
+            {/* 프로필 도판: 사진이 없으면 원고지 칸 한 글자로 대신한다 */}
+            <div className="md:col-span-4">
+              <div className="plate max-w-[240px] md:max-w-sm">
+                <div className="aspect-[4/5] overflow-hidden bg-paper-2">
+                  {member.profile_image ? (
+                    // eslint-disable-next-line @next/next/no-img-element
+                    <img src={member.profile_image} alt={name} className="plate__img" />
+                  ) : (
+                    <div aria-hidden className="ruled grid h-full w-full place-items-center">
+                      <Cells text={Array.from(name)[0] || '·'} size="lg" />
+                    </div>
+                  )}
+                </div>
               </div>
             </div>
 
-            <div className="md:w-2/3 p-8">
-              <h1 className="font-display font-black text-3xl md:text-4xl text-gray-900 dark:text-white">
-                {name}
+            <div className="md:col-span-8 md:pt-4">
+              <p className="t-eyebrow">{t('eyebrow')}</p>
+              <h1 aria-label={name} className="mt-5">
+                <CellTitle text={name} />
               </h1>
-              
+
               {role && (
-                <p className="text-xl text-primary font-medium mt-2">{role}</p>
+                <p className="mt-6 flex items-center gap-3">
+                  <span className="marker marker--outline">{role}</span>
+                  {habom && (
+                    <span data-brand="habom" aria-hidden className="inline-flex">
+                      <span className="h-2.5 w-2.5 rounded-full bg-accent" />
+                    </span>
+                  )}
+                </p>
               )}
 
-              {bio && (
-                <div className="mt-6 prose prose-lg dark:prose-invert max-w-none">
-                  <p className="text-gray-600 dark:text-gray-300 whitespace-pre-line">{bio}</p>
-                </div>
-              )}
+              {bio && <p className="t-prose mt-8 whitespace-pre-line break-keep">{bio}</p>}
 
-              {(member.twitter_url || member.instagram_url || member.website_url) && (
-                <div className="mt-8 pt-6 border-t border-gray-100 dark:border-gray-800">
-                  <h3 className="text-sm font-semibold text-gray-500 uppercase tracking-wide mb-4">
-                    Connect
-                  </h3>
-                  <div className="flex gap-4">
-                    {member.twitter_url && (
-                      <a
-                        href={member.twitter_url}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="w-10 h-10 bg-gray-100 dark:bg-gray-800 rounded-full flex items-center justify-center text-gray-600 dark:text-gray-400 hover:bg-primary hover:text-white transition-all"
-                      >
-                        <i className="fa-brands fa-twitter"></i>
-                      </a>
-                    )}
-                    {member.instagram_url && (
-                      <a
-                        href={member.instagram_url}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="w-10 h-10 bg-gray-100 dark:bg-gray-800 rounded-full flex items-center justify-center text-gray-600 dark:text-gray-400 hover:bg-primary hover:text-white transition-all"
-                      >
-                        <i className="fa-brands fa-instagram"></i>
-                      </a>
-                    )}
-                    {member.website_url && (
-                      <a
-                        href={member.website_url}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="w-10 h-10 bg-gray-100 dark:bg-gray-800 rounded-full flex items-center justify-center text-gray-600 dark:text-gray-400 hover:bg-primary hover:text-white transition-all"
-                      >
-                        <i className="fa-solid fa-globe"></i>
-                      </a>
-                    )}
-                  </div>
+              {links.length > 0 && (
+                <div className="mt-10">
+                  <h2 className="t-eyebrow">{t('social')}</h2>
+                  <ul className="mt-3 flex flex-wrap gap-3">
+                    {links.map((l) => (
+                      <li key={l.id}>
+                        <a href={l.url} target="_blank" rel="noopener noreferrer" className="btn btn--ghost">
+                          <SocialIcon id={l.id} className="h-4 w-4" />
+                          {l.label}
+                          <span className="font-mono text-[12px] font-normal opacity-70">{l.id === 'website' ? '' : handleOf(l.url)}</span>
+                          <span className="sr-only">{tp('external')}</span>
+                        </a>
+                      </li>
+                    ))}
+                  </ul>
                 </div>
               )}
             </div>
           </div>
         </div>
-
-        {sections.length > 0 && (
-          <div className="mt-8 space-y-8">
-            {sections.map((section) => (
-              <SectionRenderer key={section.id} section={section} locale={locale} />
-            ))}
-          </div>
-        )}
       </div>
-    </div>
+
+      {sections.map((section) => (
+        <SectionBlock key={section.id} section={section} locale={locale} projectLabel={t('project')} levelLabel={(n) => t('skillLevel', { level: n })} />
+      ))}
+    </Shell>
   );
 }
 
-function SectionRenderer({ section, locale }: { section: TeamMemberSection; locale: string }) {
+/** 어드민에서 채우는 보조 섹션. 왼쪽 열 제목 + 오른쪽 열 내용(4:8). */
+function SectionBlock({
+  section,
+  locale,
+  projectLabel,
+  levelLabel,
+}: {
+  section: TeamMemberSection;
+  locale: string;
+  projectLabel: string;
+  levelLabel: (n: number) => string;
+}) {
   const title = getLocalizedField(section, 'title', locale);
   const content = getLocalizedField(section, 'content', locale);
+  const hid = `section-${section.id}`;
 
-  return (
-    <div className="bg-white dark:bg-surface-dark rounded-2xl shadow-lg overflow-hidden p-8">
-      {title && (
-        <h2 className="font-display font-bold text-2xl text-gray-900 dark:text-white mb-6">
-          {title}
-        </h2>
-      )}
+  let body: React.ReactNode = null;
 
-      {section.section_type === 'text' && content && (
-        <div className="prose prose-lg dark:prose-invert max-w-none">
-          <p className="text-gray-600 dark:text-gray-300 whitespace-pre-line">{content}</p>
-        </div>
-      )}
+  switch (section.section_type) {
+    case 'text':
+      body = content ? <p className="t-prose whitespace-pre-line break-keep">{content}</p> : null;
+      break;
 
-      {section.section_type === 'gallery' && section.images && section.images.length > 0 && (
-        <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
-          {section.images.map((image, idx) => (
-            <div key={idx} className="aspect-square rounded-lg overflow-hidden bg-gray-100 dark:bg-gray-800">
-              <img src={image} alt="" className="w-full h-full object-cover" />
-            </div>
+    case 'custom':
+      body = content ? <RichText html={content} /> : null;
+      break;
+
+    case 'gallery':
+      body = section.images?.length ? (
+        <ul className="grid grid-cols-2 gap-5 lg:grid-cols-3">
+          {section.images.map((src, i) => (
+            <li key={i} className="plate">
+              <div className="aspect-square overflow-hidden">
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img src={src} alt="" loading="lazy" className="plate__img" />
+              </div>
+            </li>
           ))}
-        </div>
-      )}
+        </ul>
+      ) : null;
+      break;
 
-      {section.section_type === 'video' && section.video_url && (
-        <div className="aspect-video rounded-lg overflow-hidden">
-          <iframe
-            src={section.video_url}
-            className="w-full h-full"
-            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-            allowFullScreen
-          />
+    case 'video': {
+      const src = safeUrl(section.video_url);
+      body = src ? (
+        <div className="plate">
+          <div className="aspect-video overflow-hidden">
+            <iframe
+              src={toEmbedUrl(src)}
+              title={title || 'video'}
+              loading="lazy"
+              className="h-full w-full"
+              allow="accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+              allowFullScreen
+            />
+          </div>
         </div>
-      )}
+      ) : null;
+      break;
+    }
 
-      {section.section_type === 'links' && section.links && section.links.length > 0 && (
-        <div className="flex flex-wrap gap-4">
-          {section.links.map((link, idx) => (
-            <a
-              key={idx}
-              href={link.url}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex items-center gap-2 px-4 py-2 bg-gray-100 dark:bg-gray-800 rounded-lg text-gray-700 dark:text-gray-300 hover:bg-primary hover:text-white transition-all"
-            >
-              <i className={getLinkIcon(link.icon)}></i>
-              {link.name}
-            </a>
+    case 'links': {
+      const items = (section.links || []).filter((l) => safeUrl(l.url));
+      body = items.length ? (
+        <ul className="flex flex-wrap gap-3">
+          {items.map((l, i) => (
+            <li key={i}>
+              <a href={safeUrl(l.url)} target="_blank" rel="noopener noreferrer" className="btn btn--ghost">
+                <SocialIcon id={l.icon || ''} className="h-4 w-4" />
+                {l.name}
+                <ArrowUpRightIcon />
+              </a>
+            </li>
           ))}
-        </div>
-      )}
+        </ul>
+      ) : null;
+      break;
+    }
 
-      {section.section_type === 'projects' && section.projects && section.projects.length > 0 && (
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          {section.projects.map((project, idx) => {
-            const projectTitle = locale === 'en' ? (project.title_en || project.title_ko) : project.title_ko;
-            const projectDesc = locale === 'en' ? (project.description_en || project.description_ko) : project.description_ko;
+    case 'projects':
+      body = section.projects?.length ? (
+        <ul className="grid gap-8 sm:grid-cols-2">
+          {section.projects.map((p, i) => {
+            const pt = getLocalizedField(p, 'title', locale);
+            const pd = getLocalizedField(p, 'description', locale);
+            const url = safeUrl(p.url);
             return (
-              <div key={idx} className="bg-gray-50 dark:bg-gray-800/50 rounded-xl overflow-hidden">
-                {project.image && (
-                  <div className="aspect-video">
-                    <img src={project.image} alt={projectTitle || ''} className="w-full h-full object-cover" />
+              <li key={i}>
+                {p.image && (
+                  <div className="plate mb-4">
+                    <div className="aspect-video overflow-hidden">
+                      {/* eslint-disable-next-line @next/next/no-img-element */}
+                      <img src={p.image} alt="" loading="lazy" className="plate__img" />
+                    </div>
                   </div>
                 )}
-                <div className="p-4">
-                  {projectTitle && (
-                    <h3 className="font-semibold text-gray-900 dark:text-white mb-2">{projectTitle}</h3>
-                  )}
-                  {projectDesc && (
-                    <p className="text-sm text-gray-600 dark:text-gray-400">{projectDesc}</p>
-                  )}
-                  {project.url && (
-                    <a
-                      href={project.url}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="inline-flex items-center gap-1 text-primary text-sm mt-3 hover:underline"
-                    >
-                      View Project <i className="fa-solid fa-arrow-right text-xs"></i>
-                    </a>
-                  )}
-                </div>
-              </div>
+                {pt && <h3 className="break-keep font-display text-[20px] font-extrabold leading-snug">{pt}</h3>}
+                {pd && <p className="mt-2 break-keep font-serif text-[15px] leading-7 text-ink-2">{pd}</p>}
+                {url && (
+                  <a href={url} target="_blank" rel="noopener noreferrer" className="link-u mt-3 inline-flex min-h-[44px] items-center gap-1.5 text-[14px] font-bold">
+                    {projectLabel}
+                    <ArrowUpRightIcon className="h-3.5 w-3.5" />
+                  </a>
+                )}
+              </li>
             );
           })}
-        </div>
-      )}
+        </ul>
+      ) : null;
+      break;
 
-      {section.section_type === 'skills' && section.skills && section.skills.length > 0 && (
-        <div className="space-y-4">
-          {section.skills.map((skill, idx) => {
-            const skillName = locale === 'en' ? (skill.name_en || skill.name_ko) : skill.name_ko;
+    case 'skills':
+      body = section.skills?.length ? (
+        <ul className="border-t border-ink">
+          {section.skills.map((sk, i) => {
+            const level = Math.max(0, Math.min(5, Math.round(sk.level || 0)));
             return (
-              <div key={idx}>
-                <div className="flex justify-between mb-1">
-                  <span className="text-gray-700 dark:text-gray-300">{skillName}</span>
-                  <span className="text-gray-500 text-sm">{skill.level}/5</span>
-                </div>
-                <div className="h-2 bg-gray-200 dark:bg-gray-700 rounded-full overflow-hidden">
-                  <div 
-                    className="h-full bg-primary rounded-full transition-all"
-                    style={{ width: `${((skill.level || 0) / 5) * 100}%` }}
-                  />
-                </div>
-              </div>
+              <li key={i} className="flex items-center justify-between gap-6 border-b border-ink/15 py-4">
+                <span className="break-keep font-serif text-[17px]">{getLocalizedField(sk, 'name', locale)}</span>
+                <span className="flex items-center gap-1.5" role="img" aria-label={levelLabel(level)}>
+                  {[1, 2, 3, 4, 5].map((n) => (
+                    <span key={n} aria-hidden className={`h-3 w-3 border border-ink ${n <= level ? 'bg-ink' : ''}`} />
+                  ))}
+                </span>
+              </li>
             );
           })}
-        </div>
-      )}
+        </ul>
+      ) : null;
+      break;
 
-      {section.section_type === 'timeline' && section.timeline_items && section.timeline_items.length > 0 && (
-        <div className="space-y-4">
-          {section.timeline_items.map((item, idx) => {
-            const eventText = locale === 'ko' ? item.event_ko : (locale === 'ja' ? item.event_ja : item.event_en) || item.event_ko;
-            return (
-              <div key={idx} className="flex gap-4">
-                <div className="flex-shrink-0 w-24 text-sm font-medium text-primary">{item.date}</div>
-                <div className="text-gray-600 dark:text-gray-300">{eventText}</div>
-              </div>
-            );
-          })}
-        </div>
-      )}
+    case 'timeline':
+      body = section.timeline_items?.length ? (
+        <ol className="border-t border-ink">
+          {section.timeline_items.map((it, i) => (
+            <li key={i} className="grid grid-cols-[6.5rem_minmax(0,1fr)] gap-4 border-b border-ink/15 py-4">
+              <span className="font-mono text-[13px] leading-7 text-accent-text">{it.date}</span>
+              <span className="break-keep font-serif text-[17px] leading-8">{getLocalizedField(it, 'event', locale)}</span>
+            </li>
+          ))}
+        </ol>
+      ) : null;
+      break;
+  }
 
-      {section.section_type === 'custom' && content && (
-        <div 
-          className="prose prose-lg dark:prose-invert max-w-none"
-          dangerouslySetInnerHTML={{ __html: content }}
-        />
-      )}
-    </div>
+  if (!body) return null;
+
+  return (
+    <section aria-labelledby={title ? hid : undefined} className="border-t border-ink/15 even:bg-paper-2">
+      <div className="mx-auto grid max-w-page gap-8 px-5 py-14 md:grid-cols-12 md:gap-12 md:px-10 md:py-20">
+        <div className="md:col-span-4">
+          {title && (
+            <h2 id={hid} className="t-display break-keep text-[clamp(24px,3vw,36px)]">
+              {title}
+            </h2>
+          )}
+        </div>
+        <div className="min-w-0 md:col-span-8">{body}</div>
+      </div>
+    </section>
   );
-}
-
-function getLinkIcon(icon?: string): string {
-  const iconMap: Record<string, string> = {
-    portfolio: 'fa-solid fa-briefcase',
-    github: 'fa-brands fa-github',
-    linkedin: 'fa-brands fa-linkedin',
-    twitter: 'fa-brands fa-twitter',
-    artstation: 'fa-brands fa-artstation',
-    behance: 'fa-brands fa-behance',
-  };
-  return iconMap[icon || ''] || 'fa-solid fa-link';
 }

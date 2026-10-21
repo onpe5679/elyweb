@@ -1,1 +1,92 @@
-{}
+{
+  "Habom": {
+    "meta": {
+      "title": "Studio Habom",
+      "description": "Studio Habom, a sister studio of Studio Elysian. We make bright, round and soft stories you can pick up and enjoy."
+    },
+    "hero": {
+      "badge": "A sister studio of Studio Elysian",
+      "wordmarkLabel": "Studio Habom",
+      "wordmarkNote": "* We couldn't find an official logo, so this is a temporary typographic wordmark.",
+      "tagline": "Bright, round and soft.\nStories you can pick up and enjoy lightly.",
+      "stickerA": "Bright",
+      "stickerB": "Round",
+      "stickerC": "Soft",
+      "artSticker": "Try it right now",
+      "ctaGame": "View the game page",
+      "toElysian": "Back to Studio Elysian"
+    },
+    "works": {
+      "eyebrow": "Our Games",
+      "title": "Habom's games",
+      "lead": "The stories Habom has made. Open a card to see the game in detail, or jump straight into the experience.",
+      "count": "{count, plural, one {# game} other {# games}}",
+      "open": "View game",
+      "play": "Try it",
+      "playable": "Playable sample",
+      "empty": "No Habom games are published yet."
+    },
+    "experience": {
+      "eyebrow": "Dialogue & Choices",
+      "title": "Tap through the lines.\nMake the choices yourself.",
+      "body": "A short taste of Habom's mood. Step through the dialogue one line at a time, pick your answers, and see where the story goes.",
+      "step1Title": "Move through the lines",
+      "step1Body": "Press while the text is appearing to show it all at once, and press again to go to the next line.",
+      "step2Title": "Pick your choices",
+      "step2Body": "Click or tap, or use the 1 · 2 · 3 keys. There are three choice points.",
+      "step3Title": "Reach an ending",
+      "step3Body": "Your choices lead to different endings. The ending card recaps what you picked, and you can play again.",
+      "roommates": "The roommates you'll meet",
+      "roommatesNote": "Names and personalities come from the official synopsis.",
+      "noticeTag": "Draft",
+      "noticeTitle": "This is a draft sample script",
+      "noticeBody": "The lines and scenes were newly written for this concept and are not official game content. They will be replaced once the real script, characters, length and sound are decided. There is no audio.",
+      "only": "Available only for games under Habom.",
+      "keys": "Enter · Space next / 1 · 2 · 3 choose / R restart / Esc close",
+      "previewLabel": "Sample screen"
+    },
+    "studio": {
+      "eyebrow": "About Habom",
+      "title": "Studio Habom",
+      "body": "Habom is a sister studio of Studio Elysian. It makes works with a bright, round and casual mood, quite different from Elysian's.",
+      "teamEyebrow": "Team",
+      "elysianNote": "Elysian's other games and the studio introduction live on the Studio Elysian site.",
+      "toElysian": "Go to Studio Elysian",
+      "toAbout": "About Elysian",
+      "toContact": "Collaborate or contact us"
+    }
+  },
+  "Experience": {
+    "eyebrow": "Dialogue & choices",
+    "draftBadge": "Draft sample script · not official game content",
+    "draftNote": "These lines and endings were newly written for the concept and are not the official game's script or character settings.",
+    "replayHint": "Make different choices to reach different endings.",
+    "progress": "Progress",
+    "choiceCount": "Choices {done}/{total}",
+    "choiceNow": "Choice {n}/{total}",
+    "chooseHint": "Pick one of the choices",
+    "next": "Next",
+    "restart": "Restart",
+    "restartAria": "Start over (R)",
+    "close": "Close",
+    "closeAria": "Close the experience (Esc)",
+    "keys": "Enter · Space next  ·  1 2 3 choose  ·  R restart  ·  Esc close",
+    "endingLabel": "Ending {n}/{total}",
+    "endingAnnounce": "You reached an ending. {title}",
+    "yourChoices": "Your choices",
+    "closeness": "Closeness with roommates",
+    "closenessItem": "{name}: {count}/{total}",
+    "collection": "Endings found {found}/{total}",
+    "locked": "???",
+    "lockedLabel": "An ending you haven't found yet",
+    "toGame": "To the game page",
+    "closeEnd": "Close",
+    "launcher": {
+      "label": "Try the dialogue & choices",
+      "badge": "Draft sample",
+      "cardTitle": "Dialogue & choices experience",
+      "cardBody": "Step through the lines, make your choices, and find out how the story ends.",
+      "cardMeta": "Short experience · no sound"
+    }
+  }
+}

@@ -30,7 +30,7 @@ export default async function HabomPortal({ game }: { game?: GameCardModel }) {
                 <div className="plate rotate-[1.6deg] transition-transform duration-500 group-hover:rotate-0">
                   <div className="aspect-[16/10] overflow-hidden rounded-[22px]">
                     {/* eslint-disable-next-line @next/next/no-img-element */}
-                    <img src={game.wide} alt={game.title} loading="lazy" className="plate__img zoom-img" />
+                    <img src={game.wide} alt="" loading="lazy" className="plate__img zoom-img" />
                   </div>
                 </div>
                 <p className="mt-6 text-center font-display text-[22px]">{game.title}</p>

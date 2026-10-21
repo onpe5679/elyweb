@@ -22,24 +22,32 @@ export type GameCardModel = {
   status: GameStatus;
   brand: BrandId;
   genres: string[];
-  /** 가로형 이미지(배너 우선) / 세로형 이미지(커버 우선) */
+  /** 가로형 이미지(목록·스트립·카드용) / 세로형 이미지(포스터) / 상세 히어로 배경 */
   wide: string;
   tall: string;
+  hero: string;
 };
 
 export function toCard(game: Game, locale: string): GameCardModel {
-  const wide = game.banner_image || game.thumbnail_image || game.cover_image || '';
+  const brand = resolveBrand(game);
+  // 엘리시안 작품은 가로 배너를, 하봄 작품은 캐주얼한 커버를 목록·카드의 대표 이미지로 쓴다(상세 히어로는 항상 배너).
+  const wide =
+    (brand === 'habom'
+      ? game.thumbnail_image || game.cover_image || game.banner_image
+      : game.banner_image || game.thumbnail_image || game.cover_image) || '';
   const tall = game.cover_image || game.thumbnail_image || game.banner_image || '';
+  const hero = game.banner_image || game.thumbnail_image || game.cover_image || '';
   return {
     slug: game.slug,
     title: getLocalizedField(game, 'title', locale),
     series: getLocalizedField(game, 'series', locale),
     desc: getLocalizedField(game, 'description', locale),
     status: game.status,
-    brand: resolveBrand(game),
+    brand,
     genres: getLocalizedArray(game, 'genre', locale),
     wide,
     tall,
+    hero,
   };
 }
 

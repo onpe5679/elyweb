@@ -48,7 +48,7 @@ export default async function LocaleLayout({ children, params: { locale } }: Pro
     <html lang={locale} suppressHydrationWarning>
       <head>
         <script dangerouslySetInnerHTML={{ __html: THEME_INIT }} />
-        {faviconUrl && <link rel="icon" href={faviconUrl} />}
+        <link rel="icon" href={faviconUrl || '/favicon.svg'} />
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="" />
         <link href={FONT_CSS} rel="stylesheet" />

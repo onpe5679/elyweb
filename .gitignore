@@ -37,3 +37,6 @@ pnpm-debug.log*
 # Misc
 *.tsbuildinfo
 .vercel
+
+# Static preview build output
+.preview-build

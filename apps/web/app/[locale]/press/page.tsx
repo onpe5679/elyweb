@@ -1,63 +1,90 @@
-import { getPressKits, getLocalizedField, PressKit } from '@/lib/supabase';
-import { getLocale } from 'next-intl/server';
+import type { Metadata } from 'next';
+import { getTranslations, setRequestLocale } from 'next-intl/server';
+import { Link } from '@/i18n/routing';
+import { getLocalizedField, getLocalizedSettingValue, getPressKits, getSettings } from '@/lib/supabase';
+import { pad2 } from '@/lib/format';
+import Shell from '@/components/shell/Shell';
+import PageHeader from '@/components/pages/PageHeader';
+import SectionHead from '@/components/pages/SectionHead';
+import { ArrowUpRightIcon } from '@/components/pages/Icons';
+import { safeUrl } from '@/components/pages/text';
 
-export default async function PressPage() {
-  const locale = await getLocale();
-  const pressKits = await getPressKits();
+export const revalidate = 10;
+
+export async function generateMetadata({ params: { locale } }: { params: { locale: string } }): Promise<Metadata> {
+  const tm = await getTranslations({ locale, namespace: 'Press' });
+  return { title: tm('metaTitle') };
+}
+
+export default async function PressPage({ params: { locale } }: { params: { locale: string } }) {
+  setRequestLocale(locale);
+  const [t, tp, kits, s] = await Promise.all([
+    getTranslations('Press'),
+    getTranslations('Pages'),
+    getPressKits(),
+    getSettings(['contact_email']),
+  ]);
+  const email = getLocalizedSettingValue(s.contact_email, locale);
 
   return (
-    <div className="pt-24 pb-16 bg-background-light dark:bg-background-dark min-h-screen">
-      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="text-center mb-16">
-          <h4 className="text-primary font-bold tracking-widest uppercase mb-2 text-sm">
-            Media Resources
-          </h4>
-          <h1 className="font-display font-black text-4xl md:text-5xl text-gray-900 dark:text-white">
-            Press Kit
-          </h1>
-        </div>
+    <Shell locale={locale}>
+      <PageHeader eyebrow={t('eyebrow')} title={t('title')} lead={t('lead')} />
 
-        <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-6">
-          Download Press Kits
-        </h2>
-
-        {pressKits.length === 0 ? (
-          <div className="bg-white dark:bg-surface-dark rounded-xl p-8 text-center border border-gray-100 dark:border-gray-800">
-            <i className="fa-solid fa-folder-open text-4xl text-gray-300 dark:text-gray-600 mb-4"></i>
-            <p className="text-gray-500 dark:text-gray-400">
-              No press kits available yet. Check back later!
+      <section aria-labelledby="kits-title" className="border-t border-ink/15">
+        <div className="mx-auto grid max-w-page gap-10 px-5 py-16 md:grid-cols-12 md:gap-12 md:px-10 md:py-24">
+          <SectionHead id="kits-title" eyebrow={t('list.eyebrow')} title={t('list.title')} sticky>
+            <p>{t('list.contact')}</p>
+            <p className="mt-4 flex flex-wrap gap-x-5 gap-y-1 text-[15px] font-bold">
+              <Link href="/contact" className="link-u inline-flex min-h-[44px] items-center">{t('empty.cta')} →</Link>
+              {email && (
+                <a href={`mailto:${email}`} className="link-u inline-flex min-h-[44px] items-center break-all font-mono text-[13px]">{email}</a>
+              )}
             </p>
-          </div>
-        ) : (
-          <div className="space-y-4">
-            {pressKits.map((kit: PressKit) => (
-              <a
-                key={kit.id}
-                href={kit.file_url || '#'}
-                target={kit.file_url ? '_blank' : undefined}
-                rel={kit.file_url ? 'noopener noreferrer' : undefined}
-                className={`block bg-white dark:bg-surface-dark rounded-xl p-6 shadow-sm border border-gray-100 dark:border-gray-800 hover:border-primary dark:hover:border-primary transition-colors ${
-                  !kit.file_url ? 'cursor-not-allowed opacity-60' : ''
-                }`}
-              >
-                <div className="flex items-center justify-between">
-                  <div>
-                    <h3 className="text-lg font-bold text-gray-900 dark:text-white mb-1">
-                      {getLocalizedField(kit, 'title', locale)}
-                    </h3>
-                    <p className="text-gray-500 dark:text-gray-400 text-sm">
-                      {getLocalizedField(kit, 'description', locale) || 'Download press materials'}
-                    </p>
-                  </div>
-                  <div className="w-10 h-10 bg-primary/10 rounded-full flex items-center justify-center flex-shrink-0">
-                    <i className={`fa-solid ${kit.file_url ? 'fa-download' : 'fa-clock'} text-primary`}></i>
-                  </div>
+          </SectionHead>
+
+          <div className="md:col-span-8">
+            {kits.length === 0 ? (
+              <div className="relative isolate overflow-hidden border border-ink/60 bg-paper-3" data-testid="press-empty">
+                <div aria-hidden className="ruled absolute inset-0 -z-10 opacity-40" />
+                <div className="p-8 md:p-12">
+                  <p className="font-mono text-[12px] uppercase tracking-[.14em] text-ink-3">No.00 / 00</p>
+                  <h3 className="t-display mt-4 break-keep text-[clamp(24px,3vw,36px)]">{t('empty.title')}</h3>
+                  <p className="mt-4 max-w-md break-keep font-serif text-[16px] leading-8 text-ink-2">{t('empty.body')}</p>
+                  <Link href="/contact" className="btn mt-8">{t('empty.cta')}</Link>
                 </div>
-              </a>
-            ))}
+              </div>
+            ) : (
+              <ol className="border-t border-ink" data-testid="press-list">
+                {kits.map((kit, i) => {
+                  const title = getLocalizedField(kit, 'title', locale);
+                  const desc = getLocalizedField(kit, 'description', locale) || t('list.fallbackDesc');
+                  const url = safeUrl(kit.file_url);
+                  return (
+                    <li key={kit.id} className="grid items-start gap-x-8 gap-y-5 border-b border-ink/15 py-8 sm:grid-cols-[3.5rem_minmax(0,1fr)] md:py-10 lg:grid-cols-[3.5rem_minmax(0,1fr)_auto]">
+                      <p aria-hidden className="font-mono text-[13px] leading-7 text-ink-3">No.{pad2(i + 1)}</p>
+                      <div className="min-w-0">
+                        <h3 className="break-keep font-display text-[clamp(22px,2.3vw,30px)] font-extrabold leading-snug">{title}</h3>
+                        <p className="mt-2 break-keep font-serif text-[16px] leading-8 text-ink-2">{desc}</p>
+                      </div>
+                      <div className="sm:col-start-2 lg:col-start-auto">
+                        {url ? (
+                          <a href={url} target="_blank" rel="noopener noreferrer" className="btn btn--ghost" data-testid="press-open">
+                            {t('list.open')}
+                            <ArrowUpRightIcon />
+                            <span className="sr-only">: {title} ({tp('external')})</span>
+                          </a>
+                        ) : (
+                          <span className="marker marker--outline">{t('list.pending')}</span>
+                        )}
+                      </div>
+                    </li>
+                  );
+                })}
+              </ol>
+            )}
           </div>
-        )}
-      </div>
-    </div>
+        </div>
+      </section>
+    </Shell>
   );
 }

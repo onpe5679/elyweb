@@ -33,7 +33,9 @@ for (const [local, url] of Object.entries(manifest)) {
   const meta = await sharp(buf, { limitInputPixels: false }).metadata();
   const isLogo = local.includes('/company_settings/') && (meta.width ?? 0) <= 2000 && meta.hasAlpha;
   const maxW = isLogo ? 640 : meta.height > meta.width ? 1100 : 1800;
-  const pipeline = sharp(buf, { limitInputPixels: false }).rotate().resize({ width: maxW, withoutEnlargement: true });
+  let img = sharp(buf, { limitInputPixels: false }).rotate();
+  if (isLogo) img = sharp(await img.trim({ threshold: 10 }).png().toBuffer()); // 로고 둘레의 투명 여백을 걷어 작은 크기에서도 크게 보이게
+  const pipeline = img.resize({ width: maxW, withoutEnlargement: true });
   const info = await (isLogo ? pipeline.webp({ lossless: true }) : pipeline.webp({ quality: 80, effort: 5 })).toFile(out);
   console.log(local.padEnd(80), `${meta.width}x${meta.height}`.padEnd(11), '->', `${info.width}x${info.height}`.padEnd(11), `${Math.round(info.size / 1024)}KB`);
 }

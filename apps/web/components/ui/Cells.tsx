@@ -16,11 +16,14 @@ type Props = {
  */
 export default function Cells({ text, filled, size = 'lg', indent = 0, delay = 0, className = '' }: Props) {
   const chars = Array.from(text);
+  // 한 줄에 들어가는 칸이 많으면(일본어 5자, 영어 7자 등) 칸을 줄여 줄바꿈을 막는다.
+  const total = chars.length + indent;
+  const fit = size === 'lg' ? (total >= 8 ? 'cells--fit8' : total >= 6 ? 'cells--fit6' : '') : '';
   return (
     <span
       role="text"
       aria-label={text}
-      className={`cells ${size === 'sm' ? 'cells--sm' : size === 'md' ? 'cells--md' : ''} ${filled ? 'cells--filled' : ''} ${className}`}
+      className={`cells ${size === 'sm' ? 'cells--sm' : size === 'md' ? 'cells--md' : ''} ${fit} ${filled ? 'cells--filled' : ''} ${className}`}
     >
       {indent > 0 && <span aria-hidden className="cells__indent" style={{ width: `calc(var(--cell) * ${indent})` }} />}
       {chars.map((c, i) =>

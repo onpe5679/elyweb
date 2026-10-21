@@ -110,10 +110,10 @@ export default function Cover({ works }: { works: CoverWork[] }) {
                     <span className="font-mono text-[11px] text-current opacity-60">{String(i + 1).padStart(2, '0')}</span>
                     <span>
                       <span className="font-display text-[22px] font-extrabold leading-tight">{t(`menu.${r.key}`)}</span>
-                      <span className="ml-3 font-mono text-[11px] uppercase tracking-[.14em] opacity-60">{t(`menu.${r.key}En`)}</span>
+                      <span className="ml-3 hidden font-mono text-[11px] uppercase tracking-[.14em] opacity-60 sm:inline">{t(`menu.${r.key}En`)}</span>
                     </span>
                     <span aria-hidden className="title-menu__dots" />
-                    <span className="max-w-[11rem] truncate text-right font-mono text-[11px] opacity-70">{r.meta}</span>
+                    <span className="max-w-[7.5rem] truncate text-right font-mono text-[11px] opacity-70 sm:max-w-[11rem]">{r.meta}</span>
                   </>
                 );
                 return (

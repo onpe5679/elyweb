@@ -1,4 +1,11 @@
-> 이 브랜치는 **독립 리디자인 작업의 출발점**입니다. 새 에이전트는 [DESIGN_BRIEF.md](DESIGN_BRIEF.md)부터 읽으세요. 기존 시안 결과물은 포함하지 않습니다.
+> 이 브랜치는 **독립 리디자인 시안**(`design/my-independent-concept`)입니다. 요구사항은 [DESIGN_BRIEF.md](DESIGN_BRIEF.md), 디자인 규칙은 [docs/design-system.md](docs/design-system.md), 작품 상세 공통 규격은 [docs/game-detail-spec.md](docs/game-detail-spec.md)를 보세요.
+>
+> ```bash
+> pnpm install
+> pnpm --filter web dev          # http://localhost:3000  (Supabase 환경변수가 없으면 내장 스냅샷 데이터로 동작)
+> node scripts/check-i18n.mjs    # ko/en/ja 번역 키 점검
+> node scripts/preview/build-static-preview.mjs   # 서버 없이 열 수 있는 정적 시안 → .preview-build/site
+> ```
 
 # Studio Elysian (elyweb)
 

@@ -1,1 +1,71 @@
-{}
+{
+  "Works": {
+    "eyebrow": "Our Works",
+    "title": "作品",
+    "lead": "エリシアンとハボムが開いてきた物語です。画像やタイトルを選ぶと作品の詳細に進みます。",
+    "filterLabel": "シリーズ",
+    "filterAll": "すべて",
+    "count": "{count}本",
+    "open": "作品を見る",
+    "habomLink": "スタジオ ハボム"
+  },
+  "Game": {
+    "breadcrumb": "現在位置",
+    "breadcrumbWorks": "作品",
+    "tabsLabel": "作品詳細のセクション",
+    "buy": "{name}で見る",
+    "watch": "映像を見る",
+    "official": "公式サイト",
+    "synopsis": "Synopsis",
+    "about": "About",
+    "tabs": {
+      "overview": "紹介",
+      "gallery": "図版",
+      "video": "映像",
+      "credits": "スタッフ",
+      "history": "沿革",
+      "related": "ほかの作品"
+    },
+    "info": {
+      "title": "作品情報",
+      "series": "シリーズ",
+      "status": "状態",
+      "platform": "プラットフォーム",
+      "genre": "ジャンル",
+      "release": "発売",
+      "staff": "主なスタッフ"
+    },
+    "keyart": {
+      "title": "図版",
+      "lead": "作品の代表的なイメージです。選ぶと大きく表示されます。",
+      "visual": "キービジュアル",
+      "poster": "ポスター"
+    },
+    "videos": {
+      "title": "映像",
+      "play": "再生",
+      "youtube": "YouTubeで見る"
+    },
+    "credits": {
+      "title": "スタッフ"
+    },
+    "history": {
+      "title": "プロジェクト沿革"
+    },
+    "related": {
+      "series": "同じシリーズの作品",
+      "other": "ほかの作品"
+    },
+    "experience": {
+      "title": "セリフ・選択肢体験",
+      "body": "ハボム作品の雰囲気を、短いセリフと選択肢で先に味わえます。試作用のサンプルで、公式のゲーム内容ではありません。"
+    },
+    "lightbox": {
+      "open": "拡大して見る",
+      "close": "閉じる",
+      "prev": "前の画像",
+      "next": "次の画像",
+      "counter": "{current} / {total}"
+    }
+  }
+}

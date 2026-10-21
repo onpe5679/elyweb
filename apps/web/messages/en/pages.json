@@ -1,1 +1,166 @@
-{}
+{
+  "Pages": {
+    "external": "Opens in a new tab"
+  },
+  "About": {
+    "metaTitle": "The Studio",
+    "eyebrow": "About Studio Elysian",
+    "title": "The Studio",
+    "lead": "Meet the people behind Studio Elysian, a studio that makes stories.",
+    "plate": "Plate · About the studio",
+    "vision": {
+      "eyebrow": "Vision",
+      "title": "Infinite Horizon of Stories",
+      "p1": "Studio Elysian is a team founded in 2022 that develops story-driven games combining visual, comic, illustration, and music elements.",
+      "p2": "Our team members, each with strengths in their respective fields, come together with the goal of delivering stories that both users and creators can enjoy in various ways.",
+      "p3": "Starting with \"Memorial Circuit\", we are developing the \"Old Engine\" universe centered on the theme of \"war and its wounds,\" while also showcasing creative works like \"In Between All Times\" with unique worldviews and settings."
+    },
+    "mission": {
+      "eyebrow": "Our Mission",
+      "title": "Mission",
+      "body": "We believe in the power of stories. Through visual novels and interactive experiences, we want to create emotional connections that reach across language and cultural barriers."
+    },
+    "colophon": {
+      "eyebrow": "Colophon",
+      "title": "The Studio in Numbers",
+      "year": "Founded",
+      "projects": "Projects",
+      "released": "Released",
+      "global": "Steam release",
+      "funding": "Funding reached"
+    },
+    "team": {
+      "eyebrow": "Team",
+      "title": "The People Behind the Pages",
+      "lead": "The members who carry each story. Select a name to read their profile."
+    },
+    "history": {
+      "eyebrow": "History",
+      "title": "History",
+      "lead": "Our steps since 2022, in order.",
+      "caption": "Studio Elysian chronology",
+      "date": "Date",
+      "event": "Event",
+      "empty": "No history has been added yet."
+    }
+  },
+  "News": {
+    "metaTitle": "News",
+    "eyebrow": "Latest Updates",
+    "title": "News",
+    "lead": "The latest from Studio Elysian.",
+    "feed": {
+      "eyebrow": "Official X",
+      "title": "News on X",
+      "body": "Recent news from the studio is on the timeline of our official X account.",
+      "account": "Official account"
+    },
+    "list": {
+      "eyebrow": "Posts",
+      "title": "Announcements",
+      "more": "Read more"
+    },
+    "empty": {
+      "title": "No news yet",
+      "body": "New posts will appear here as they come. In the meantime, have a look at our works.",
+      "x": "See updates on X",
+      "works": "Browse works"
+    },
+    "x": {
+      "frame": "X timeline",
+      "loading": "Loading the timeline…",
+      "fallbackBody": "The X timeline can't be shown on this screen. Please check our official account for the latest news.",
+      "open": "View on X"
+    },
+    "detail": {
+      "back": "All news",
+      "published": "Published"
+    }
+  },
+  "Press": {
+    "metaTitle": "Press Kit",
+    "eyebrow": "Media Resources",
+    "title": "Press Kit",
+    "lead": "Official materials for articles and write-ups, gathered in one place.",
+    "list": {
+      "eyebrow": "Downloads",
+      "title": "Materials",
+      "contact": "If you need help using these materials or want something more, please get in touch.",
+      "open": "Open files",
+      "pending": "Coming soon",
+      "fallbackDesc": "Materials for press and introductions"
+    },
+    "empty": {
+      "title": "No press kits are public yet",
+      "body": "If you need something specific, let us know through the contact page.",
+      "cta": "Contact us"
+    }
+  },
+  "Contact": {
+    "metaTitle": "Contact",
+    "eyebrow": "Get in Touch",
+    "title": "Contact",
+    "lead": "Send us your collaboration, publishing or press enquiry. We'll reply by email.",
+    "form": {
+      "title": "Send a message",
+      "name": "Name",
+      "email": "Email",
+      "message": "Message",
+      "required": "Required",
+      "submit": "Send message",
+      "sending": "Sending…",
+      "consent": "We use your name, email and message only to read and answer your enquiry. See our <link>privacy policy</link> for details.",
+      "summary": "Please check the fields below.",
+      "errors": {
+        "nameRequired": "Please enter your name.",
+        "emailRequired": "Please enter your email.",
+        "emailInvalid": "Please check the email format, e.g. name@example.com",
+        "messageRequired": "Please enter your message.",
+        "send": "We couldn't send your message. Please try again in a moment, or email us directly."
+      },
+      "success": {
+        "badge": "Received",
+        "title": "Your message has been received",
+        "body": "We'll reply to the email address you gave us.",
+        "confirmation": "We've also sent you a confirmation email."
+      },
+      "preview": {
+        "badge": "Preview",
+        "title": "Submission screen checked",
+        "body": "This is a preview environment, so nothing was stored or sent. Your message was not delivered to anyone."
+      },
+      "again": "Write another message"
+    },
+    "info": {
+      "eyebrow": "Contact",
+      "title": "Reach us directly",
+      "email": "Email",
+      "follow": "Official social media"
+    }
+  },
+  "Privacy": {
+    "metaTitle": "Privacy Policy",
+    "eyebrow": "Privacy Policy",
+    "title": "Privacy Policy",
+    "toc": "Contents",
+    "koOnly": "The privacy policy is currently available in Korean only.",
+    "empty": "The privacy policy has not been published yet."
+  },
+  "Team": {
+    "eyebrow": "Team",
+    "back": "The Studio",
+    "links": "Links",
+    "website": "Website",
+    "project": "View project",
+    "skillLevel": "Level {level} of 5",
+    "social": "Profile links"
+  },
+  "NotFound": {
+    "metaTitle": "Page not found",
+    "eyebrow": "Error 404",
+    "title": "Page Not Found",
+    "body": "The address may have changed, or the page no longer exists. Try finding it again from the contents below.",
+    "menu": "Contents",
+    "home": "Back to the cover"
+  }
+}

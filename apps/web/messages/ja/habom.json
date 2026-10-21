@@ -1,1 +1,92 @@
-{}
+{
+  "Habom": {
+    "meta": {
+      "title": "スタジオ ハボム",
+      "description": "スタジオ エリシアンのレーベルスタジオ、ハボム。明るく、丸く、やわらかく、気軽に楽しめる物語をつくります。"
+    },
+    "hero": {
+      "badge": "スタジオ エリシアンのレーベルスタジオ",
+      "wordmarkLabel": "スタジオ ハボム",
+      "wordmarkNote": "※ 公式ロゴが見つからなかったため、書体で作った仮のワードマークです。",
+      "tagline": "明るく、丸く、やわらかく。\n気軽に開ける物語をつくります。",
+      "stickerA": "明るく",
+      "stickerB": "まるく",
+      "stickerC": "ふんわり",
+      "artSticker": "今すぐ体験できます",
+      "ctaGame": "作品ページを見る",
+      "toElysian": "スタジオ エリシアンへ戻る"
+    },
+    "works": {
+      "eyebrow": "Our Games",
+      "title": "ハボムの作品",
+      "lead": "ハボムがつくった物語です。カードを開いて作品の詳細を見たり、そのまま体験したりできます。",
+      "count": "作品 {count} 本",
+      "open": "作品を見る",
+      "play": "体験する",
+      "playable": "体験できます",
+      "empty": "公開中のハボム作品はまだありません。"
+    },
+    "experience": {
+      "eyebrow": "Dialogue & Choices",
+      "title": "セリフと選択肢を\n自分で選んでみよう",
+      "body": "ハボム作品の雰囲気を味わえる短い体験です。セリフを一行ずつ進め、選択肢を選んで、物語がどこへ向かうか確かめてみてください。",
+      "step1Title": "セリフを進める",
+      "step1Body": "文字が出ている間に押すと一度に表示され、もう一度押すと次のセリフへ進みます。",
+      "step2Title": "選択肢を選ぶ",
+      "step2Body": "クリック・タップのほか、キーボードの 1 · 2 · 3 キーでも選べます。選択は三回あります。",
+      "step3Title": "エンディングへ",
+      "step3Body": "選んだ内容によってエンディングが分かれます。エンディングカードで自分の選択を振り返り、もう一度遊べます。",
+      "roommates": "体験で出会うルームメイト",
+      "roommatesNote": "名前と性格は公式のあらすじで紹介されている内容です。",
+      "noticeTag": "試作",
+      "noticeTitle": "これは試作用のサンプル脚本です",
+      "noticeBody": "セリフと場面はこのコンセプトのために新しく書いたサンプルで、公式ゲームの内容ではありません。実際の脚本・キャラクター・ボリューム・サウンドが決まったら差し替えます。音は出ません。",
+      "only": "ハボム所属のゲームでのみ提供されます。",
+      "keys": "Enter · Space 次へ / 1 · 2 · 3 選択 / R やり直し / Esc 閉じる",
+      "previewLabel": "サンプル画面"
+    },
+    "studio": {
+      "eyebrow": "About Habom",
+      "title": "スタジオ ハボム",
+      "body": "ハボムはスタジオ エリシアンのレーベルスタジオです。エリシアンとは違う、明るく丸くカジュアルな雰囲気の作品をつくります。",
+      "teamEyebrow": "Team",
+      "elysianNote": "エリシアンのほかの作品やスタジオ紹介は、スタジオ エリシアンのサイトでご覧いただけます。",
+      "toElysian": "スタジオ エリシアンを見る",
+      "toAbout": "エリシアンについて",
+      "toContact": "協業・お問い合わせ"
+    }
+  },
+  "Experience": {
+    "eyebrow": "セリフ・選択肢体験",
+    "draftBadge": "試作用のサンプル脚本 · 公式ゲームの内容ではありません",
+    "draftNote": "このセリフとエンディングは試作のために新しく書いたサンプルで、公式ゲームの脚本・キャラクター設定ではありません。",
+    "replayHint": "違う選択をすると、違うエンディングに出会えます。",
+    "progress": "進行度",
+    "choiceCount": "選択 {done}/{total}",
+    "choiceNow": "選択 {n}/{total}",
+    "chooseHint": "選択肢を選んでください",
+    "next": "次へ",
+    "restart": "やり直す",
+    "restartAria": "最初からやり直す (R)",
+    "close": "閉じる",
+    "closeAria": "体験を閉じる (Esc)",
+    "keys": "Enter · Space 次へ  ·  1 2 3 選択  ·  R やり直し  ·  Esc 閉じる",
+    "endingLabel": "エンディング {n}/{total}",
+    "endingAnnounce": "エンディングに到達しました。{title}",
+    "yourChoices": "あなたの選択",
+    "closeness": "ルームメイトとの距離",
+    "closenessItem": "{name}: {count}/{total}",
+    "collection": "見つけたエンディング {found}/{total}",
+    "locked": "???",
+    "lockedLabel": "まだ見つけていないエンディング",
+    "toGame": "ゲームページへ",
+    "closeEnd": "閉じる",
+    "launcher": {
+      "label": "セリフ・選択肢を体験する",
+      "badge": "試作サンプル",
+      "cardTitle": "セリフ・選択肢体験",
+      "cardBody": "セリフを一行ずつ進め、選択肢を選んで、物語の結末に出会いましょう。",
+      "cardMeta": "短い体験 · 音なし"
+    }
+  }
+}
