@@ -149,6 +149,8 @@ for await (const f of files(site)) {
   let text = await fs.readFile(f, 'utf8');
   const before = text;
   text = text.replaceAll('/_next/', '/nx/');
+  // 일부 호스팅은 U+FFFD(대체 문자)가 든 텍스트 파일을 거부한다(폴리필 청크에 리터럴로 들어 있음) → 같은 뜻의 이스케이프로 바꾼다.
+  if (ext === '.js' && text.includes('\uFFFD')) text = text.replaceAll('\uFFFD', '\\uFFFD');
   for (const [seg, name] of bracket) {
     text = text.replaceAll(seg, name).replaceAll(encodeURIComponent(seg), name);
   }
