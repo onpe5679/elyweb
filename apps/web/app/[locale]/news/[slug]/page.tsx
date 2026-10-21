@@ -7,6 +7,7 @@ type Props = {
 };
 
 async function getNewsBySlug(slug: string) {
+  if (!supabase) return null; // 스냅샷 모드: 공개 뉴스 없음
   const { data, error } = await supabase
     .from('news')
     .select('*')

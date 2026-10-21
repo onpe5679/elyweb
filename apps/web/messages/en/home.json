@@ -1,0 +1,61 @@
+{
+  "Home": {
+    "eyebrow": "For Story-Lovers, By Storytellers",
+    "titleLine1": "STUDIO",
+    "titleLine2": "ELYSIAN",
+    "tagline": "Makers of stories, Studio Elysian.\nWe build beautiful worlds that move you.",
+    "menuLabel": "Main menu",
+    "stripsLabel": "Works by Studio Elysian",
+    "plateCaption": "Plate · Stories now open",
+    "menu": {
+      "start": "Begin a story",
+      "startEn": "New Story",
+      "startMeta": "{count} works",
+      "continue": "Pick up reading",
+      "continueEn": "Continue",
+      "continueEmpty": "Nothing read yet",
+      "continueHint": "You haven't opened a story yet. Choose “Begin a story” to open your first one.",
+      "studio": "The studio",
+      "studioEn": "Studio",
+      "habom": "Studio Habom",
+      "habomEn": "Habom",
+      "news": "News",
+      "newsEn": "News",
+      "keys": "↑ ↓ move · Enter select"
+    },
+    "works": {
+      "eyebrow": "Our Works",
+      "title": "Stories now open",
+      "all": "All works",
+      "featured": "This issue",
+      "open": "Open the work"
+    },
+    "vision": {
+      "eyebrow": "Our Vision",
+      "plate": "Plate · About the studio",
+      "more": "More about the studio"
+    },
+    "habom": {
+      "badge": "Sister studio",
+      "body": "A different kind of story from Elysian: bright, soft and easy to enjoy. Meet the work of Studio Habom.",
+      "cta": "Visit Habom",
+      "play": "Try the dialogue demo"
+    },
+    "chronology": {
+      "title": "Milestones",
+      "all": "Full history"
+    },
+    "stats": {
+      "year": "Founded",
+      "projects": "Projects",
+      "released": "Released",
+      "global": "Steam release"
+    },
+    "cta": {
+      "title": "Want to make stories with us?",
+      "body": "We welcome collaboration, publishing and press enquiries.",
+      "contact": "Contact us",
+      "press": "Press kit"
+    }
+  }
+}

@@ -1,9 +1,33 @@
 import { createClient } from '@supabase/supabase-js';
+import snapshotGames from './snapshot/games.json';
+import snapshotSections from './snapshot/game_sections.json';
+import snapshotTimeline from './snapshot/timeline_events.json';
+import snapshotTeam from './snapshot/team_members.json';
+import snapshotTeamSections from './snapshot/team_member_sections.json';
+import snapshotSettings from './snapshot/company_settings.json';
+import snapshotPress from './snapshot/press_kits.json';
+import snapshotNews from './snapshot/news.json';
 
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
-const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!;
+const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
+const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
 
-export const supabase = createClient(supabaseUrl, supabaseAnonKey);
+/**
+ * Supabase 환경변수가 있으면 실제 DB를 쓰고, 없으면 lib/snapshot 의 읽기 전용 스냅샷을 쓴다.
+ * (스냅샷은 운영 사이트 공개 페이지에서 만든 것 — scripts/snapshot/README.md 참고)
+ */
+export const isSnapshotMode = !supabaseUrl || !supabaseAnonKey;
+export const supabase = isSnapshotMode ? null : createClient(supabaseUrl!, supabaseAnonKey!);
+
+const snap = {
+  games: snapshotGames as unknown as Game[],
+  sections: snapshotSections as unknown as GameSectionDB[],
+  timeline: snapshotTimeline as unknown as TimelineEvent[],
+  team: snapshotTeam as unknown as TeamMember[],
+  teamSections: snapshotTeamSections as unknown as TeamMemberSection[],
+  settings: snapshotSettings as unknown as SiteSetting[],
+  press: snapshotPress as unknown as PressKit[],
+  news: snapshotNews as unknown as News[],
+};
 
 export type Game = {
   id: string;
@@ -28,6 +52,7 @@ export type Game = {
   official_url?: string;
   platforms?: string[];
   is_featured: boolean;
+  display_order?: number;
   created_at: string;
 };
 
@@ -82,6 +107,7 @@ export function getLocalizedArray<T extends Record<string, unknown>>(
 }
 
 export async function getGames(): Promise<Game[]> {
+  if (!supabase) return snap.games.slice().sort((a, b) => (a.display_order ?? 0) - (b.display_order ?? 0));
   const { data, error } = await supabase
     .from('games')
     .select('*')
@@ -96,6 +122,7 @@ export async function getGames(): Promise<Game[]> {
 }
 
 export async function getGameBySlug(slug: string): Promise<Game | null> {
+  if (!supabase) return snap.games.find((g) => g.slug === slug) ?? null;
   const { data, error } = await supabase
     .from('games')
     .select('*')
@@ -111,6 +138,7 @@ export async function getGameBySlug(slug: string): Promise<Game | null> {
 }
 
 export async function getFeaturedGame(): Promise<Game | null> {
+  if (!supabase) return snap.games.slice().sort((a, b) => (a.display_order ?? 0) - (b.display_order ?? 0)).find((g) => g.is_featured) ?? null;
   const { data, error } = await supabase
     .from('games')
     .select('*')
@@ -128,6 +156,7 @@ export async function getFeaturedGame(): Promise<Game | null> {
 }
 
 export async function getNews(publishedOnly = true): Promise<News[]> {
+  if (!supabase) return snap.news.filter((n) => !publishedOnly || n.is_published);
   let query = supabase
     .from('news')
     .select('*')
@@ -147,7 +176,12 @@ export async function getNews(publishedOnly = true): Promise<News[]> {
   return data || [];
 }
 
+function mapTimeline(rows: TimelineEvent[]): TimelineEvent[] {
+  return rows.map((event) => ({ ...event, date: event.date_label || event.date || '' }));
+}
+
 export async function getTimelineEvents(): Promise<TimelineEvent[]> {
+  if (!supabase) return mapTimeline(snap.timeline.slice().sort((a, b) => (a.display_order ?? 0) - (b.display_order ?? 0)));
   const { data, error } = await supabase
     .from('timeline_events')
     .select('*')
@@ -165,6 +199,7 @@ export async function getTimelineEvents(): Promise<TimelineEvent[]> {
 }
 
 export async function getHomeTimelineEvents(): Promise<TimelineEvent[]> {
+  if (!supabase) return mapTimeline(snap.timeline.slice().sort((a, b) => (a.display_order ?? 0) - (b.display_order ?? 0)).filter((e) => e.show_on_home));
   const { data, error } = await supabase
     .from('timeline_events')
     .select('*')
@@ -322,6 +357,7 @@ export type SiteSetting = {
 
 // Fetch a single setting by key
 export async function getSetting(key: string): Promise<SiteSetting | null> {
+  if (!supabase) return snap.settings.find((x) => x.key === key) ?? null;
   const { data, error } = await supabase
     .from('company_settings')
     .select('*')
@@ -338,6 +374,11 @@ export async function getSetting(key: string): Promise<SiteSetting | null> {
 
 // Fetch multiple settings by keys
 export async function getSettings(keys: string[]): Promise<Record<string, SiteSetting>> {
+  if (!supabase) {
+    const result: Record<string, SiteSetting> = {};
+    snap.settings.filter((x) => keys.includes(x.key)).forEach((x) => { result[x.key] = x; });
+    return result;
+  }
   const { data, error } = await supabase
     .from('company_settings')
     .select('*')
@@ -402,6 +443,7 @@ export type TeamMember = {
 };
 
 export async function getTeamMembers(): Promise<TeamMember[]> {
+  if (!supabase) return snap.team.filter((m) => m.is_active).slice().sort((a, b) => (a.display_order ?? 0) - (b.display_order ?? 0));
   const { data, error } = await supabase
     .from('team_members')
     .select('*')
@@ -417,6 +459,7 @@ export async function getTeamMembers(): Promise<TeamMember[]> {
 }
 
 export async function getTeamMemberBySlug(slug: string): Promise<TeamMember | null> {
+  if (!supabase) return snap.team.find((m) => m.slug === slug) ?? null;
   const { data, error } = await supabase
     .from('team_members')
     .select('*')
@@ -454,6 +497,12 @@ export type TeamMemberSection = {
 };
 
 export async function getTeamMemberSections(teamMemberIdOrSlug: string): Promise<TeamMemberSection[]> {
+  if (!supabase) {
+    const member = snap.team.find((m) => m.slug === teamMemberIdOrSlug || m.id === teamMemberIdOrSlug);
+    return snap.teamSections
+      .filter((x) => x.team_member_id === member?.id && x.is_visible)
+      .sort((a, b) => a.display_order - b.display_order);
+  }
   const { data: member } = await supabase
     .from('team_members')
     .select('id')
@@ -478,6 +527,7 @@ export async function getTeamMemberSections(teamMemberIdOrSlug: string): Promise
 }
 
 export async function getPressKits(): Promise<PressKit[]> {
+  if (!supabase) return snap.press.filter((k) => k.is_published).slice().sort((a, b) => (a.display_order ?? 0) - (b.display_order ?? 0));
   const { data, error } = await supabase
     .from('press_kits')
     .select('*')
@@ -494,6 +544,9 @@ export async function getPressKits(): Promise<PressKit[]> {
 
 // Fetch game sections from database
 export async function getGameSections(gameIdOrSlug: string): Promise<GameSection[]> {
+  if (!supabase) {
+    return (await getGameSectionRows(gameIdOrSlug)).map(transformSectionToLegacy);
+  }
   // First, try to get game by slug to get its UUID
   const { data: game } = await supabase
     .from('games')
@@ -521,4 +574,26 @@ export async function getGameSections(gameIdOrSlug: string): Promise<GameSection
 
   // Transform DB records to legacy format
   return (data as GameSectionDB[]).map(transformSectionToLegacy);
+}
+
+// 새 디자인의 게임 상세는 레거시 변환 없이 DB 행 그대로 사용한다.
+export async function getGameSectionRows(gameIdOrSlug: string): Promise<GameSectionDB[]> {
+  if (!supabase) {
+    const game = snap.games.find((g) => g.slug === gameIdOrSlug || g.id === gameIdOrSlug);
+    return snap.sections
+      .filter((x) => x.game_id === game?.id && x.is_visible)
+      .sort((a, b) => a.display_order - b.display_order);
+  }
+  const { data: game } = await supabase.from('games').select('id').eq('slug', gameIdOrSlug).single();
+  const { data, error } = await supabase
+    .from('game_sections')
+    .select('*')
+    .eq('game_id', game?.id || gameIdOrSlug)
+    .eq('is_visible', true)
+    .order('display_order', { ascending: true });
+  if (error) {
+    console.error('Error fetching game sections:', error);
+    return [];
+  }
+  return (data as GameSectionDB[]) || [];
 }

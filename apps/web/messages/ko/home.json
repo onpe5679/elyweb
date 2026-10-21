@@ -1,0 +1,61 @@
+{
+  "Home": {
+    "eyebrow": "For Story-Lovers, By Storytellers",
+    "titleLine1": "스튜디오",
+    "titleLine2": "엘리시안",
+    "tagline": "이야기를 만드는 사람들, 엘리시안.\n우리는 당신의 마음을 움직일 아름다운 세계를 창조합니다.",
+    "menuLabel": "메인 메뉴",
+    "stripsLabel": "엘리시안의 작품",
+    "plateCaption": "도판 · 현재 펼쳐진 이야기",
+    "menu": {
+      "start": "이야기 시작하기",
+      "startEn": "New Story",
+      "startMeta": "작품 {count}편",
+      "continue": "이어 읽기",
+      "continueEn": "Continue",
+      "continueEmpty": "읽은 이야기 없음",
+      "continueHint": "아직 펼친 이야기가 없어요. ‘이야기 시작하기’에서 첫 작품을 열어 보세요.",
+      "studio": "스튜디오 소개",
+      "studioEn": "Studio",
+      "habom": "스튜디오 하봄",
+      "habomEn": "Habom",
+      "news": "새소식",
+      "newsEn": "News",
+      "keys": "↑ ↓ 이동 · Enter 선택"
+    },
+    "works": {
+      "eyebrow": "Our Works",
+      "title": "현재 펼쳐진 이야기",
+      "all": "작품 전체 보기",
+      "featured": "이번 호",
+      "open": "작품 보기"
+    },
+    "vision": {
+      "eyebrow": "Our Vision",
+      "plate": "도판 · 스튜디오 소개",
+      "more": "회사 소개 더보기"
+    },
+    "habom": {
+      "badge": "산하 스튜디오",
+      "body": "엘리시안과는 다른 결의 이야기. 밝고 말랑하고 가볍게 즐기는 스튜디오 하봄의 작품을 만나 보세요.",
+      "cta": "하봄 둘러보기",
+      "play": "대사·선택지 체험"
+    },
+    "chronology": {
+      "title": "주요 연혁",
+      "all": "전체 연혁 보기"
+    },
+    "stats": {
+      "year": "설립 연도",
+      "projects": "진행 프로젝트",
+      "released": "출시 프로젝트",
+      "global": "스팀 출시"
+    },
+    "cta": {
+      "title": "이야기를 함께 만들고 싶으신가요?",
+      "body": "협업, 퍼블리싱, 취재 문의를 기다립니다.",
+      "contact": "문의하기",
+      "press": "프레스 키트"
+    }
+  }
+}

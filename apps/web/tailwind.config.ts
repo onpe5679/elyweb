@@ -1,7 +1,9 @@
 import type { Config } from "tailwindcss";
 
+// 색은 모두 CSS 변수(RGB 3값)로 정의되어 있고 app/globals.css 에서 브랜드·테마별로 바뀐다.
+const token = (name: string) => `rgb(var(--c-${name}) / <alpha-value>)`;
+
 const config: Config = {
-  darkMode: "class",
   content: [
     "./app/**/*.{js,ts,jsx,tsx,mdx}",
     "./components/**/*.{js,ts,jsx,tsx,mdx}",
@@ -9,46 +11,37 @@ const config: Config = {
   theme: {
     extend: {
       colors: {
-        primary: "#7C3AED", 
-        "background-light": "#F3F4F6", 
-        "background-dark": "#0F172A", 
-        "surface-light": "#FFFFFF",
-        "surface-dark": "#1E293B",
-        "text-light": "#111827",
-        "text-dark": "#E2E8F0",
-        "accent-light": "#4F46E5",
-        "accent-dark": "#818CF8",
-        "romance-pink": "#FF8DA1",
+        paper: token("paper"),
+        "paper-2": token("paper-2"),
+        "paper-3": token("paper-3"),
+        ink: token("ink"),
+        "ink-2": token("ink-2"),
+        "ink-3": token("ink-3"),
+        accent: token("accent"),
+        "accent-text": token("accent-text"),
+        "accent-ink": token("accent-ink"),
+        sub: token("sub"),
+        grid: token("grid"),
       },
       fontFamily: {
-        display: ["Montserrat", "sans-serif"],
-        body: ["Noto Sans KR", "sans-serif"],
+        // display/serif/sans 는 브랜드에 따라 --font-* 가 바뀐다.
+        display: ["var(--font-display)"],
+        serif: ["var(--font-serif)"],
+        sans: ["var(--font-sans)"],
+        mono: ["var(--font-mono)"],
       },
       borderRadius: {
-        DEFAULT: "0.5rem",
-        'xl': '1rem',
-        '2xl': '1.5rem',
-        '3xl': '2rem',
+        ui: "var(--radius-ui)",
+        card: "var(--radius-card)",
       },
-      animation: {
-        'fade-in-down': 'fadeInDown 0.5s ease-out',
-        'fade-in-up': 'fadeInUp 0.5s ease-out',
+      maxWidth: {
+        page: "88rem",
       },
-      keyframes: {
-        fadeInDown: {
-          '0%': { opacity: '0', transform: 'translateY(-10px)' },
-          '100%': { opacity: '1', transform: 'translateY(0)' },
-        },
-        fadeInUp: {
-          '0%': { opacity: '0', transform: 'translateY(10px)' },
-          '100%': { opacity: '1', transform: 'translateY(0)' },
-        },
-      }
+      transitionTimingFunction: {
+        page: "cubic-bezier(.2,.7,.1,1)",
+      },
     },
   },
-  plugins: [
-    require('@tailwindcss/typography'),
-    require('@tailwindcss/forms'),
-  ],
+  plugins: [],
 };
 export default config;

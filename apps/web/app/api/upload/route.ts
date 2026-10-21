@@ -5,7 +5,7 @@ import { randomUUID } from 'crypto';
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
 const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY!;
 
-const supabase = createClient(supabaseUrl, supabaseServiceKey);
+const supabase = supabaseUrl && supabaseServiceKey ? createClient(supabaseUrl, supabaseServiceKey) : null;
 
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
@@ -18,6 +18,9 @@ export async function OPTIONS() {
 }
 
 export async function POST(request: NextRequest) {
+  if (!supabase) {
+    return NextResponse.json({ error: 'Storage is not configured (preview mode)' }, { status: 503, headers: corsHeaders });
+  }
   try {
     const formData = await request.formData();
     const file = formData.get('file') as File | null;
@@ -58,6 +61,9 @@ export async function POST(request: NextRequest) {
 }
 
 export async function DELETE(request: NextRequest) {
+  if (!supabase) {
+    return NextResponse.json({ error: 'Storage is not configured (preview mode)' }, { status: 503, headers: corsHeaders });
+  }
   try {
     const { searchParams } = new URL(request.url);
     const fileUrl = searchParams.get('path');

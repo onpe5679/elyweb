@@ -1,0 +1,48 @@
+{
+  "Common": {
+    "theme": "화면 테마 전환",
+    "themePaper": "종이",
+    "themeNight": "밤",
+    "language": "언어",
+    "mainNav": "주 메뉴",
+    "openMenu": "메뉴 열기",
+    "closeMenu": "메뉴 닫기",
+    "habomName": "스튜디오 하봄",
+    "toElysian": "스튜디오 엘리시안",
+    "back": "뒤로",
+    "close": "닫기",
+    "viewMore": "더 보기"
+  },
+  "Nav": {
+    "works": "작품",
+    "studio": "스튜디오",
+    "news": "새소식",
+    "habom": "하봄",
+    "contact": "문의",
+    "press": "프레스",
+    "habomHome": "하봄 홈",
+    "habomWorks": "작품",
+    "habomPlay": "체험하기",
+    "toElysian": "스튜디오 엘리시안"
+  },
+  "Status": {
+    "released": "출시",
+    "coming_soon": "출시 예정",
+    "in_development": "개발 중",
+    "publishing": "퍼블리싱"
+  },
+  "Footer": {
+    "tagline": "스튜디오 엘리시안은 이야기가 가진 힘을 믿습니다.\n우리는 게임을 통해 더 넓은 세상과 소통합니다.",
+    "habomTagline": "스튜디오 엘리시안의 산하 스튜디오.\n가볍고 말랑한 이야기를 만듭니다.",
+    "sitemap": "사이트맵",
+    "contactTitle": "Contact",
+    "contactNote": "협업·퍼블리싱·취재 문의는 문의 페이지로 보내 주세요.",
+    "colophon": "판권",
+    "legalName": "상호(법인명): 주식회사 스튜디오엘리시안",
+    "legalReg": "사업자 등록번호: 373-81-03729",
+    "legalCeo": "대표자: 우현제",
+    "legalAddress": "주소: 경기도 성남시 분당구 대왕판교로645번길 12, 6층 27호(삼평동, 경기창조경제혁신센터)",
+    "privacy": "개인정보처리방침",
+    "habomNote": "※ 시안 안내: 하봄의 공식 로고 파일을 저장소와 운영 사이트에서 찾지 못해, 서체로 만든 임시 워드마크를 사용했습니다."
+  }
+}

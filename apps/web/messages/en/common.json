@@ -1,0 +1,48 @@
+{
+  "Common": {
+    "theme": "Toggle colour theme",
+    "themePaper": "Paper",
+    "themeNight": "Night",
+    "language": "Language",
+    "mainNav": "Main navigation",
+    "openMenu": "Open menu",
+    "closeMenu": "Close menu",
+    "habomName": "Studio Habom",
+    "toElysian": "Studio Elysian",
+    "back": "Back",
+    "close": "Close",
+    "viewMore": "More"
+  },
+  "Nav": {
+    "works": "Works",
+    "studio": "Studio",
+    "news": "News",
+    "habom": "Habom",
+    "contact": "Contact",
+    "press": "Press",
+    "habomHome": "Habom Home",
+    "habomWorks": "Works",
+    "habomPlay": "Try it",
+    "toElysian": "Studio Elysian"
+  },
+  "Status": {
+    "released": "Released",
+    "coming_soon": "Coming soon",
+    "in_development": "In development",
+    "publishing": "Publishing"
+  },
+  "Footer": {
+    "tagline": "Studio Elysian believes in the power of stories.\nThrough games, we reach a wider world.",
+    "habomTagline": "A sister studio of Studio Elysian.\nSoft, bright stories you can pick up and enjoy.",
+    "sitemap": "Sitemap",
+    "contactTitle": "Contact",
+    "contactNote": "For collaboration, publishing and press enquiries, please use the contact page.",
+    "colophon": "Colophon",
+    "legalName": "Company: Studio Elysian Inc. (주식회사 스튜디오엘리시안)",
+    "legalReg": "Business registration no.: 373-81-03729",
+    "legalCeo": "CEO: 우현제",
+    "legalAddress": "Address: 12, Daewangpangyo-ro 645beon-gil, Bundang-gu, Seongnam-si, Gyeonggi-do, Korea (Gyeonggi Center for Creative Economy & Innovation, Room 27, 6F)",
+    "privacy": "Privacy Policy",
+    "habomNote": "Note for this draft: no official Habom logo file was found in the repository or on the live site, so a temporary typographic wordmark is used."
+  }
+}

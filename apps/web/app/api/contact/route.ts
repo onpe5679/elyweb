@@ -7,7 +7,8 @@ const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY!;
 const resendApiKey = process.env.RESEND_API_KEY;
 const resendFromEmail = process.env.RESEND_FROM_EMAIL || 'onboarding@resend.dev';
 
-const supabaseAdmin = createClient(supabaseUrl, supabaseServiceKey);
+// 환경변수가 없는 미리보기/스냅샷 환경에서는 클라이언트를 만들지 않는다(문의는 저장·발송되지 않음).
+const supabaseAdmin = supabaseUrl && supabaseServiceKey ? createClient(supabaseUrl, supabaseServiceKey) : null;
 const resend = resendApiKey ? new Resend(resendApiKey) : null;
 
 const corsHeaders = {
@@ -17,6 +18,7 @@ const corsHeaders = {
 };
 
 async function getNotificationEmail(): Promise<string | null> {
+  if (!supabaseAdmin) return null;
   const { data } = await supabaseAdmin
     .from('company_settings')
     .select('value_ko')
@@ -46,6 +48,13 @@ export async function POST(request: NextRequest) {
       return NextResponse.json(
         { error: 'Invalid email format' },
         { status: 400, headers: corsHeaders }
+      );
+    }
+
+    if (!supabaseAdmin) {
+      return NextResponse.json(
+        { success: true, preview: true, adminEmailSent: false, userEmailSent: false, message: 'Preview mode: nothing was stored or sent' },
+        { headers: corsHeaders }
       );
     }
 

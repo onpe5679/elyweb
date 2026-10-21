@@ -1,0 +1,48 @@
+{
+  "Common": {
+    "theme": "配色テーマの切り替え",
+    "themePaper": "紙",
+    "themeNight": "夜",
+    "language": "言語",
+    "mainNav": "メインメニュー",
+    "openMenu": "メニューを開く",
+    "closeMenu": "メニューを閉じる",
+    "habomName": "スタジオ ハボム",
+    "toElysian": "スタジオ エリシアン",
+    "back": "戻る",
+    "close": "閉じる",
+    "viewMore": "もっと見る"
+  },
+  "Nav": {
+    "works": "作品",
+    "studio": "スタジオ",
+    "news": "お知らせ",
+    "habom": "ハボム",
+    "contact": "お問い合わせ",
+    "press": "プレス",
+    "habomHome": "ハボム ホーム",
+    "habomWorks": "作品",
+    "habomPlay": "体験する",
+    "toElysian": "スタジオ エリシアン"
+  },
+  "Status": {
+    "released": "発売中",
+    "coming_soon": "近日公開",
+    "in_development": "開発中",
+    "publishing": "パブリッシング"
+  },
+  "Footer": {
+    "tagline": "スタジオエリシアンは、物語の持つ力を信じています。\n私たちはゲームを通じて、より広い世界とつながります。",
+    "habomTagline": "スタジオエリシアンのレーベルスタジオ。\n軽やかでやわらかな物語を届けます。",
+    "sitemap": "サイトマップ",
+    "contactTitle": "Contact",
+    "contactNote": "協業・パブリッシング・取材のご相談は、お問い合わせページからお送りください。",
+    "colophon": "奥付",
+    "legalName": "商号：株式会社スタジオエリシアン(주식회사 스튜디오엘리시안)",
+    "legalReg": "事業者登録番号：373-81-03729",
+    "legalCeo": "代表者：우현제",
+    "legalAddress": "住所：京畿道城南市盆唐区大王板橋路645番キル12、6階27号(京畿創造経済革新センター)",
+    "privacy": "プライバシーポリシー",
+    "habomNote": "※ 試作に関するお知らせ：ハボムの公式ロゴはリポジトリにも公開サイトにも見つからなかったため、書体で作った仮のワードマークを使用しています。"
+  }
+}

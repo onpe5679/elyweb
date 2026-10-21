@@ -1,0 +1,795 @@
+[
+  {
+    "id": "b8d4b42a-9ada-43d4-b30e-fdb9751c709f",
+    "game_id": "5d1e2152-9a4f-526b-a0b1-ffa7c1408d92",
+    "section_type": "text",
+    "display_order": 1,
+    "is_visible": true,
+    "title_ko": "시놉시스",
+    "content_ko": "전쟁이 끝난지 어연 1년.\n\n전쟁을 먹고 자란 도시는 여느 때보다 성장했지만, 사람들은 그러지 못했다.\n거대한 증기기관과 기계 소리로 가득한 공장도시 '악테인'.\n\n문명의 재건과 눈부신 발전 뒤에 묻혀버린 '전쟁의 상흔'과 \n'발전'이라는 명목으로 지워진 과거들...\n\n불쾌한 진실이 난무하는 이 곳에서는 경찰이 공조라는 명분으로,\n사설 탐정들에게 업무를 떠넘기고 있었다.\n\n격동하는 시대 속, 전직 경찰이자 참전 군인인 시엘라는 미제로 남은 \n아버지의 죽음을 찾기 위해 위험한 동맹을 맺게 되는데...",
+    "title_en": "Synopsis",
+    "content_en": "A year has passed since the war ended.\n\nThe city, fed on the ashes of conflict, grew faster than \never—but its people were left behind. \nThis is 'Actain,' a factory city drowned in the roar of massive steam engines and grinding gears.\n\nBehind the blinding light of reconstruction and progress lie the buried scars of war, \nand pasts erased in the name of advancement.\n\nIn a place where uncomfortable truths run rampant, \nthe police are shifting their burdens to private investigators \nunder the guise of \"co-operation.\"\n\nAmidst this turbulent era, Ciella—a former cop and war veteran—\nenters into a dangerous alliance to uncover the truth behind her father’s cold case...",
+    "title_ja": "시놉시스",
+    "content_ja": "전쟁이 끝난지 어연 1년.\n\n전쟁을 먹고 자란 도시는 여느 때보다 성장했지만, 사람들은 그러지 못했다.\n거대한 증기기관과 기계 소리로 가득한 공장도시 '악테인'.\n\n문명의 재건과 눈부신 발전 뒤에 묻혀버린 '전쟁의 상흔'과 \n'발전'이라는 명목으로 지워진 과거들...\n\n불쾌한 진실이 난무하는 이 곳에서는 경찰이 공조라는 명분으로,\n사설 탐정들에게 업무를 떠넘기고 있었다.\n\n격동하는 시대 속, 전직 경찰이자 참전 군인인 시엘라는 미제로 남은 \n아버지의 죽음을 찾기 위해 위험한 동맹을 맺게 되는데..."
+  },
+  {
+    "id": "5ba0609a-9dc3-4402-b772-48badbed350c",
+    "game_id": "25186d57-9974-543e-a5ed-c60b5a9fb724",
+    "section_type": "text",
+    "display_order": 1,
+    "is_visible": true,
+    "title_ko": "시놉시스",
+    "content_ko": "\"어떤 상처들은 아무리 치료해도 낫지 않고 어떤 기억들은 아무리 잊으려해도 그곳에 남으니까.\"\n\n'축제는 아직 끝나지 않았다'는 퇴역 군인 이샤의 조각난 기억들을 따라 전개되는 비주얼 노벨 어드벤쳐 게임입니다. \n\n축제를 앞둔 마을, 위태로운 그녀를 도와 기억을 되찾고, 더 나아가 인생을 바꿀 수 있는 마지막 여정을 떠나십시오.",
+    "title_en": "Synopsis",
+    "content_en": "\"Some wounds never fully mend. And some memories are never really gone.\"\n\n'The Festival Isn't Over' is a visual-novel adventure game following a \nretired war veteran, ISHA's fragmented memories. \n\nYou, as her companion helps Isha to make choices that will result in bringing \nher memories back, and further more, change her life.",
+    "title_ja": "시놉시스",
+    "content_ja": "\"어떤 상처들은 아무리 치료해도 낫지 않고 어떤 기억들은 아무리 잊으려해도 그곳에 남으니까.\"\n\n'축제는 아직 끝나지 않았다'는 퇴역 군인 이샤의 조각난 기억들을 따라 전개되는 비주얼 노벨 어드벤쳐 게임입니다. \n\n축제를 앞둔 마을, 위태로운 그녀를 도와 기억을 되찾고, 더 나아가 인생을 바꿀 수 있는 마지막 여정을 떠나십시오."
+  },
+  {
+    "id": "27f549e5-ef62-4548-82af-82cb58462c45",
+    "game_id": "25186d57-9974-543e-a5ed-c60b5a9fb724",
+    "section_type": "text",
+    "display_order": 2,
+    "is_visible": true,
+    "title_ko": "게임 특징",
+    "content_ko": "• ‘메모리 스레드’를 추적하며 잊혀진 기억을 찾아보세요.\n\n• 3년에 걸친 전쟁의 이야기를, 7일간의 축제로 회고합니다.\n\n• 집 곳곳을 탐험하고 다양한 물건들과 상호작용하여 그 뒤에 숨겨진 이야기를 알아내세요.\n\n• 이샤, 방문객들 그리고 아파트와의 상호작용에 따라 4가지 이상의 다양한 엔딩이 펼쳐집니다.",
+    "title_en": "게임 특징",
+    "content_en": "• ‘메모리 스레드’를 추적하며 잊혀진 기억을 찾아보세요.\n\n• 3년에 걸친 전쟁의 이야기를, 7일간의 축제로 회고합니다.\n\n• 집 곳곳을 탐험하고 다양한 물건들과 상호작용하여 그 뒤에 숨겨진 이야기를 알아내세요.\n\n• 이샤, 방문객들 그리고 아파트와의 상호작용에 따라 4가지 이상의 다양한 엔딩이 펼쳐집니다.",
+    "title_ja": "게임 특징",
+    "content_ja": "• ‘메모리 스레드’를 추적하며 잊혀진 기억을 찾아보세요.\n\n• 3년에 걸친 전쟁의 이야기를, 7일간의 축제로 회고합니다.\n\n• 집 곳곳을 탐험하고 다양한 물건들과 상호작용하여 그 뒤에 숨겨진 이야기를 알아내세요.\n\n• 이샤, 방문객들 그리고 아파트와의 상호작용에 따라 4가지 이상의 다양한 엔딩이 펼쳐집니다."
+  },
+  {
+    "id": "b7efe0ca-2165-486c-bd16-524390b6d344",
+    "game_id": "25186d57-9974-543e-a5ed-c60b5a9fb724",
+    "section_type": "timeline",
+    "display_order": 3,
+    "is_visible": true,
+    "title_ko": "프로젝트 연혁",
+    "title_en": "Project Timeline",
+    "title_ja": "프로젝트 연혁",
+    "timeline_items": [
+      {
+        "date": "2024 ~ Current",
+        "event_ko": "개발 중",
+        "event_en": "Production In Progress",
+        "event_ja": "개발 중"
+      }
+    ]
+  },
+  {
+    "id": "525a4e24-0972-48f3-9cfa-7ebacb1db5b7",
+    "game_id": "53d9b368-84a7-53fb-a838-800ade3f1219",
+    "section_type": "text",
+    "display_order": 1,
+    "is_visible": true,
+    "title_ko": "시놉시스",
+    "content_ko": "20XX년, 평소처럼 무직 백수로 살고 있던 당신. \n수능을 망쳐 대학 입시에 실패한 후. \n여느 때처럼 방구석에서 애니메이션만 보고 있었다. ​\n\n여자친구들과 모니터로 소통을 하던 도중. \n뒤에서 날라오는 부모님의 등짝 스매싱과 함께 서울로 상경하게 되었는데, \n다른 사람들과 함께 사는 셰어하우스로 이사를 가게 된다.\n\n열심히 사는 사람들만 있으니 보고 배워오라는 말을 들은 당신은 \n셰어하우스의 일원으로 살아가게 되지만, 도착하니 웬 이쁜 여자 세명이 집에...? ​\n\n활기차고 당찬 성격의 '류지혜'\n\n어른스럽지만 반전 매력이 있는 '박윤하'\n\n귀여우면서도 새침한 '홍세은'까지.",
+    "title_en": "Synopsis",
+    "content_en": "Living your life as an unemployed bum.\n\nAfter failing the SATs, you're holded up in the corner of your room wasting time watching anime and playing games in your room.\n\nAs you are suddenly forced to move out to a sharehouse in Seoul by your parents, \n\nYou come into an unexpected encounter with three housemates.\n\nBut the only problem is that...\n\nThey are all girls???\n\nEnergetic and bold - Jihye Ryu\n\nMature... with an unexpected side - Yunha Park\n\nCute but bites back coldly - Saeun Hong",
+    "title_ja": "시놉시스",
+    "content_ja": "20XX년, 평소처럼 무직 백수로 살고 있던 당신. \n수능을 망쳐 대학 입시에 실패한 후. \n여느 때처럼 방구석에서 애니메이션만 보고 있었다. ​\n\n여자친구들과 모니터로 소통을 하던 도중. \n뒤에서 날라오는 부모님의 등짝 스매싱과 함께 서울로 상경하게 되었는데, \n다른 사람들과 함께 사는 셰어하우스로 이사를 가게 된다.\n\n열심히 사는 사람들만 있으니 보고 배워오라는 말을 들은 당신은 \n셰어하우스의 일원으로 살아가게 되지만, 도착하니 웬 이쁜 여자 세명이 집에...? ​\n\n활기차고 당찬 성격의 '류지혜'\n\n어른스럽지만 반전 매력이 있는 '박윤하'\n\n귀여우면서도 새침한 '홍세은'까지."
+  },
+  {
+    "id": "0ebf7925-61fc-4df7-9e32-d616b6c5af6a",
+    "game_id": "53d9b368-84a7-53fb-a838-800ade3f1219",
+    "section_type": "text",
+    "display_order": 2,
+    "is_visible": true,
+    "title_ko": "게임 특징",
+    "content_ko": "[우리들의 이야기]\n저희 '어서오세요, 셰어하우스에!'는 현대 사회에 흔하게 있을 법한 20대의 고민과 \n어려움들을 코믹하게 풀어내고 있습니다. \n이 세 명의 룸메이트들과 동거를 하게 되며, 함께 미래를 고민하게 됩니다.\n\n[고퀄리티 일러스트]\n여러분이 매력을 느낄 수 있는 포인트를 집중하여, \n하나하나 놓치지 않고 디테일하게 그려냈습니다. \n귀여운 캐릭터들과 함께 동거하는 기분을 즐겨보세요!\n\n[게임을 보다 쉽고 즐겁게! 직관적 인터페이스]\n쉽고 거부감 없이 플레이 할 수 있도록, \n최대한 직관적이고 유저가 인지하기 쉽도록 인터페이스를 제작하여, \n룸메이트 여러분이 캐릭터와의 두근거리는 연애에만 고민할 수 있도록 구성하였습니다.",
+    "title_en": "About our game",
+    "content_en": "[Stories from our lives]\n\nIn 'Welcome, Sharehouse!', we take common struggles of young adults \nin our modern world and tell them in a comedic way. \nAs we live with these three roommates, \nwe try to figure out our futures together.\n\n[Gorgeous illustrations]\n\nIn order to fully capture what makes these characters charming, \nwe've paid great attention to detail in each illustration. \nEnjoy the feeling of living with these cute girls!\n\n[Intuitively designed user interface]\n\nTo make playing the game as easy as possible, \nwe've designed the interface with the user experience in mind \nso that you can focus on the exciting romance with your new roommates!",
+    "title_ja": "게임 특징",
+    "content_ja": "[우리들의 이야기]\n저희 '어서오세요, 셰어하우스에!'는 현대 사회에 흔하게 있을 법한 20대의 고민과 \n어려움들을 코믹하게 풀어내고 있습니다. \n이 세 명의 룸메이트들과 동거를 하게 되며, 함께 미래를 고민하게 됩니다.\n\n[고퀄리티 일러스트]\n여러분이 매력을 느낄 수 있는 포인트를 집중하여, \n하나하나 놓치지 않고 디테일하게 그려냈습니다. \n귀여운 캐릭터들과 함께 동거하는 기분을 즐겨보세요!\n\n[게임을 보다 쉽고 즐겁게! 직관적 인터페이스]\n쉽고 거부감 없이 플레이 할 수 있도록, \n최대한 직관적이고 유저가 인지하기 쉽도록 인터페이스를 제작하여, \n룸메이트 여러분이 캐릭터와의 두근거리는 연애에만 고민할 수 있도록 구성하였습니다."
+  },
+  {
+    "id": "deb3d7d7-5bd4-4d6d-b233-3a8b9da1cf81",
+    "game_id": "53d9b368-84a7-53fb-a838-800ade3f1219",
+    "section_type": "timeline",
+    "display_order": 3,
+    "is_visible": true,
+    "title_ko": "프로젝트 연혁",
+    "title_en": "Project History",
+    "title_ja": "プロジェクト沿革",
+    "timeline_items": [
+      {
+        "date": "2024",
+        "event_ko": "플레이엑스포 2024 B2C&B2B 전시",
+        "event_en": "PlayX4 B2C&B2B Exhibition",
+        "event_ja": "PlayX4 B2C&B2B展示"
+      },
+      {
+        "date": "2025.05",
+        "event_ko": "텀블벅 펀딩 1347% 달성",
+        "event_en": "Tumblebug Crowdfunding 1347%",
+        "event_ja": "텀블벅 펀딩 1347% 달성"
+      },
+      {
+        "date": "2025.05",
+        "event_ko": "플레이엑스포 2025 전시",
+        "event_en": "PlayX4 2025 Exhibition",
+        "event_ja": "PlayX4 2025 展示"
+      },
+      {
+        "date": "2026.05",
+        "event_ko": "플레이엑스포 2026 전시",
+        "event_en": "PlayX4 2026 Exhibition",
+        "event_ja": "PlayX4 2026 展示"
+      },
+      {
+        "date": "2026.07",
+        "event_ko": "스팀 출시",
+        "event_en": "Steam Release",
+        "event_ja": "스팀 출시"
+      }
+    ]
+  },
+  {
+    "id": "7d9a7d9b-5cdd-4b7e-85a6-6c8274cecf80",
+    "game_id": "53d9b368-84a7-53fb-a838-800ade3f1219",
+    "section_type": "credits",
+    "display_order": 4,
+    "is_visible": true,
+    "title_ko": "제작진",
+    "title_en": "Staff Credits",
+    "title_ja": "제작진",
+    "credits": [
+      {
+        "role": "프로듀서",
+        "name": "카엘로 / 권요한"
+      },
+      {
+        "role": "Scenario - Jihye",
+        "name": "문꼬리"
+      },
+      {
+        "role": "Scenario - Yunha",
+        "name": "바민"
+      },
+      {
+        "role": "Scenario - Saeun",
+        "name": "카엘로"
+      },
+      {
+        "role": "Developer",
+        "name": "pakka / 20000"
+      },
+      {
+        "role": "Art Director",
+        "name": "Xos"
+      },
+      {
+        "role": "Illustrator",
+        "name": "래시포드 / 멜콩"
+      },
+      {
+        "role": "Background Art",
+        "name": "네크롬"
+      },
+      {
+        "role": "UI",
+        "name": "카엘로"
+      },
+      {
+        "role": "BGM",
+        "name": "뮤스 / 단무"
+      },
+      {
+        "role": "Movie",
+        "name": "온페 / 니어:네클"
+      },
+      {
+        "role": "Translation",
+        "name": "Sonnet"
+      },
+      {
+        "role": "VOICE STUDIO",
+        "name": "뮤지음 엔터테인먼트"
+      },
+      {
+        "role": "Publishing Support",
+        "name": "우현제"
+      }
+    ]
+  },
+  {
+    "id": "49efae14-7222-4d5b-874e-b72c262aa748",
+    "game_id": "53d9b368-84a7-53fb-a838-800ade3f1219",
+    "section_type": "credits",
+    "display_order": 5,
+    "is_visible": true,
+    "title_ko": "성우 크레딧",
+    "title_en": "CAST CREDITS",
+    "title_ja": "성우 크레딧",
+    "credits": [
+      {
+        "role": "류지혜",
+        "name": "손정민"
+      },
+      {
+        "role": "박윤하",
+        "name": "신온유"
+      },
+      {
+        "role": "홍세은",
+        "name": "유영"
+      },
+      {
+        "role": "주인공의 어머니",
+        "name": "손정민"
+      },
+      {
+        "role": "차서원",
+        "name": "카엘라"
+      },
+      {
+        "role": "홍세연",
+        "name": "손정민"
+      },
+      {
+        "role": "관객 / 경찰관 / 학생",
+        "name": "운별"
+      },
+      {
+        "role": "세은이 아빠 / 윤하 아빠 / 과대",
+        "name": "각류"
+      },
+      {
+        "role": "택시기사 / 손님들 / 큰아버지 / 기타",
+        "name": "종원"
+      },
+      {
+        "role": "버스킹 가수 / 큰어머니 / 윤하 엄마",
+        "name": "경설"
+      },
+      {
+        "role": "식당점원 / 사서 / 초등학생",
+        "name": "다류히"
+      }
+    ]
+  },
+  {
+    "id": "1c6bf4ca-fd77-46ab-a534-19cc4e7585c3",
+    "game_id": "53d9b368-84a7-53fb-a838-800ade3f1219",
+    "section_type": "credits",
+    "display_order": 6,
+    "is_visible": true,
+    "title_ko": "[있어줘] / [꽃나무] Vocal OST 크레딧",
+    "title_en": "[있어줘] / [꽃나무] Vocal OST 크레딧",
+    "title_ja": "[있어줘] / [꽃나무] Vocal OST 크레딧",
+    "credits": [
+      {
+        "role": "작곡",
+        "name": "마로노트"
+      },
+      {
+        "role": "작사",
+        "name": "주렁이"
+      },
+      {
+        "role": "보컬",
+        "name": "해찌"
+      }
+    ]
+  },
+  {
+    "id": "de326e77-ee71-4e28-ba8f-17e45e0edd4f",
+    "game_id": "53d9b368-84a7-53fb-a838-800ade3f1219",
+    "section_type": "credits",
+    "display_order": 7,
+    "is_visible": true,
+    "title_ko": "[고슴도치] Vocal OST 크레딧",
+    "title_en": "[고슴도치] Vocal OST 크레딧",
+    "title_ja": "[고슴도치] Vocal OST 크레딧",
+    "credits": [
+      {
+        "role": "작곡",
+        "name": "릴센치"
+      },
+      {
+        "role": "작사",
+        "name": "이사문"
+      },
+      {
+        "role": "탑라인",
+        "name": "Endou"
+      },
+      {
+        "role": "편곡",
+        "name": "묘우네"
+      },
+      {
+        "role": "기타",
+        "name": "Endou"
+      },
+      {
+        "role": "믹스/마스터링",
+        "name": "릴센치"
+      }
+    ]
+  },
+  {
+    "id": "cf780993-add8-438e-b7d1-698d66b508ed",
+    "game_id": "53d9b368-84a7-53fb-a838-800ade3f1219",
+    "section_type": "video",
+    "display_order": 8,
+    "is_visible": true,
+    "title_ko": "Teaser PV",
+    "title_en": "Teaser PV",
+    "title_ja": "Teaser PV",
+    "video_url": "https://www.youtube.com/embed/XnhuFQI95zg"
+  },
+  {
+    "id": "940309b7-c513-4871-9496-51ffc1f48f8d",
+    "game_id": "562779f9-2b03-53e7-a002-07848ef0c446",
+    "section_type": "text",
+    "display_order": 1,
+    "is_visible": true,
+    "title_ko": "시놉시스",
+    "content_ko": "곧 졸업을 앞둔 사회학과 4학년의 주인공은 어느 날, \n텅 빈 동아리실에서 미스테리한 캠퍼스 유령과 조우한다.\n\n기묘한 인연으로 엮이게 된 둘은 주인공이 졸업하기까지 \n남은 1년의 시간 동안 하나의 단편 소설을 완성하기로 마음먹는데...",
+    "title_en": "시놉시스",
+    "content_en": "곧 졸업을 앞둔 사회학과 4학년의 주인공은 어느 날, \n텅 빈 동아리실에서 미스테리한 캠퍼스 유령과 조우한다.\n\n기묘한 인연으로 엮이게 된 둘은 주인공이 졸업하기까지 \n남은 1년의 시간 동안 하나의 단편 소설을 완성하기로 마음먹는데...",
+    "title_ja": "시놉시스",
+    "content_ja": "곧 졸업을 앞둔 사회학과 4학년의 주인공은 어느 날, \n텅 빈 동아리실에서 미스테리한 캠퍼스 유령과 조우한다.\n\n기묘한 인연으로 엮이게 된 둘은 주인공이 졸업하기까지 \n남은 1년의 시간 동안 하나의 단편 소설을 완성하기로 마음먹는데..."
+  },
+  {
+    "id": "60319bcc-6fad-4b16-ba19-916240555d22",
+    "game_id": "562779f9-2b03-53e7-a002-07848ef0c446",
+    "section_type": "text",
+    "display_order": 2,
+    "is_visible": true,
+    "title_ko": "게임 특징",
+    "content_ko": "낮선 세계관 속의 익숙한 일상\n인류가 우주에서 사는 세계, 하지만 그 누구도 우주복을 입지 않는 초현실적인 무대 속, 우주를 부유하는 캠퍼스에서 마지막 학년의 학교생활을 경험하세요.\n\n다양한 아트풍과 모션그래픽 효과를 통한 몰입\n전통 ECG부터 만화 형식을 차용한 코믹스 CG, 모션그래픽 비주얼들을 사용하여 스토리를 보다 생동감 있게 연출합니다.\n\n양질의 수려한 일러스트\n여러 비주얼 노벨에서 아트를 맡으셨던 Yur1ca님이 그려낸 몽환적인 우주의 세계",
+    "title_en": "게임 특징",
+    "content_en": "낮선 세계관 속의 익숙한 일상\n인류가 우주에서 사는 세계, 하지만 그 누구도 우주복을 입지 않는 초현실적인 무대 속, 우주를 부유하는 캠퍼스에서 마지막 학년의 학교생활을 경험하세요.\n\n다양한 아트풍과 모션그래픽 효과를 통한 몰입\n전통 ECG부터 만화 형식을 차용한 코믹스 CG, 모션그래픽 비주얼들을 사용하여 스토리를 보다 생동감 있게 연출합니다.\n\n양질의 수려한 일러스트\n여러 비주얼 노벨에서 아트를 맡으셨던 Yur1ca님이 그려낸 몽환적인 우주의 세계",
+    "title_ja": "게임 특징",
+    "content_ja": "낮선 세계관 속의 익숙한 일상\n인류가 우주에서 사는 세계, 하지만 그 누구도 우주복을 입지 않는 초현실적인 무대 속, 우주를 부유하는 캠퍼스에서 마지막 학년의 학교생활을 경험하세요.\n\n다양한 아트풍과 모션그래픽 효과를 통한 몰입\n전통 ECG부터 만화 형식을 차용한 코믹스 CG, 모션그래픽 비주얼들을 사용하여 스토리를 보다 생동감 있게 연출합니다.\n\n양질의 수려한 일러스트\n여러 비주얼 노벨에서 아트를 맡으셨던 Yur1ca님이 그려낸 몽환적인 우주의 세계"
+  },
+  {
+    "id": "44e270d8-d307-400b-ab08-f49d97290f81",
+    "game_id": "562779f9-2b03-53e7-a002-07848ef0c446",
+    "section_type": "timeline",
+    "display_order": 3,
+    "is_visible": true,
+    "title_ko": "프로젝트 연혁",
+    "title_en": "Project History",
+    "title_ja": "プロジェクト沿革",
+    "timeline_items": [
+      {
+        "date": "2024",
+        "event_ko": "플레이엑스포 B2C&B2B 전시",
+        "event_en": "PlayX4 B2C&B2B Exhibition",
+        "event_ja": "PlayX4 B2C&B2B展示"
+      },
+      {
+        "date": "2024",
+        "event_ko": "Pixel Expo 전시",
+        "event_en": "Pixel Expo Exhibition",
+        "event_ja": "Pixel Expo展示"
+      },
+      {
+        "date": "2025",
+        "event_ko": "🎮 스팀 글로벌 출시",
+        "event_en": "🎮 Steam EN & KR Release",
+        "event_ja": "🎮 Steam EN & KR 発売"
+      }
+    ]
+  },
+  {
+    "id": "9dfdcd9a-0b08-4c90-baec-88a632f4b616",
+    "game_id": "562779f9-2b03-53e7-a002-07848ef0c446",
+    "section_type": "credits",
+    "display_order": 4,
+    "is_visible": true,
+    "title_ko": "제작진",
+    "title_en": "STAFF CREDITS",
+    "title_ja": "STAFF CREDITS",
+    "credits": [
+      {
+        "role": "PRODUCER",
+        "name": "지영수 / 우현제 / 온페"
+      },
+      {
+        "role": "DIRECTOR",
+        "name": "권요한"
+      },
+      {
+        "role": "SCENARIO",
+        "name": "권요한 / 래영"
+      },
+      {
+        "role": "DEVELOPER",
+        "name": "화니"
+      },
+      {
+        "role": "MAIN ART",
+        "name": "유리카"
+      },
+      {
+        "role": "SUB ART",
+        "name": "인솜"
+      },
+      {
+        "role": "BACKGROUND ART",
+        "name": "네크롬"
+      },
+      {
+        "role": "ART ASSIST",
+        "name": "김해변"
+      },
+      {
+        "role": "SPINE",
+        "name": "웨인이"
+      },
+      {
+        "role": "UI",
+        "name": "카엘로"
+      },
+      {
+        "role": "BGM",
+        "name": "뮤스"
+      },
+      {
+        "role": "VOCAL OST",
+        "name": "마로노트 & 주렁이 / Vocal. 해찌"
+      },
+      {
+        "role": "MOTION",
+        "name": "온페 / 니어:네클"
+      },
+      {
+        "role": "VOICE STUDIO",
+        "name": "뮤지음 엔터테인먼트"
+      },
+      {
+        "role": "PROMOTIONAL ART DESIGN",
+        "name": "치뷰"
+      },
+      {
+        "role": "PROMOTIONAL SD ILLUST",
+        "name": "바코"
+      },
+      {
+        "role": "Translation",
+        "name": "Sonnet"
+      }
+    ]
+  },
+  {
+    "id": "2f73911e-b7b8-4e1f-999c-7ea81fc253bd",
+    "game_id": "562779f9-2b03-53e7-a002-07848ef0c446",
+    "section_type": "credits",
+    "display_order": 5,
+    "is_visible": true,
+    "title_ko": "CAST CREDITS",
+    "title_en": "CAST CREDITS",
+    "title_ja": "CAST CREDITS",
+    "credits": [
+      {
+        "role": "한별 CV",
+        "name": "권다예"
+      },
+      {
+        "role": "유연 CV",
+        "name": "장예나"
+      }
+    ]
+  },
+  {
+    "id": "b947bdeb-b317-4101-903f-0d8aed6fdf09",
+    "game_id": "562779f9-2b03-53e7-a002-07848ef0c446",
+    "section_type": "credits",
+    "display_order": 6,
+    "is_visible": true,
+    "title_ko": "VOCAL OST CREDITS",
+    "title_en": "VOCAL OST CREDITS",
+    "title_ja": "VOCAL OST CREDITS",
+    "credits": [
+      {
+        "role": "작곡",
+        "name": "마로노트"
+      },
+      {
+        "role": "작사",
+        "name": "주렁이"
+      },
+      {
+        "role": "보컬",
+        "name": "해찌"
+      }
+    ]
+  },
+  {
+    "id": "a3d2213e-5ca4-49e0-8b61-f61664a9421d",
+    "game_id": "562779f9-2b03-53e7-a002-07848ef0c446",
+    "section_type": "video",
+    "display_order": 7,
+    "is_visible": true,
+    "title_ko": "PV",
+    "title_en": "PV",
+    "title_ja": "PV",
+    "video_url": "https://www.youtube.com/embed/rXLzpVSWZc8"
+  },
+  {
+    "id": "5fbf11e2-12eb-40ab-8645-de6da1fd9352",
+    "game_id": "562779f9-2b03-53e7-a002-07848ef0c446",
+    "section_type": "video",
+    "display_order": 8,
+    "is_visible": true,
+    "title_ko": "OP MV",
+    "title_en": "OP MV",
+    "title_ja": "OP MV",
+    "video_url": "https://www.youtube.com/embed/N_t1fMaLGyA"
+  },
+  {
+    "id": "24540513-c3a7-4a5b-b1b6-c32e8ac4fb62",
+    "game_id": "562779f9-2b03-53e7-a002-07848ef0c446",
+    "section_type": "video",
+    "display_order": 9,
+    "is_visible": true,
+    "title_ko": "ED MV",
+    "title_en": "ED MV",
+    "title_ja": "ED MV",
+    "video_url": "https://www.youtube.com/embed/R0QxOAKbzf0"
+  },
+  {
+    "id": "40ca6090-d447-4c76-b003-cf50cd1bdd0d",
+    "game_id": "f84caf82-90de-55c5-8815-6fb9c292bb5c",
+    "section_type": "text",
+    "display_order": 1,
+    "is_visible": true,
+    "title_ko": "게임 소개",
+    "content_ko": "4년간의 대전쟁 이후, 어느 비밀스러운 프로젝트가 진행되는 연구소를 배경으로 펼쳐지는 로맨스릴러 비주얼노벨.\n\n올드엔진 시리즈의 첫번째 작품.",
+    "title_en": "게임 소개",
+    "content_en": "4년간의 대전쟁 이후, 어느 비밀스러운 프로젝트가 진행되는 연구소를 배경으로 펼쳐지는 로맨스릴러 비주얼노벨.\n\n올드엔진 시리즈의 첫번째 작품.",
+    "title_ja": "게임 소개",
+    "content_ja": "4년간의 대전쟁 이후, 어느 비밀스러운 프로젝트가 진행되는 연구소를 배경으로 펼쳐지는 로맨스릴러 비주얼노벨.\n\n올드엔진 시리즈의 첫번째 작품."
+  },
+  {
+    "id": "7807886c-6fc9-4f4b-9f48-b63c534dda78",
+    "game_id": "f84caf82-90de-55c5-8815-6fb9c292bb5c",
+    "section_type": "text",
+    "display_order": 2,
+    "is_visible": true,
+    "title_ko": "시놉시스",
+    "content_ko": "대륙 전체를 휩쓴 4년간의 참혹한 전쟁이 끝났다. 그러나 공학자 루카스에게 남은 것은 군의관으로 참전해 돌아오지 못한 아내, 하나의 빈자리뿐이었다.\n\n깊은 상실감 속에 자신을 가둔 채 살아가던 어느 날, 국가적 공학 사업을 주도하는 대기업 '플롯 인더스트리'의 대표로부터 기묘한 제안이 도착한다.\n\n\"자네, 만약 죽은 아내를 되살릴 수 있다면 어떤가?\"\n\n잃을 것이 없던 루카스는 제안을 받아들이고, 마침내 차가운 의체 속에서 아내 하나가 눈을 뜬다. 하지만 그녀는 과거의 모든 기억을 잃어버린 상태. 그저 아내와의 평범했던 일상을 되돌려 받고 싶었던 루카스는 동료들과 함께 하나의 조각난 기억을 찾아 나선다.\n\n그러나 기억의 심연을 파고들수록, 플롯 인더스트리의 숨겨진 진실들이 점점 수면 위로 드러나기 시작하는데…….\n\n점차 조여오는 감시와 위협 속에서, 루카스는 하나를 지키기 위한 탈출을 결심한다.",
+    "title_en": "시놉시스",
+    "content_en": "대륙 전체를 휩쓴 4년간의 참혹한 전쟁이 끝났다. 그러나 공학자 루카스에게 남은 것은 군의관으로 참전해 돌아오지 못한 아내, 하나의 빈자리뿐이었다.\n\n깊은 상실감 속에 자신을 가둔 채 살아가던 어느 날, 국가적 공학 사업을 주도하는 대기업 '플롯 인더스트리'의 대표로부터 기묘한 제안이 도착한다.\n\n\"자네, 만약 죽은 아내를 되살릴 수 있다면 어떤가?\"\n\n잃을 것이 없던 루카스는 제안을 받아들이고, 마침내 차가운 의체 속에서 아내 하나가 눈을 뜬다. 하지만 그녀는 과거의 모든 기억을 잃어버린 상태. 그저 아내와의 평범했던 일상을 되돌려 받고 싶었던 루카스는 동료들과 함께 하나의 조각난 기억을 찾아 나선다.\n\n그러나 기억의 심연을 파고들수록, 플롯 인더스트리의 숨겨진 진실들이 점점 수면 위로 드러나기 시작하는데…….\n\n점차 조여오는 감시와 위협 속에서, 루카스는 하나를 지키기 위한 탈출을 결심한다.",
+    "title_ja": "시놉시스",
+    "content_ja": "대륙 전체를 휩쓴 4년간의 참혹한 전쟁이 끝났다. 그러나 공학자 루카스에게 남은 것은 군의관으로 참전해 돌아오지 못한 아내, 하나의 빈자리뿐이었다.\n\n깊은 상실감 속에 자신을 가둔 채 살아가던 어느 날, 국가적 공학 사업을 주도하는 대기업 '플롯 인더스트리'의 대표로부터 기묘한 제안이 도착한다.\n\n\"자네, 만약 죽은 아내를 되살릴 수 있다면 어떤가?\"\n\n잃을 것이 없던 루카스는 제안을 받아들이고, 마침내 차가운 의체 속에서 아내 하나가 눈을 뜬다. 하지만 그녀는 과거의 모든 기억을 잃어버린 상태. 그저 아내와의 평범했던 일상을 되돌려 받고 싶었던 루카스는 동료들과 함께 하나의 조각난 기억을 찾아 나선다.\n\n그러나 기억의 심연을 파고들수록, 플롯 인더스트리의 숨겨진 진실들이 점점 수면 위로 드러나기 시작하는데…….\n\n점차 조여오는 감시와 위협 속에서, 루카스는 하나를 지키기 위한 탈출을 결심한다."
+  },
+  {
+    "id": "cdc6f346-8ab1-4fe0-bd65-e46c19688222",
+    "game_id": "f84caf82-90de-55c5-8815-6fb9c292bb5c",
+    "section_type": "timeline",
+    "display_order": 3,
+    "is_visible": true,
+    "title_ko": "프로젝트 연혁",
+    "title_en": "Project History",
+    "title_ja": "プロジェクト沿革",
+    "timeline_items": [
+      {
+        "date": "2023",
+        "event_ko": "플레이엑스포 B2C&B2B 전시",
+        "event_en": "PlayX4 B2C&B2B Exhibition",
+        "event_ja": "PlayX4 B2C&B2B展示"
+      },
+      {
+        "date": "2023",
+        "event_ko": "지스타 인디쇼케이스 40개사 선정",
+        "event_en": "G-STAR Indie Showcase Top 40 Selection",
+        "event_ja": "G-STAR インディーショーケース40社選定"
+      },
+      {
+        "date": "2024",
+        "event_ko": "제3회 일러스타 페스 인디게임특별존 선정",
+        "event_en": "Illustar Fest Indie Game Special Zone Selection",
+        "event_ja": "第3回イラスタフェス インディーゲーム特別ゾーン選定"
+      },
+      {
+        "date": "2024.01.25",
+        "event_ko": "🎮 스토브 인디 출시",
+        "event_en": "🎮 STOVE Indie Release",
+        "event_ja": "🎮 STOVEインディーリリース"
+      },
+      {
+        "date": "2024",
+        "event_ko": "플레이엑스포 B2C&B2B 전시",
+        "event_en": "PlayX4 B2C&B2B Exhibition",
+        "event_ja": "PlayX4 B2C&B2B展示"
+      },
+      {
+        "date": "2024.04.11",
+        "event_ko": "🎮 스팀 출시",
+        "event_en": "🎮 Steam Release",
+        "event_ja": "🎮 Steamリリース"
+      }
+    ]
+  },
+  {
+    "id": "026e7142-9edd-4ae9-85e5-d7d1e6f98c03",
+    "game_id": "f84caf82-90de-55c5-8815-6fb9c292bb5c",
+    "section_type": "credits",
+    "display_order": 4,
+    "is_visible": true,
+    "title_ko": "제작진",
+    "title_en": "STAFF CREDITS",
+    "title_ja": "STAFF CREDITS",
+    "credits": [
+      {
+        "role": "디렉터",
+        "name": "권요한"
+      },
+      {
+        "role": "제작",
+        "name": "지영수 / 온페 / 우현제"
+      },
+      {
+        "role": "PM",
+        "name": "개말"
+      },
+      {
+        "role": "개발",
+        "name": "박효식"
+      },
+      {
+        "role": "시나리오 (1막)",
+        "name": "토모로"
+      },
+      {
+        "role": "시나리오 (2,3막)",
+        "name": "권요한"
+      },
+      {
+        "role": "컨셉아트",
+        "name": "우현제"
+      },
+      {
+        "role": "일러스트레이터",
+        "name": "애랑 / 베또 / 김해변"
+      },
+      {
+        "role": "배경 일러스트",
+        "name": "헬버섯 / 네크롬"
+      },
+      {
+        "role": "아이템 일러스트",
+        "name": "히델 / 우현제 / 김해변"
+      },
+      {
+        "role": "코믹스 아트",
+        "name": "자주색 / 화사타 / 우현제"
+      },
+      {
+        "role": "코믹스 채색",
+        "name": "정예린"
+      },
+      {
+        "role": "코믹스 후반작업",
+        "name": "하묘"
+      },
+      {
+        "role": "스파인",
+        "name": "유영주"
+      },
+      {
+        "role": "영상",
+        "name": "온페"
+      },
+      {
+        "role": "UI 디자인",
+        "name": "김가니 / 온페"
+      },
+      {
+        "role": "사운드 디렉터",
+        "name": "박태준"
+      },
+      {
+        "role": "MUSIC",
+        "name": "뮤스 / 순수원자"
+      }
+    ]
+  },
+  {
+    "id": "05d6b4ac-e196-4cc7-92e1-57a087b50125",
+    "game_id": "f84caf82-90de-55c5-8815-6fb9c292bb5c",
+    "section_type": "credits",
+    "display_order": 5,
+    "is_visible": true,
+    "title_ko": "CAST CREDITS",
+    "title_en": "CAST CREDITS",
+    "title_ja": "CAST CREDITS",
+    "credits": [
+      {
+        "role": "하나 역",
+        "name": "기령"
+      },
+      {
+        "role": "클로에 역",
+        "name": "박지음"
+      },
+      {
+        "role": "페이즈 역",
+        "name": "여름거미"
+      },
+      {
+        "role": "파울 역",
+        "name": "LSJ"
+      },
+      {
+        "role": "이바노바 역",
+        "name": "기령"
+      },
+      {
+        "role": "조르주 역",
+        "name": "박성현"
+      },
+      {
+        "role": "프리드리히 윈터 역",
+        "name": "호락호락해"
+      },
+      {
+        "role": "조연",
+        "name": "LSJ / 운별 / 호락호락해 / 박성현 / 여름거미"
+      }
+    ]
+  },
+  {
+    "id": "582183ea-7fb4-472b-878a-5e874537e95f",
+    "game_id": "f84caf82-90de-55c5-8815-6fb9c292bb5c",
+    "section_type": "credits",
+    "display_order": 6,
+    "is_visible": true,
+    "title_ko": "VOCAL OST CREDITS",
+    "title_en": "VOCAL OST CREDITS",
+    "title_ja": "VOCAL OST CREDITS",
+    "credits": [
+      {
+        "role": "MEMORIAL RECIPE - 작곡",
+        "name": "마로 노트"
+      },
+      {
+        "role": "MEMORIAL RECIPE - 작사",
+        "name": "주렁이"
+      },
+      {
+        "role": "MEMORIAL RECIPE - 보컬",
+        "name": "해찌"
+      },
+      {
+        "role": "MEMORIAL THINGS - 작곡",
+        "name": "마로 노트"
+      },
+      {
+        "role": "MEMORIAL THINGS - 작사",
+        "name": "주렁이"
+      },
+      {
+        "role": "MEMORIAL THINGS - 보컬",
+        "name": "해찌"
+      }
+    ]
+  },
+  {
+    "id": "7af302ac-7ec2-49e8-a75c-7198b7afa351",
+    "game_id": "f84caf82-90de-55c5-8815-6fb9c292bb5c",
+    "section_type": "video",
+    "display_order": 7,
+    "is_visible": true,
+    "title_ko": "PV",
+    "title_en": "PV",
+    "title_ja": "PV",
+    "video_url": "https://www.youtube.com/embed/hxotVKZl9uo"
+  },
+  {
+    "id": "0c758e2e-6976-411e-8138-fb1a220097d7",
+    "game_id": "f84caf82-90de-55c5-8815-6fb9c292bb5c",
+    "section_type": "video",
+    "display_order": 8,
+    "is_visible": true,
+    "title_ko": "DEMO PLAY",
+    "title_en": "DEMO PLAY",
+    "title_ja": "DEMO PLAY",
+    "video_url": "https://www.youtube.com/embed/gdBnCGypW18"
+  }
+]

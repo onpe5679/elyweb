@@ -1,0 +1,61 @@
+{
+  "Home": {
+    "eyebrow": "For Story-Lovers, By Storytellers",
+    "titleLine1": "スタジオ",
+    "titleLine2": "エリシアン",
+    "tagline": "物語をつくる人たち、エリシアン。\nあなたの心を動かす美しい世界を創ります。",
+    "menuLabel": "メインメニュー",
+    "stripsLabel": "エリシアンの作品",
+    "plateCaption": "図版・いま開かれている物語",
+    "menu": {
+      "start": "物語をはじめる",
+      "startEn": "New Story",
+      "startMeta": "作品 {count}本",
+      "continue": "続きから読む",
+      "continueEn": "Continue",
+      "continueEmpty": "まだ読んでいません",
+      "continueHint": "まだ開いた物語がありません。「物語をはじめる」から最初の作品を開いてみてください。",
+      "studio": "スタジオ紹介",
+      "studioEn": "Studio",
+      "habom": "スタジオ ハボム",
+      "habomEn": "Habom",
+      "news": "お知らせ",
+      "newsEn": "News",
+      "keys": "↑ ↓ 移動・Enter 決定"
+    },
+    "works": {
+      "eyebrow": "Our Works",
+      "title": "いま開かれている物語",
+      "all": "作品一覧",
+      "featured": "今号",
+      "open": "作品を見る"
+    },
+    "vision": {
+      "eyebrow": "Our Vision",
+      "plate": "図版・スタジオ紹介",
+      "more": "スタジオ紹介をもっと見る"
+    },
+    "habom": {
+      "badge": "レーベルスタジオ",
+      "body": "エリシアンとは違う手ざわりの物語。明るくやわらかく、気軽に楽しめるスタジオ ハボムの作品をどうぞ。",
+      "cta": "ハボムを見る",
+      "play": "セリフ・選択肢体験"
+    },
+    "chronology": {
+      "title": "主な沿革",
+      "all": "沿革をすべて見る"
+    },
+    "stats": {
+      "year": "設立",
+      "projects": "プロジェクト",
+      "released": "リリース",
+      "global": "Steam リリース"
+    },
+    "cta": {
+      "title": "一緒に物語をつくりませんか？",
+      "body": "協業・パブリッシング・取材のご相談をお待ちしています。",
+      "contact": "お問い合わせ",
+      "press": "プレスキット"
+    }
+  }
+}

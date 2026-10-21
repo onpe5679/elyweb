@@ -1,0 +1,56 @@
+[
+  {
+    "slug": "h1ut",
+    "is_active": true,
+    "display_order": 1,
+    "created_at": "2024-01-01T00:00:00Z",
+    "id": "82aca720-da91-5db9-85f8-4ea35d2acad1",
+    "name_ko": "우현제",
+    "role_ko": "대표이사",
+    "name_en": "Woo Hyun Je",
+    "role_en": "CEO",
+    "name_ja": "우현제",
+    "role_ja": "대표이사"
+  },
+  {
+    "slug": "gwon-yohan",
+    "is_active": true,
+    "display_order": 2,
+    "created_at": "2024-01-01T00:00:00Z",
+    "id": "dee1a2e8-3806-56bb-b3d2-9bfbcb401afe",
+    "name_ko": "권요한",
+    "role_ko": "스튜디오 엘리시안 팀장",
+    "twitter_url": "https://x.com/_gwonyohan",
+    "instagram_url": "https://www.instagram.com/gwon.yohan/",
+    "name_en": "Gwon Yohan",
+    "role_en": "Studio Director",
+    "name_ja": "권요한",
+    "role_ja": "스튜디오 엘리시안 팀장"
+  },
+  {
+    "slug": "anhanuel",
+    "is_active": true,
+    "display_order": 3,
+    "created_at": "2024-01-01T00:00:00Z",
+    "id": "346e5e4f-86ea-545d-8450-22f1e254b947",
+    "name_ko": "안하늘",
+    "role_ko": "하봄 스튜디오 팀장",
+    "name_en": "An Hanuel",
+    "role_en": "Team Leader of Habom Studio",
+    "name_ja": "안하늘",
+    "role_ja": "하봄 스튜디오 팀장"
+  },
+  {
+    "slug": "jeonseongmin",
+    "is_active": true,
+    "display_order": 4,
+    "created_at": "2024-01-01T00:00:00Z",
+    "id": "b204fac1-660e-556f-98e4-11391bff6253",
+    "name_ko": "전성민",
+    "role_ko": "엘리시안 픽쳐스 팀장",
+    "name_en": "Jeon Seong Min",
+    "role_en": "엘리시안 픽쳐스 팀장",
+    "name_ja": "전성민",
+    "role_ja": "엘리시안 픽쳐스 팀장"
+  }
+]
