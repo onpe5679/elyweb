@@ -2,29 +2,115 @@
 @tailwind components;
 @tailwind utilities;
 
-.hero-gradient {
-    background: linear-gradient(135deg, rgba(15, 23, 42, 0.9) 0%, rgba(124, 58, 237, 0.2) 100%);
+/* Typefaces switch per locale so Japanese text picks JP-specific glyphs */
+:root {
+  --font-display: "Cormorant Garamond", "Noto Serif KR", serif;
+  --font-body: "Noto Sans KR", "Noto Sans JP", system-ui, sans-serif;
+  --font-hobom: "Gowun Dodum", "Nunito", "M PLUS Rounded 1c", sans-serif;
 }
-.text-shadow {
-    text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+html[lang="ja"] {
+  --font-display: "Cormorant Garamond", "Noto Serif JP", serif;
+  --font-body: "Noto Sans JP", "Noto Sans KR", sans-serif;
+  --font-hobom: "M PLUS Rounded 1c", "Nunito", "Gowun Dodum", sans-serif;
 }
-.card-hover {
-    transition: all 0.3s ease;
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+    -webkit-text-size-adjust: 100%;
+  }
+  body {
+    @apply bg-paper text-ink font-body antialiased;
+    word-break: keep-all;
+    overflow-wrap: break-word;
+  }
+  html[lang="ja"] body {
+    word-break: normal;
+  }
+  h1, h2, h3, h4 {
+    text-wrap: balance;
+  }
+  ::selection {
+    background: #A4402C;
+    color: #FBF9F4;
+  }
+  :focus-visible {
+    outline: 2px solid #A4402C;
+    outline-offset: 3px;
+  }
+  .on-night :focus-visible {
+    outline-color: #ECE7DA;
+  }
+  .on-hobom :focus-visible {
+    outline-color: #B9446F;
+  }
 }
-.card-hover:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+
+@layer components {
+  /* Skip link: visible only when focused */
+  .skip-link {
+    @apply sr-only;
+  }
+  .skip-link:focus {
+    @apply not-sr-only fixed left-4 top-4 z-[100] bg-ink text-paper px-4 py-2 rounded-sm text-sm font-bold;
+  }
+
+  /* 원고지 cell grid for manuscript-style backgrounds */
+  .manuscript-grid {
+    background-image:
+      linear-gradient(to right, rgba(28, 27, 24, 0.07) 1px, transparent 1px),
+      linear-gradient(to bottom, rgba(28, 27, 24, 0.07) 1px, transparent 1px);
+    background-size: 2.5rem 2.5rem;
+  }
+
+  /* Hairline rule used between editorial blocks */
+  .hairline {
+    @apply border-t border-rule;
+  }
+
+  .eyebrow {
+    @apply font-body text-[0.72rem] font-medium uppercase tracking-[0.22em] text-seal;
+  }
+
+  /* Vertical accents (display only; never for long body copy) */
+  .vertical-accent {
+    writing-mode: vertical-rl;
+    text-orientation: upright;
+    letter-spacing: 0.2em;
+  }
+
+  .btn-ink {
+    @apply inline-flex items-center justify-center gap-2 bg-ink text-paper px-6 py-3.5 text-sm font-bold tracking-wide transition-colors hover:bg-seal;
+  }
+  .btn-line {
+    @apply inline-flex items-center justify-center gap-2 border border-ink px-6 py-3.5 text-sm font-bold tracking-wide text-ink transition-colors hover:bg-ink hover:text-paper;
+  }
 }
-.custom-scroll::-webkit-scrollbar {
-    width: 6px;
+
+@keyframes title-rise {
+  from { opacity: 0; transform: translateY(18px); }
+  to { opacity: 1; transform: translateY(0); }
 }
-.custom-scroll::-webkit-scrollbar-track {
-    background: rgba(0,0,0,0.05);
+
+@keyframes cue-drop {
+  0% { transform: translateY(-100%); }
+  100% { transform: translateY(200%); }
 }
-.custom-scroll::-webkit-scrollbar-thumb {
-    background: rgba(124, 58, 237, 0.2); 
-    border-radius: 10px;
+
+.cue-line {
+  animation: cue-drop 2.2s ease-in-out infinite;
 }
-.custom-scroll::-webkit-scrollbar-thumb:hover {
-    background: rgba(124, 58, 237, 0.4); 
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
 }

@@ -11,12 +11,12 @@ test.describe('Home Page', () => {
   });
 
   test('should have navigation with all menu items', async ({ page }) => {
-    const nav = page.locator('nav');
+    const nav = page.getByRole('navigation', { name: 'Main' });
     await expect(nav).toBeVisible();
     await expect(nav.getByText('Studio Elysian', { exact: true })).toBeVisible();
-    await expect(nav.getByRole('link', { name: /홈|Home|ホーム/i })).toBeVisible();
+    await expect(nav.getByRole('link', { name: 'Studio Elysian' })).toBeVisible();
     await expect(nav.getByRole('link', { name: /회사 소개|About|会社紹介/i })).toBeVisible();
-    await expect(nav.getByRole('link', { name: /게임 소개|Games|ゲーム/i })).toBeVisible();
+    await expect(nav.getByRole('link', { name: /작품|Works|作品|게임|Games|ゲーム/i })).toBeVisible();
   });
 
   test('should display projects section', async ({ page }) => {
@@ -28,16 +28,13 @@ test.describe('Home Page', () => {
   test('should display stats bar', async ({ page }) => {
     await expect(page.getByText('2022', { exact: true })).toBeVisible();
     await expect(page.getByText('3+')).toBeVisible();
-    await expect(page.getByText('296%')).toBeVisible();
+    await expect(page.getByText('Global', { exact: true })).toBeVisible();
   });
 
   test('should have working language switcher', async ({ page }) => {
-    const langSwitcher = page.locator('[data-testid="language-switcher"]');
-    if (await langSwitcher.isVisible()) {
-      await langSwitcher.click();
-      await expect(page.getByText('English')).toBeVisible();
-      await expect(page.getByText('日本語')).toBeVisible();
-    }
+    const langSwitcher = page.locator('[data-testid="language-switcher"]').first();
+    await expect(langSwitcher).toBeVisible();
+    await expect(langSwitcher.locator('option')).toHaveCount(3);
   });
 
   test('should have footer with social links', async ({ page }) => {

@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useRef, useState } from 'react';
+import { useTranslations } from 'next-intl';
 
 declare global {
   interface Window {
@@ -18,6 +19,7 @@ type XTimelineProps = {
 // within the deadline we show a graceful "View on X" fallback card instead of
 // the bare placeholder link, so the page never looks broken.
 export default function XTimeline({ handle, height = 600 }: XTimelineProps) {
+  const t = useTranslations('XTimeline');
   const ref = useRef<HTMLDivElement>(null);
   const [status, setStatus] = useState<'loading' | 'rendered' | 'failed'>('loading');
 
@@ -92,28 +94,27 @@ export default function XTimeline({ handle, height = 600 }: XTimelineProps) {
         href={profileUrl}
         target="_blank"
         rel="noopener noreferrer"
-        className="block max-w-xl mx-auto bg-white dark:bg-surface-dark border border-gray-100 dark:border-gray-800 rounded-2xl p-10 text-center hover:border-primary/40 transition-colors"
+        className="group block w-full border border-rule bg-paper-raised p-8 text-center transition-colors hover:border-ink md:p-10"
       >
-        <i className="fa-brands fa-x-twitter text-4xl text-gray-900 dark:text-white mb-4"></i>
-        <h3 className="text-lg font-bold text-gray-900 dark:text-white mb-2">@{clean}</h3>
-        <p className="text-gray-500 dark:text-gray-400 text-sm mb-6">
-          X(트위터)에서 스튜디오 엘리시안의 최신 소식을 확인하세요.
-        </p>
-        <span className="inline-flex items-center gap-2 px-5 py-2.5 bg-primary text-white rounded-lg font-bold text-sm">
-          X에서 보기 <i className="fa-solid fa-arrow-right"></i>
+        <i className="fa-brands fa-x-twitter text-4xl text-ink" aria-hidden="true"></i>
+        <h3 className="font-display mt-6 text-3xl leading-tight text-ink">@{clean}</h3>
+        <p className="mx-auto mt-4 max-w-sm text-sm leading-relaxed text-ink-2">{t('fallback')}</p>
+        <span className="btn-ink mt-8 group-hover:bg-seal">
+          {t('cta')}
+          <i className="fa-solid fa-arrow-right" aria-hidden="true"></i>
         </span>
       </a>
     );
   }
 
   return (
-    <div ref={ref} className="relative min-h-[160px] max-w-xl mx-auto">
+    <div ref={ref} className="relative min-h-[160px] max-w-xl">
       <a className="twitter-timeline" data-theme="dark" data-height={height} href={`https://twitter.com/${clean}`}>
         @{clean}
       </a>
       {status === 'loading' && (
-        <div className="absolute inset-0 flex items-center justify-center bg-background-light dark:bg-background-dark">
-          <i className="fa-solid fa-spinner fa-spin text-primary text-2xl"></i>
+        <div className="absolute inset-0 flex items-center justify-center bg-paper">
+          <i className="fa-solid fa-spinner fa-spin text-2xl text-seal" aria-hidden="true"></i>
         </div>
       )}
     </div>

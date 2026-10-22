@@ -1,80 +1,83 @@
 'use client';
 
-import Link from 'next/link';
-import { useTranslations } from 'next-intl';
-import { Game, getLocalizedField, getLocalizedArray, getStatusText, getStatusTagColor } from '@/lib/supabase';
+import {useTranslations} from 'next-intl';
+import {Link} from '@/i18n/routing';
+import {Game, getLocalizedField, getLocalizedArray, getStatusText} from '@/lib/supabase';
+import {isHobomGame} from '@/lib/studios';
 
 interface FeaturedGameProps {
   game: Game;
   locale: string;
 }
 
-export default function FeaturedGame({ game, locale }: FeaturedGameProps) {
-  const t = useTranslations('Projects.memorialCircuit');
+export default function FeaturedGame({game, locale}: FeaturedGameProps) {
+  const t = useTranslations('Projects');
+  const tDetail = useTranslations('GameDetail');
   const genres = getLocalizedArray(game, 'genre', locale);
+  const title = getLocalizedField(game, 'title', locale);
+  const image = game.cover_image || game.banner_image || '';
+  const hobom = isHobomGame(game);
 
   return (
-    <div
+    <article
       data-testid="featured-game"
-      className="mb-16 card-hover bg-white dark:bg-surface-dark rounded-2xl overflow-hidden shadow-xl border border-gray-100 dark:border-gray-800 transition-colors duration-300"
+      className="grid gap-12 border-y border-rule py-16 md:py-20 lg:grid-cols-12 lg:items-center"
     >
-      <div className="grid grid-cols-1 lg:grid-cols-2">
-        <div className="relative h-64 lg:h-auto overflow-hidden">
-          <div
-            data-testid="game-status-badge"
-            className={`absolute top-4 left-4 ${getStatusTagColor(game.status)} text-white text-xs font-bold px-3 py-1 rounded uppercase tracking-wider z-10`}
-          >
-            {getStatusText(game.status, locale)}
+      <div className="relative min-w-0 lg:col-span-6">
+        <Link href={`/games/${game.slug}`} className="group block focus-visible:outline-offset-8">
+          <div className="relative aspect-[4/5] overflow-hidden bg-paper-alt">
+            {image && (
+              <img
+                alt={title}
+                loading="lazy"
+                className="h-full w-full object-cover transition-transform duration-[1200ms] ease-out group-hover:scale-[1.03]"
+                src={image}
+              />
+            )}
           </div>
-          {game.cover_image && (
-            <img
-              alt={getLocalizedField(game, 'title', locale)}
-              className="w-full h-full object-cover transform hover:scale-105 transition-transform duration-700"
-              src={game.cover_image}
-            />
+        </Link>
+        <span
+          data-testid="game-status-badge"
+          className="absolute -bottom-4 left-6 bg-ink px-4 py-2 text-[0.7rem] font-bold uppercase tracking-[0.16em] text-paper"
+        >
+          {getStatusText(game.status, locale)}
+        </span>
+      </div>
+
+      <div className="min-w-0 lg:col-span-5 lg:col-start-8">
+        <p className="eyebrow">
+          {getLocalizedField(game, 'series', locale) || t('label')}
+          {hobom && <span className="ml-3 text-ink-3">· {t('hobomTag')}</span>}
+        </p>
+        <h3 className="font-display mt-6 text-balance text-5xl leading-[1.05] text-ink md:text-6xl">{title}</h3>
+        <p className="mt-8 whitespace-pre-line text-base leading-loose text-ink-2 md:text-lg">
+          {getLocalizedField(game, 'description', locale)}
+        </p>
+        {genres.length > 0 && (
+          <ul className="mt-8 flex flex-wrap gap-x-5 gap-y-2 text-sm text-ink-3">
+            {genres.map((genre, index) => (
+              <li key={index} className="before:mr-5 before:text-seal before:content-['/'] first:before:content-none">
+                {genre}
+              </li>
+            ))}
+          </ul>
+        )}
+        <div className="mt-12 flex flex-wrap items-center gap-6">
+          <Link href={`/games/${game.slug}`} className="btn-ink">
+            {t('viewWork')}
+          </Link>
+          {game.steam_url && (
+            <a
+              href={game.steam_url}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-sm font-bold text-ink underline-offset-4 hover:text-seal hover:underline"
+            >
+              {tDetail('steam')} ↗
+            </a>
           )}
         </div>
-
-        <div className="p-8 lg:p-12 flex flex-col justify-center">
-          <div className="mb-2 text-primary font-semibold text-sm uppercase tracking-wide">
-            {getLocalizedField(game, 'series', locale)}
-          </div>
-          <h3 className="text-3xl font-bold text-gray-900 dark:text-white mb-4">
-            {getLocalizedField(game, 'title', locale)}
-          </h3>
-          <p className="text-gray-600 dark:text-gray-400 mb-6 leading-relaxed whitespace-pre-line">
-            {getLocalizedField(game, 'description', locale)}
-          </p>
-          <div className="flex flex-wrap gap-2 mb-8">
-            {genres.map((genre, index) => (
-              <span
-                key={index}
-                className="px-3 py-1 bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300 rounded-full text-xs font-medium"
-              >
-                {genre}
-              </span>
-            ))}
-          </div>
-          <div className="flex items-center gap-4">
-            {game.steam_url && (
-              <a
-                href={game.steam_url}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="bg-gray-900 dark:bg-white text-white dark:text-gray-900 px-6 py-3 rounded-lg font-bold hover:opacity-90 transition-opacity flex items-center gap-2"
-              >
-                <i className="fa-brands fa-steam"></i> {t('steam')}
-              </a>
-            )}
-            <Link
-              href={`/${locale}/games/${game.slug}`}
-              className="text-gray-600 dark:text-gray-400 hover:text-primary dark:hover:text-primary font-medium transition-colors"
-            >
-              {t('details')}
-            </Link>
-          </div>
-        </div>
       </div>
-    </div>
+    </article>
   );
 }

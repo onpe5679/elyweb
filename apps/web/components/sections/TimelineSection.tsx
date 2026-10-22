@@ -1,59 +1,44 @@
 'use client';
 
-import { useTranslations } from 'next-intl';
-import { Link } from '@/i18n/routing';
-import { TimelineEvent, getLocalizedField } from '@/lib/supabase';
+import {useTranslations} from 'next-intl';
+import {Link} from '@/i18n/routing';
+import {TimelineEvent, getLocalizedField} from '@/lib/supabase';
 
 interface TimelineSectionProps {
   events: TimelineEvent[];
   locale: string;
 }
 
-export default function TimelineSection({ events, locale }: TimelineSectionProps) {
+export default function TimelineSection({events, locale}: TimelineSectionProps) {
   const t = useTranslations('Timeline');
 
-  const iconMap: Record<number, string> = {
-    0: 'fa-rocket',
-    1: 'fa-trophy',
-    2: 'fa-flag',
-  };
-
   return (
-    <section className="py-20 bg-surface-light dark:bg-surface-dark border-t border-gray-200 dark:border-gray-800">
-      <div className="max-w-4xl mx-auto px-4">
-        <h2 className="text-center font-display font-bold text-3xl text-gray-900 dark:text-white mb-12">
-          {t('title')}
-        </h2>
-
-        <div className="space-y-8 relative before:absolute before:inset-0 before:ml-5 before:-translate-x-px md:before:mx-auto md:before:translate-x-0 before:h-full before:w-0.5 before:bg-gradient-to-b before:from-transparent before:via-gray-300 before:to-transparent">
-          {events.map((event, index) => (
-            <div
-              key={event.id}
-              className="relative flex items-center justify-between md:justify-normal md:odd:flex-row-reverse group is-active"
-            >
-              <div className="flex items-center justify-center w-10 h-10 rounded-full border border-white bg-slate-300 group-[.is-active]:bg-primary text-slate-500 group-[.is-active]:text-emerald-50 shadow shrink-0 md:order-1 md:group-odd:-translate-x-1/2 md:group-even:translate-x-1/2 z-10">
-                <i className={`fa-solid ${iconMap[index] || 'fa-circle'} text-sm`}></i>
-              </div>
-              <div className="w-[calc(100%-4rem)] md:w-[calc(50%-2.5rem)] bg-white dark:bg-gray-800 p-4 rounded-xl border border-gray-100 dark:border-gray-700 shadow-sm">
-                <div className="flex items-center justify-between space-x-2 mb-1">
-                  <div className="font-bold text-slate-900 dark:text-slate-100">{event.date}</div>
-                </div>
-                <div className="text-slate-500 dark:text-slate-400 text-sm">
-                  {getLocalizedField(event, 'title', locale)}
-                </div>
-              </div>
-            </div>
-          ))}
-        </div>
-
-        <div className="text-center mt-10">
+    <section className="bg-paper py-28 md:py-36">
+      <div className="mx-auto grid max-w-7xl gap-14 px-4 sm:px-6 md:grid-cols-12 lg:px-8">
+        <div className="md:col-span-4">
+          <p className="eyebrow">Timeline</p>
+          <h2 className="font-display mt-6 text-4xl leading-tight text-ink md:text-5xl">{t('title')}</h2>
           <Link
             href="/about"
-            className="text-sm text-gray-500 dark:text-gray-400 hover:text-primary dark:hover:text-primary underline"
+            className="mt-10 inline-flex items-center gap-3 border-b border-ink pb-1 text-sm font-bold text-ink transition-colors hover:border-seal hover:text-seal"
           >
             {t('viewAll')}
           </Link>
         </div>
+
+        <ol className="md:col-span-7 md:col-start-6 border-t border-ink">
+          {events.map((event) => (
+            <li
+              key={event.id}
+              className="grid grid-cols-[6.5rem_1fr] gap-6 border-b border-rule py-7 md:grid-cols-[8rem_1fr] md:py-9"
+            >
+              <time className="font-display text-2xl tabular-nums text-seal md:text-3xl">{event.date}</time>
+              <p className="text-base leading-relaxed text-ink md:text-lg">
+                {getLocalizedField(event, 'title', locale)}
+              </p>
+            </li>
+          ))}
+        </ol>
       </div>
     </section>
   );

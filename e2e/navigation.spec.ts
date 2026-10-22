@@ -7,32 +7,32 @@ test.describe('Navigation', () => {
 
   test('logo should link to home', async ({ page }) => {
     await page.goto('/ko/about');
-    await page.locator('nav').getByRole('link').first().click();
+    await page.getByRole('navigation', { name: 'Main' }).getByRole('link').first().click();
     await expect(page).toHaveURL(/\/ko\/?$/);
   });
 
   test('should navigate to About page', async ({ page }) => {
-    await page.locator('nav').getByRole('link', { name: /회사 소개|About|会社紹介/i }).click();
+    await page.getByRole('navigation', { name: 'Main' }).getByRole('link', { name: /회사 소개|About|会社紹介/i }).click();
     await expect(page).toHaveURL(/\/about/);
   });
 
   test('should navigate to Games page', async ({ page }) => {
-    await page.locator('nav').getByRole('link', { name: /게임 소개|Games|ゲーム紹介/i }).click();
+    await page.getByRole('navigation', { name: 'Main' }).getByRole('link', { name: /작품|게임 소개|Works|Games|作品|ゲーム/i }).click();
     await expect(page).toHaveURL(/\/games/);
   });
 
   test('should navigate to News page', async ({ page }) => {
-    await page.locator('nav').getByRole('link', { name: /새소식|News|お知らせ/i }).click();
+    await page.getByRole('navigation', { name: 'Main' }).getByRole('link', { name: /새소식|News|お知らせ/i }).click();
     await expect(page).toHaveURL(/\/news/);
   });
 
   test('should navigate to Contact page', async ({ page }) => {
-    await page.locator('nav').getByRole('link', { name: /문의하기|Contact|お問い合わせ/i }).click();
+    await page.getByRole('navigation', { name: 'Main' }).getByRole('link', { name: /문의하기|Contact|お問い合わせ/i }).click();
     await expect(page).toHaveURL(/\/contact/);
   });
 
   test('Press button should be visible', async ({ page }) => {
-    await expect(page.locator('nav').getByRole('link', { name: 'PRESS' })).toBeVisible();
+    await expect(page.getByRole('navigation', { name: 'Main' }).getByRole('link', { name: 'PRESS' })).toBeVisible();
   });
 });
 
@@ -42,7 +42,7 @@ test.describe('Footer Navigation', () => {
     const footer = page.locator('footer');
     
     await expect(footer.getByText(/회사 소개|About/i)).toBeVisible();
-    await expect(footer.getByText(/프로젝트|Projects/i)).toBeVisible();
+    await expect(footer.getByText(/작품|프로젝트|Works|Projects/i).first()).toBeVisible();
   });
 
   test('footer should have social links', async ({ page }) => {
@@ -87,7 +87,7 @@ test.describe('Mobile Navigation', () => {
     const mobileMenu = page.locator('[data-testid="mobile-menu"]');
     await expect(mobileMenu.getByRole('link', { name: /홈|Home/i })).toBeVisible();
     await expect(mobileMenu.getByRole('link', { name: /회사 소개|About/i })).toBeVisible();
-    await expect(mobileMenu.getByRole('link', { name: /게임|Games/i })).toBeVisible();
+    await expect(mobileMenu.getByRole('link', { name: /작품|게임|Works|Games/i })).toBeVisible();
   });
 
   test('should close mobile menu after navigation', async ({ page }) => {

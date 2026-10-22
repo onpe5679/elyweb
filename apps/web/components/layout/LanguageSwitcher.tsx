@@ -1,11 +1,16 @@
 'use client';
 
-import {useLocale} from 'next-intl';
+import {useLocale, useTranslations} from 'next-intl';
 import {usePathname, useRouter} from '@/i18n/routing';
 import {ChangeEvent, useTransition} from 'react';
 
-export default function LanguageSwitcher() {
+type LanguageSwitcherProps = {
+  onNight?: boolean;
+};
+
+export default function LanguageSwitcher({onNight = false}: LanguageSwitcherProps) {
   const locale = useLocale();
+  const t = useTranslations('Navigation');
   const router = useRouter();
   const pathname = usePathname();
   const [isPending, startTransition] = useTransition();
@@ -19,19 +24,31 @@ export default function LanguageSwitcher() {
 
   return (
     <div className="relative">
-        <select
-        defaultValue={locale}
+      <label className="sr-only" htmlFor="language-select">{t('language')}</label>
+      <select
+        id="language-select"
+        data-testid="language-switcher"
+        value={locale}
         onChange={onSelectChange}
         disabled={isPending}
-        className="appearance-none bg-transparent pl-2 pr-6 py-1 text-sm font-medium text-gray-700 dark:text-gray-300 border border-gray-200 dark:border-gray-700 rounded-md focus:outline-none focus:ring-1 focus:ring-primary cursor-pointer hover:border-primary transition-colors"
-        >
-        <option value="ko" className="text-black">KR</option>
-        <option value="en" className="text-black">EN</option>
-        <option value="ja" className="text-black">JP</option>
-        </select>
-        <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700 dark:text-gray-300">
-            <i className="fa-solid fa-chevron-down text-xs"></i>
-        </div>
+        className={[
+          'appearance-none bg-transparent py-1 pl-2 pr-6 text-xs font-bold tracking-[0.15em] cursor-pointer',
+          'border-b focus:outline-none transition-colors',
+          onNight ? 'text-moon border-moon/50 hover:border-moon' : 'text-ink-2 border-ink/30 hover:border-ink',
+        ].join(' ')}
+      >
+        <option value="ko" className="bg-paper text-ink">KR</option>
+        <option value="en" className="bg-paper text-ink">EN</option>
+        <option value="ja" className="bg-paper text-ink">JP</option>
+      </select>
+      <i
+        aria-hidden="true"
+        className={['pointer-events-none absolute inset-y-0 right-0 flex items-center text-[0.6rem]', onNight ? 'text-moon' : 'text-ink-2'].join(' ')}
+      >
+        <svg width="8" height="5" viewBox="0 0 8 5" fill="none" className="mt-0.5">
+          <path d="M1 1l3 3 3-3" stroke="currentColor" strokeWidth="1.2" />
+        </svg>
+      </i>
     </div>
   );
 }

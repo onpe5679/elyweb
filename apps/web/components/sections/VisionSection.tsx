@@ -12,7 +12,7 @@ type VisionSectionProps = {
   visionBody?: string;
 };
 
-export default function VisionSection({ visionImage, visionTitle, visionBody }: VisionSectionProps) {
+export default function VisionSection({visionImage, visionTitle, visionBody}: VisionSectionProps) {
   const t = useTranslations('Vision');
   const imageSrc = visionImage || DEFAULT_VISION_IMAGE;
   const bodyParagraphs = visionBody
@@ -20,45 +20,61 @@ export default function VisionSection({ visionImage, visionTitle, visionBody }: 
     : null;
 
   return (
-    <section className="py-24 bg-surface-light dark:bg-surface-dark transition-colors duration-300">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-16 items-center">
-                <div className="relative group">
-                    <div className="absolute -inset-1 bg-gradient-to-r from-primary to-pink-600 rounded-2xl blur opacity-25 group-hover:opacity-75 transition duration-1000 group-hover:duration-200"></div>
-                    <div className="relative rounded-2xl overflow-hidden shadow-2xl h-[400px]">
-                        <Image 
-                            alt="Retro futuristic room" 
-                            src={imageSrc}
-                            fill
-                            sizes="(max-width: 768px) 100vw, 50vw"
-                            className="object-cover transform group-hover:scale-105 transition-transform duration-500"
-                        />
-                    </div>
-                </div>
-                <div>
-                    <h4 className="text-primary font-bold tracking-widest uppercase mb-2 text-sm">{t('label')}</h4>
-                    <h2 className="font-display font-bold text-3xl md:text-4xl text-gray-900 dark:text-white mb-6">
-                        {visionTitle || t('title')}
-                    </h2>
-                    <div className="space-y-4 text-gray-600 dark:text-gray-300 leading-relaxed">
-                        {bodyParagraphs ? (
-                            bodyParagraphs.map((p, i) => <p key={i}>{p}</p>)
-                        ) : (
-                            <>
-                                <p>{t('p1')}</p>
-                                <p>{t('p2')}</p>
-                                <p>{t('p3')}</p>
-                            </>
-                        )}
-                    </div>
-                    <div className="mt-8">
-                        <Link className="inline-flex items-center text-primary font-bold hover:text-primary/80 transition-colors" href="/about">
-                            {t('more')} <i className="fa-solid fa-arrow-right ml-2"></i>
-                        </Link>
-                    </div>
-                </div>
-            </div>
+    <section id="intro" className="relative overflow-hidden bg-paper py-28 md:py-40">
+      <div
+        aria-hidden="true"
+        className="manuscript-grid pointer-events-none absolute inset-y-0 right-0 hidden w-[55%] opacity-70 [mask-image:linear-gradient(to_left,black,transparent)] lg:block"
+      />
+
+      <div className="relative mx-auto grid max-w-7xl gap-16 px-4 sm:px-6 lg:grid-cols-12 lg:items-center lg:px-8">
+        <div className="lg:col-span-5">
+          <p className="eyebrow">{t('label')}</p>
+          <h2 className="font-display mt-6 text-balance text-4xl leading-[1.15] text-ink md:text-6xl">
+            {visionTitle || t('title')}
+          </h2>
+          <div className="mt-10 space-y-6 text-base leading-loose text-ink-2 md:text-lg">
+            {bodyParagraphs ? (
+              bodyParagraphs.map((p, i) => <p key={i}>{p}</p>)
+            ) : (
+              <>
+                <p>{t('p1')}</p>
+                <p>{t('p2')}</p>
+                <p>{t('p3')}</p>
+              </>
+            )}
+          </div>
+          <Link
+            href="/about"
+            className="group mt-12 inline-flex items-center gap-4 border-b border-ink pb-1.5 text-sm font-bold tracking-wide text-ink transition-colors hover:border-seal hover:text-seal"
+          >
+            {t('more')}
+            <span aria-hidden="true" className="transition-transform group-hover:translate-x-1">→</span>
+          </Link>
         </div>
+
+        <figure className="min-w-0 lg:col-span-6 lg:col-start-7">
+          <div className="relative aspect-[4/5] overflow-hidden bg-paper-alt shadow-[0_30px_60px_-30px_rgba(28,27,24,0.45)]">
+            <Image
+              alt=""
+              src={imageSrc}
+              fill
+              sizes="(max-width: 1024px) 100vw, 50vw"
+              className="object-cover"
+            />
+          </div>
+          <figcaption className="mt-4 flex justify-between text-xs tracking-wide text-ink-3">
+            <span>Studio Elysian</span>
+            <span>2022 —</span>
+          </figcaption>
+        </figure>
+      </div>
+
+      <div className="relative mx-auto mt-28 grid max-w-7xl gap-6 border-t border-rule px-4 pt-14 sm:px-6 md:grid-cols-12 lg:px-8">
+        <h3 className="eyebrow md:col-span-3">{t('missionTitle')}</h3>
+        <p className="font-display text-2xl leading-relaxed text-ink md:col-span-8 md:col-start-5 md:text-3xl">
+          {t('missionBody')}
+        </p>
+      </div>
     </section>
   );
 }

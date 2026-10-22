@@ -1,6 +1,6 @@
 import { getTranslations } from 'next-intl/server';
 import { getNews, getLocalizedField, getSetting, getLocalizedSettingValue } from '@/lib/supabase';
-import Link from 'next/link';
+import { Link } from '@/i18n/routing';
 import XTimeline from '@/components/news/XTimeline';
 
 export const revalidate = 10;
@@ -15,8 +15,9 @@ function formatDate(dateString: string | undefined): string {
 
 export default async function NewsPage({ params }: { params: { locale: string } }) {
   const { locale } = params;
-  const [t, modeSetting, handleSetting, newsItems] = await Promise.all([
+  const [t, tPage, modeSetting, handleSetting, newsItems] = await Promise.all([
     getTranslations('Navigation'),
+    getTranslations('NewsPage'),
     getSetting('news_display_mode'),
     getSetting('news_widget_x_handle'),
     getNews(true),
@@ -29,61 +30,56 @@ export default async function NewsPage({ params }: { params: { locale: string } 
   const isEmpty = !showWidget && (!showManual || newsItems.length === 0);
 
   return (
-    <div className="pt-24 pb-16 bg-background-light dark:bg-background-dark min-h-screen">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="text-center mb-16">
-          <h4 className="text-primary font-bold tracking-widest uppercase mb-2 text-sm">
-            Latest Updates
-          </h4>
-          <h1 className="font-display font-black text-4xl md:text-5xl text-gray-900 dark:text-white">
-            {t('news')}
-          </h1>
-        </div>
+    <div className="min-h-screen bg-paper pb-32 pt-36 md:pt-44">
+      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+        <header className="border-b border-ink pb-16">
+          <p className="eyebrow">{tPage('eyebrow')}</p>
+          <h1 className="font-display mt-6 text-6xl leading-none text-ink md:text-8xl">{t('news')}</h1>
+        </header>
 
         {showWidget && (
-          <div className="mb-16">
-            <XTimeline handle={xHandle} />
-          </div>
+          <section aria-labelledby="news-widget-heading" className="mt-20 grid gap-10 md:grid-cols-12">
+            <h2 id="news-widget-heading" className="eyebrow md:col-span-3">
+              {tPage('widgetTitle')}
+            </h2>
+            <div className="md:col-span-8 md:col-start-5">
+              <XTimeline handle={xHandle} />
+            </div>
+          </section>
         )}
 
         {showManual && newsItems.length > 0 && (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          <ul className="mt-20 grid gap-x-8 gap-y-16 md:grid-cols-2 lg:grid-cols-3">
             {newsItems.map((item) => (
-              <Link
-                key={item.id}
-                href={`/${locale}/news/${item.slug}`}
-                className="group"
-              >
-                <article className="bg-white dark:bg-surface-dark rounded-xl overflow-hidden shadow-lg border border-gray-100 dark:border-gray-800 hover:shadow-xl hover:border-primary/30 transition-all duration-300">
-                  <div className="h-48 overflow-hidden">
-                    <img
-                      alt={getLocalizedField(item, 'title', locale)}
-                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
-                      src={item.cover_image || DEFAULT_NEWS_IMAGE}
-                    />
-                  </div>
-                  <div className="p-6">
-                    <div className="text-sm text-primary font-bold mb-2">
-                      {formatDate(item.published_at)}
+              <li key={item.id}>
+                <Link href={`/news/${item.slug}`} className="group block">
+                  <article>
+                    <div className="aspect-[16/10] overflow-hidden bg-paper-alt">
+                      <img
+                        alt=""
+                        className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-[1.03]"
+                        src={item.cover_image || DEFAULT_NEWS_IMAGE}
+                      />
                     </div>
-                    <h3 className="text-lg font-bold text-gray-900 dark:text-white mb-2 group-hover:text-primary transition-colors">
-                      {getLocalizedField(item, 'title', locale)}
-                    </h3>
-                    <p className="text-gray-500 dark:text-gray-400 text-sm line-clamp-3">
-                      {getLocalizedField(item, 'excerpt', locale) || getLocalizedField(item, 'content', locale)}
-                    </p>
-                  </div>
-                </article>
-              </Link>
+                    <div className="mt-6 border-t border-rule pt-6">
+                      <p className="text-xs font-bold tabular-nums tracking-[0.16em] text-seal">
+                        {formatDate(item.published_at)}
+                      </p>
+                      <h3 className="font-display mt-3 text-2xl leading-snug text-ink transition-colors group-hover:text-seal">
+                        {getLocalizedField(item, 'title', locale)}
+                      </h3>
+                      <p className="mt-3 line-clamp-3 text-sm leading-relaxed text-ink-2">
+                        {getLocalizedField(item, 'excerpt', locale) || getLocalizedField(item, 'content', locale)}
+                      </p>
+                    </div>
+                  </article>
+                </Link>
+              </li>
             ))}
-          </div>
+          </ul>
         )}
 
-        {isEmpty && (
-          <div className="text-center text-gray-500 dark:text-gray-400 py-16">
-            아직 등록된 소식이 없습니다.
-          </div>
-        )}
+        {isEmpty && <p className="mt-20 border-t border-rule pt-10 text-ink-3">{tPage('empty')}</p>}
       </div>
     </div>
   );

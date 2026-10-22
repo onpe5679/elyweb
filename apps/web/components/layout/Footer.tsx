@@ -10,77 +10,95 @@ interface FooterProps {
     youtubeUrl: string;
     instagramUrl: string;
     logoImage?: string | null;
-    logoIcon?: string;
+    logoIcon?: string | null;
   };
 }
 
-export default function Footer({ settings }: FooterProps) {
+export default function Footer({settings}: FooterProps) {
   const t = useTranslations('Footer');
-  
+  const mark = settings.logoImage || settings.logoIcon;
+
+  const socials = [
+    {href: settings.twitterUrl, icon: 'fa-brands fa-x-twitter', label: 'X'},
+    {href: settings.youtubeUrl, icon: 'fa-brands fa-youtube', label: 'YouTube'},
+    {href: settings.instagramUrl, icon: 'fa-brands fa-instagram', label: 'Instagram'},
+  ].filter((s) => s.href);
+
   return (
-    <footer className="bg-gray-900 text-white pt-16 pb-8 border-t border-gray-800">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="grid grid-cols-1 md:grid-cols-4 gap-12 mb-12">
-                <div className="col-span-1 md:col-span-2">
-                    <div className="flex items-center gap-3 mb-6">
-                        {(settings.logoImage || settings.logoIcon) ? (
-                            <img src={settings.logoImage || settings.logoIcon} alt="Logo" className="w-8 h-8 rounded-full object-cover" />
-                        ) : (
-                            <div className="w-8 h-8 bg-primary rounded-full flex items-center justify-center text-white font-bold text-sm">
-                                <i className="fa-solid fa-gamepad"></i>
-                            </div>
-                        )}
-                        <span className="font-display font-bold text-xl tracking-wider uppercase">
-                            Studio Elysian
-                        </span>
-                    </div>
-                    <p className="text-gray-400 text-sm leading-relaxed max-w-sm whitespace-pre-line">
-                        {t('desc')}
-                    </p>
-                    <div className="flex space-x-4 mt-6">
-                        {settings.twitterUrl && (
-                            <a className="text-gray-400 hover:text-white transition-colors" href={settings.twitterUrl} target="_blank" rel="noopener noreferrer"><i className="fa-brands fa-x-twitter text-xl"></i></a>
-                        )}
-                        {settings.youtubeUrl && (
-                            <a className="text-gray-400 hover:text-white transition-colors" href={settings.youtubeUrl} target="_blank" rel="noopener noreferrer"><i className="fa-brands fa-youtube text-xl"></i></a>
-                        )}
-                        {settings.instagramUrl && (
-                            <a className="text-gray-400 hover:text-white transition-colors" href={settings.instagramUrl} target="_blank" rel="noopener noreferrer"><i className="fa-brands fa-instagram text-xl"></i></a>
-                        )}
-                        {settings.contactEmail && (
-                            <a className="text-gray-400 hover:text-white transition-colors" href={`mailto:${settings.contactEmail}`}><i className="fa-solid fa-envelope text-xl"></i></a>
-                        )}
-                    </div>
-                </div>
-                <div>
-                    <h5 className="text-lg font-bold mb-4 text-white">{t('quickLinks')}</h5>
-                    <ul className="space-y-2 text-sm text-gray-400">
-                        <li><Link className="hover:text-primary transition-colors" href="/about">{t('links.about')}</Link></li>
-                        <li><Link className="hover:text-primary transition-colors" href="/games">{t('links.projects')}</Link></li>
-                        <li><Link className="hover:text-primary transition-colors" href="/news">{t('links.news')}</Link></li>
-                    </ul>
-                </div>
-                <div>
-                    <h5 className="text-lg font-bold mb-4 text-white">{t('contact')}</h5>
-                    <ul className="space-y-2 text-sm text-gray-400">
-                        <li><Link className="hover:text-primary transition-colors" href="/contact">{t('contactLinks.inquiry')}</Link></li>
-                    </ul>
-                </div>
+    <footer className="bg-ink text-paper">
+      <div className="mx-auto max-w-7xl px-4 pb-10 pt-20 sm:px-6 lg:px-8">
+        <div className="grid grid-cols-1 gap-14 md:grid-cols-12">
+          <div className="md:col-span-6">
+            <div className="flex items-center gap-3">
+              {mark ? (
+                <img src={mark} alt="" className="h-10 w-10 object-contain invert" />
+              ) : null}
+              <span className="font-display text-2xl font-semibold uppercase tracking-[0.2em]">Studio Elysian</span>
             </div>
-            <div className="border-t border-gray-800 pt-8 text-xs text-gray-500 leading-relaxed">
-                <div className="mb-4 space-y-1">
-                    <p>상호(법인명) : 주식회사 스튜디오엘리시안 | 사업자 등록번호 : 373-81-03729 | 대표자 : 우현제</p>
-                    <p>주소 : 경기도 성남시 분당구 대왕판교로645번길 12, 6층 27호(삼평동, 경기창조경제혁신센터)</p>
-                    <p>연락처 : 010-5344-0783 | 이메일 : stdelysian@gmail.com</p>
-                </div>
-                <div className="flex flex-col md:flex-row justify-between items-center text-sm">
-                    <p>{t('rights')}</p>
-                    <div className="flex space-x-6 mt-4 md:mt-0">
-                        <Link className="hover:text-white transition-colors" href="/privacy">{t('privacy')}</Link>
-                    </div>
-                </div>
-            </div>
+            <p className="mt-6 max-w-md whitespace-pre-line text-sm leading-relaxed text-paper/70">
+              {t('desc')}
+            </p>
+            {(socials.length > 0 || settings.contactEmail) && (
+              <ul className="mt-8 flex gap-6 text-paper/80" aria-label="SNS">
+                {socials.map((s) => (
+                  <li key={s.label}>
+                    <a
+                      href={s.href}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      aria-label={s.label}
+                      className="inline-flex h-10 w-10 items-center justify-center border border-paper/20 transition-colors hover:border-paper hover:text-white"
+                    >
+                      <i className={`${s.icon} text-base`} aria-hidden="true" />
+                    </a>
+                  </li>
+                ))}
+                {settings.contactEmail && (
+                  <li>
+                    <a
+                      href={`mailto:${settings.contactEmail}`}
+                      aria-label="Email"
+                      className="inline-flex h-10 w-10 items-center justify-center border border-paper/20 transition-colors hover:border-paper hover:text-white"
+                    >
+                      <i className="fa-solid fa-envelope text-base" aria-hidden="true" />
+                    </a>
+                  </li>
+                )}
+              </ul>
+            )}
+          </div>
+
+          <div className="md:col-span-3">
+            <h2 className="eyebrow !text-paper/60">{t('quickLinks')}</h2>
+            <ul className="mt-5 space-y-3 text-sm text-paper/85">
+              <li><Link className="transition-colors hover:text-white" href="/about">{t('links.about')}</Link></li>
+              <li><Link className="transition-colors hover:text-white" href="/games">{t('links.projects')}</Link></li>
+              <li><Link className="transition-colors hover:text-white" href="/news">{t('links.news')}</Link></li>
+              <li><Link className="transition-colors hover:text-white" href="/hobom">{t('hobom')}</Link></li>
+            </ul>
+          </div>
+
+          <div className="md:col-span-3">
+            <h2 className="eyebrow !text-paper/60">{t('contact')}</h2>
+            <ul className="mt-5 space-y-3 text-sm text-paper/85">
+              <li><Link className="transition-colors hover:text-white" href="/contact">{t('contactLinks.inquiry')}</Link></li>
+              <li><Link className="transition-colors hover:text-white" href="/press">PRESS</Link></li>
+            </ul>
+          </div>
         </div>
+
+        <div className="mt-16 space-y-1 border-t border-paper/15 pt-8 text-xs leading-relaxed text-paper/55">
+          <p>상호(법인명) : 주식회사 스튜디오엘리시안 | 사업자 등록번호 : 373-81-03729 | 대표자 : 우현제</p>
+          <p>주소 : 경기도 성남시 분당구 대왕판교로645번길 12, 6층 27호(삼평동, 경기창조경제혁신센터)</p>
+          <p>연락처 : 010-5344-0783 | 이메일 : stdelysian@gmail.com</p>
+        </div>
+        <div className="mt-6 flex flex-col items-start justify-between gap-4 text-xs text-paper/60 md:flex-row md:items-center">
+          <p>{t('rights')}</p>
+          <Link className="underline underline-offset-4 transition-colors hover:text-white" href="/privacy">
+            {t('privacy')}
+          </Link>
+        </div>
+      </div>
     </footer>
   );
 }

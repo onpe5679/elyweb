@@ -3,6 +3,7 @@ import VisionSection from '@/components/sections/VisionSection';
 import StatsBar from '@/components/sections/StatsBar';
 import ProjectsSection from '@/components/sections/ProjectsSection';
 import TimelineSection from '@/components/sections/TimelineSection';
+import HobomTeaser from '@/components/sections/HobomTeaser';
 import { getGames, getFeaturedGame, getHomeTimelineEvents, getSettings, getLocalizedSettingValue, Game } from '@/lib/supabase';
 
 export const revalidate = 10;
@@ -30,7 +31,7 @@ export default async function HomePage({ params }: { params: { locale: string } 
   const sv = (key: string) => getLocalizedSettingValue(siteSettings[key], params.locale) || undefined;
 
   return (
-    <div className="bg-background-light dark:bg-background-dark min-h-screen">
+    <div className="min-h-screen bg-paper">
       <Hero heroImage={heroImage} heroTitle={heroTitle} heroDescription={heroDescription} />
       <VisionSection visionImage={visionImage} visionTitle={sv('vision_title')} visionBody={sv('vision_description')} />
       <StatsBar
@@ -45,6 +46,7 @@ export default async function HomePage({ params }: { params: { locale: string } 
       />
       <ProjectsSection games={nonFeaturedGames} featuredGame={featuredGame} locale={params.locale} />
       <TimelineSection events={timelineEvents} locale={params.locale} />
+      <HobomTeaser />
     </div>
   );
 }

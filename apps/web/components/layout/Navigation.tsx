@@ -1,70 +1,157 @@
 'use client';
 
-import {Link} from '@/i18n/routing';
+import {Link, usePathname} from '@/i18n/routing';
 import {useTranslations} from 'next-intl';
 import LanguageSwitcher from './LanguageSwitcher';
-import {useState} from 'react';
+import {useEffect, useState} from 'react';
 
 interface NavigationProps {
   logoImage?: string | null;
-  logoIcon?: string;
+  logoIcon?: string | null;
 }
 
-export default function Navigation({ logoImage, logoIcon }: NavigationProps) {
+const LINKS = [
+  {key: 'games', href: '/games'},
+  {key: 'about', href: '/about'},
+  {key: 'news', href: '/news'},
+  {key: 'hobom', href: '/hobom'},
+  {key: 'contact', href: '/contact'},
+] as const;
+
+function MobileMenu({items, t, onClose}: {items: readonly {key: string; href: string}[]; t: (key: string) => string; onClose: () => void}) {
+  return (
+    <div
+      id="mobile-menu"
+      data-testid="mobile-menu"
+      className="fixed inset-x-0 bottom-0 top-20 z-40 flex flex-col overflow-y-auto bg-paper md:hidden"
+    >
+      <ul className="flex flex-col px-4 pt-6">
+        {items.map((item) => (
+          <li key={item.key} className="border-b border-rule">
+            <Link
+              href={item.href}
+              onClick={onClose}
+              className="font-display flex items-center justify-between py-5 text-3xl text-ink"
+            >
+              <span>{t(item.key)}</span>
+              <span aria-hidden="true" className="text-xl text-seal">→</span>
+            </Link>
+          </li>
+        ))}
+      </ul>
+    </div>
+  );
+}
+
+export default function Navigation({logoImage, logoIcon}: NavigationProps) {
   const t = useTranslations('Navigation');
-  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const pathname = usePathname();
+  const isHome = pathname === '/';
+  const [scrolled, setScrolled] = useState(false);
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+
+  // The home title screen sits on night ink, so the bar stays transparent until the reader scrolls.
+  const onNight = isHome && !scrolled && !isMenuOpen;
+  const mark = logoImage || logoIcon;
+
+  useEffect(() => {
+    const onScroll = () => setScrolled(window.scrollY > 40);
+    onScroll();
+    window.addEventListener('scroll', onScroll, {passive: true});
+    return () => window.removeEventListener('scroll', onScroll);
+  }, []);
+
+  useEffect(() => {
+    if (!isMenuOpen) return;
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') setIsMenuOpen(false);
+    };
+    document.addEventListener('keydown', onKey);
+    return () => document.removeEventListener('keydown', onKey);
+  }, [isMenuOpen]);
+
+  const linkClass = (href: string) => {
+    const active = pathname === href || pathname.startsWith(`${href}/`);
+    return [
+      'relative text-sm tracking-wide transition-colors py-1',
+      'after:absolute after:left-0 after:-bottom-0.5 after:h-px after:bg-current after:transition-all',
+      active ? 'after:w-full' : 'after:w-0 hover:after:w-full',
+      onNight ? 'text-moon hover:text-white' : 'text-ink-2 hover:text-seal',
+    ].join(' ');
+  };
 
   return (
-    <nav className="fixed w-full z-50 bg-surface-light/90 dark:bg-surface-dark/90 backdrop-blur-md border-b border-gray-200 dark:border-gray-800 transition-colors duration-300">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="flex justify-between items-center h-20">
-                <div className="flex-shrink-0 flex items-center gap-3">
-                    <Link href="/" className="flex items-center gap-3">
-                        {(logoImage || logoIcon) ? (
-                            <img src={logoImage || logoIcon} alt="Logo" className="w-10 h-10 rounded-full object-cover shadow-lg" />
-                        ) : (
-                            <div className="w-10 h-10 bg-primary rounded-full flex items-center justify-center text-white font-bold text-xl shadow-lg">
-                                <i className="fa-solid fa-gamepad"></i>
-                            </div>
-                        )}
-                        <span className="font-display font-bold text-xl tracking-wider uppercase text-gray-900 dark:text-white">
-                            Studio Elysian
-                        </span>
-                    </Link>
-                </div>
-                <div className="hidden md:flex space-x-8 items-center">
-                    <Link className="text-sm font-medium text-gray-700 dark:text-gray-300 hover:text-primary dark:hover:text-primary transition-colors" href="/">{t('home')}</Link>
-                    <Link className="text-sm font-medium text-gray-700 dark:text-gray-300 hover:text-primary dark:hover:text-primary transition-colors" href="/about">{t('about')}</Link>
-                    <Link className="text-sm font-medium text-gray-700 dark:text-gray-300 hover:text-primary dark:hover:text-primary transition-colors" href="/news">{t('news')}</Link>
-                    <Link className="text-sm font-medium text-gray-700 dark:text-gray-300 hover:text-primary dark:hover:text-primary transition-colors" href="/games">{t('games')}</Link>
-                    <Link className="text-sm font-medium text-gray-700 dark:text-gray-300 hover:text-primary dark:hover:text-primary transition-colors" href="/contact">{t('contact')}</Link>
-                    <Link className="px-4 py-2 rounded-full bg-primary text-white text-sm font-bold hover:bg-opacity-90 transition-all shadow-md" href="/press">{t('press')}</Link>
-                    <LanguageSwitcher />
-                </div>
-                <div className="md:hidden flex items-center gap-4">
-                    <LanguageSwitcher />
-                    <button 
-                        data-testid="mobile-menu-button"
-                        className="text-gray-700 dark:text-gray-300 hover:text-primary focus:outline-none"
-                        onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-                    >
-                        <i className="fa-solid fa-bars text-2xl"></i>
-                    </button>
-                </div>
-            </div>
+    <>
+    <header
+      className={[
+        'fixed inset-x-0 top-0 z-50 transition-colors duration-500',
+        onNight ? 'bg-transparent' : 'bg-paper/95 backdrop-blur-sm border-b border-rule',
+      ].join(' ')}
+    >
+      <nav aria-label="Main" className="mx-auto flex h-20 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
+        <Link href="/" className="flex items-center gap-3" aria-label="Studio Elysian">
+          {mark ? (
+            <img
+              src={mark}
+              alt=""
+              className={['h-9 w-9 object-contain transition-[filter] duration-500', onNight ? 'invert' : ''].join(' ')}
+            />
+          ) : (
+            <span className={['h-9 w-9 border', onNight ? 'border-moon' : 'border-ink'].join(' ')} aria-hidden="true" />
+          )}
+          <span
+            className={[
+              'font-display text-lg font-semibold uppercase tracking-[0.2em]',
+              onNight ? 'text-moon' : 'text-ink',
+            ].join(' ')}
+          >
+            Studio Elysian
+          </span>
+        </Link>
+
+        <div className="hidden items-center gap-8 md:flex">
+          {LINKS.map((item) => (
+            <Link key={item.key} href={item.href} className={linkClass(item.href)}>
+              {t(item.key)}
+            </Link>
+          ))}
+          <Link
+            href="/press"
+            className={[
+              'border px-4 py-2 text-xs font-bold uppercase tracking-[0.18em] transition-colors',
+              onNight
+                ? 'border-moon text-moon hover:bg-moon hover:text-night'
+                : 'border-ink text-ink hover:bg-ink hover:text-paper',
+            ].join(' ')}
+          >
+            {t('press')}
+          </Link>
+          <LanguageSwitcher onNight={onNight} />
         </div>
-        {isMobileMenuOpen && (
-            <div data-testid="mobile-menu" className="md:hidden bg-surface-light dark:bg-surface-dark border-t border-gray-200 dark:border-gray-800">
-                <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3">
-                    <Link className="block px-3 py-2 rounded-md text-base font-medium text-gray-700 dark:text-gray-300 hover:text-primary dark:hover:text-primary" href="/" onClick={() => setIsMobileMenuOpen(false)}>{t('home')}</Link>
-                    <Link className="block px-3 py-2 rounded-md text-base font-medium text-gray-700 dark:text-gray-300 hover:text-primary dark:hover:text-primary" href="/about" onClick={() => setIsMobileMenuOpen(false)}>{t('about')}</Link>
-                    <Link className="block px-3 py-2 rounded-md text-base font-medium text-gray-700 dark:text-gray-300 hover:text-primary dark:hover:text-primary" href="/news" onClick={() => setIsMobileMenuOpen(false)}>{t('news')}</Link>
-                    <Link className="block px-3 py-2 rounded-md text-base font-medium text-gray-700 dark:text-gray-300 hover:text-primary dark:hover:text-primary" href="/games" onClick={() => setIsMobileMenuOpen(false)}>{t('games')}</Link>
-                    <Link className="block px-3 py-2 rounded-md text-base font-medium text-gray-700 dark:text-gray-300 hover:text-primary dark:hover:text-primary" href="/contact" onClick={() => setIsMobileMenuOpen(false)}>{t('contact')}</Link>
-                    <Link className="block px-3 py-2 rounded-md text-base font-medium text-gray-700 dark:text-gray-300 hover:text-primary dark:hover:text-primary" href="/press" onClick={() => setIsMobileMenuOpen(false)}>{t('press')}</Link>
-                </div>
-            </div>
-        )}
-    </nav>
+
+        <div className="flex items-center gap-4 md:hidden">
+          <LanguageSwitcher onNight={onNight} />
+          <button
+            type="button"
+            data-testid="mobile-menu-button"
+            aria-expanded={isMenuOpen}
+            aria-controls="mobile-menu"
+            aria-label={isMenuOpen ? t('close') : t('menu')}
+            onClick={() => setIsMenuOpen((v) => !v)}
+            className={['flex h-11 w-11 items-center justify-center', onNight ? 'text-moon' : 'text-ink'].join(' ')}
+          >
+            <span className="relative block h-3.5 w-6" aria-hidden="true">
+              <span className={['absolute left-0 h-px w-6 bg-current transition-all', isMenuOpen ? 'top-1.5 rotate-45' : 'top-0'].join(' ')} />
+              <span className={['absolute left-0 h-px w-6 bg-current transition-all', isMenuOpen ? 'top-1.5 -rotate-45' : 'top-3'].join(' ')} />
+            </span>
+          </button>
+        </div>
+      </nav>
+
+    </header>
+      {isMenuOpen && (
+        <MobileMenu items={[{key: 'home', href: '/'}, ...LINKS, {key: 'press', href: '/press'}]} t={t} onClose={() => setIsMenuOpen(false)} />
+      )}
+    </>
   );
 }

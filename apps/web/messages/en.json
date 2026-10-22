@@ -3,19 +3,27 @@
     "home": "Home",
     "about": "About",
     "news": "News",
-    "games": "Games",
+    "games": "Works",
+    "hobom": "Habom",
     "contact": "Contact",
-    "press": "PRESS"
+    "press": "PRESS",
+    "menu": "Menu",
+    "close": "Close",
+    "skip": "Skip to content",
+    "language": "Language"
   },
   "Hero": {
+    "eyebrow": "STUDIO ELYSIAN",
     "label": "Immersive Visual Novels",
     "title1_prefix": "FOR ",
     "title1_highlight": "STORY-LOVERS",
     "title1_suffix": ",",
     "title2": "BY STORYTELLERS",
     "description": "We are Studio Elysian, creators of stories.\nWe create beautiful worlds that will move your heart.",
-    "viewProjects": "View Projects",
-    "contact": "Contact Us"
+    "viewProjects": "View Works",
+    "contact": "Contact Us",
+    "scroll": "Keep reading",
+    "menuLabel": "Choose a page"
   },
   "Vision": {
     "label": "Our Vision",
@@ -31,123 +39,308 @@
     "year": "Founded",
     "projects": "Active Projects",
     "funding": "Funding Rate",
+    "released": "Released Titles",
     "global": "Steam Release"
   },
   "Projects": {
     "label": "Our Works",
-    "title": "Games",
+    "title": "Works",
+    "viewWork": "View Work",
+    "hobomTag": "Habom Title",
     "memorialCircuit": {
-        "tag": "Now Available",
-        "series": "Old Engine Series",
-        "title": "Memorial Circuit",
-        "desc": "\"If you cannot remember, doubt.\"\nA visual novel themed around war and its scars. Experience deep storytelling that combines SF, romance, and mystery.",
-        "genre1": "Visual Novel",
-        "genre2": "SF",
-        "genre3": "Romance",
-        "steam": "Steam Store",
-        "details": "Details"
+      "tag": "Now Available",
+      "series": "Old Engine Series",
+      "title": "Memorial Circuit",
+      "desc": "\"If you cannot remember, doubt.\"\nA visual novel themed around war and its scars. Experience deep storytelling that combines SF, romance, and mystery.",
+      "genre1": "Visual Novel",
+      "genre2": "SF",
+      "genre3": "Romance",
+      "steam": "Steam Store",
+      "details": "Details"
     },
     "spaceEmpathy": {
-        "tag": "Coming Soon",
-        "overlay": "A unique cosmic worldview meets everyday life",
-        "series": "Elysian Panorama",
-        "title": "In Between All Times",
-        "desc": "A cosmic visual novel where everyday life and fantasy intersect. Coming 2024.",
-        "view": "View Project"
+      "tag": "Coming Soon",
+      "overlay": "A unique cosmic worldview meets everyday life",
+      "series": "Elysian Panorama",
+      "title": "In Between All Times",
+      "desc": "A cosmic visual novel where everyday life and fantasy intersect. Coming 2024.",
+      "view": "View Project"
     },
     "festival": {
-        "tag": "In Development",
-        "overlay": "Drama blooming in war",
-        "series": "Drama Visual Novel",
-        "title": "The Festival Is Not Over Yet",
-        "desc": "Deep narrative interweaving war, horror, and drama.",
-        "view": "View Project"
+      "tag": "In Development",
+      "overlay": "Drama blooming in war",
+      "series": "Drama Visual Novel",
+      "title": "The Festival Is Not Over Yet",
+      "desc": "Deep narrative interweaving war, horror, and drama.",
+      "view": "View Project"
     },
     "sharehouse": {
-        "tag": "Publishing",
-        "overlay": "A sharehouse with three heroines",
-        "series": "Romance Comedy",
-        "title": "Welcome to Sharehouse!",
-        "desc": "An Elysian Publishing work. A romance slice-of-life visual novel.",
-        "view": "View Project"
+      "tag": "Publishing",
+      "overlay": "A sharehouse with three heroines",
+      "series": "Romance Comedy",
+      "title": "Welcome to Sharehouse!",
+      "desc": "An Elysian Publishing work. A romance slice-of-life visual novel.",
+      "view": "View Project"
     }
   },
   "Timeline": {
-      "title": "Milestones",
-      "items": {
-          "item1": {
-              "date": "2024.04",
-              "text": "\"Memorial Circuit\" Official Steam Release"
-          },
-          "item2": {
-              "date": "2023.11",
-              "text": "G-Star 2023 Exhibition (STOVE Indie Showcase)"
-          },
-          "item3": {
-              "date": "2022.09",
-              "text": "Studio Elysian Founded"
-          }
+    "title": "Milestones",
+    "items": {
+      "item1": {
+        "date": "2024.04",
+        "text": "\"Memorial Circuit\" Official Steam Release"
       },
-      "viewAll": "View All Milestones"
-  },
-  "Footer": {
-      "desc": "Studio Elysian believes in the power of stories.\nWe communicate with the wider world through games.",
-      "quickLinks": "Quick Links",
-      "links": {
-          "about": "About Us",
-          "projects": "Projects",
-          "news": "News"
+      "item2": {
+        "date": "2023.11",
+        "text": "G-Star 2023 Exhibition (STOVE Indie Showcase)"
       },
-      "contact": "Contact",
-      "contactLinks": {
-          "inquiry": "Inquiry"
-      },
-      "rights": "© 2024 Studio Elysian. All rights reserved.",
-      "privacy": "Privacy Policy"
+      "item3": {
+        "date": "2022.09",
+        "text": "Studio Elysian Founded"
+      }
+    },
+    "viewAll": "View All Milestones"
   },
   "GamesPage": {
-      "title": "Games",
-      "subtitle": "Our Works"
+    "title": "Works",
+    "subtitle": "Our Works",
+    "intro": "Titles from Studio Elysian and Studio Habom in one place. Select a title to read its introduction."
+  },
+  "Hobom": {
+    "eyebrow": "Studio Habom",
+    "title": "Habom",
+    "lead": "Introducing works from Studio Habom, made in collaboration with Studio Elysian.",
+    "worksTitle": "Habom Works",
+    "empty": "No Habom titles are public yet.",
+    "backToElysian": "Back to Elysian",
+    "experienceTitle": "Dialogue & Choices",
+    "experienceLead": "Pick choices in a short scene. This is a design sample and not official game content.",
+    "experienceNotice": "Sample script for design · Not official game content",
+    "experienceOpen": "Open the sample",
+    "experienceRestart": "Start over",
+    "experienceClose": "Close",
+    "experienceStep": "Scene {count}",
+    "experienceEnding": "Ending {ending}",
+    "experienceChoose": "Choose an option",
+    "experienceContinue": "Continue",
+    "scenes": {
+      "start": {
+        "text": "The sharehouse entrance. Arms full of luggage, you hesitate before the door.",
+        "choices": [
+          {
+            "label": "Open the door",
+            "next": "greet"
+          },
+          {
+            "label": "Take a breath first",
+            "next": "breathe"
+          }
+        ]
+      },
+      "greet": {
+        "speaker": "Ryu Ji-hye",
+        "text": "Welcome back! That looks heavy. Let me help.",
+        "choices": [
+          {
+            "label": "Thanks, please",
+            "next": "meet"
+          },
+          {
+            "label": "I'm fine, I can carry it",
+            "next": "cold"
+          }
+        ]
+      },
+      "cold": {
+        "speaker": "Ryu Ji-hye",
+        "text": "Alright, just say so if you need anything. Watch the stairs.",
+        "choices": [
+          {
+            "label": "Continue",
+            "next": "meet"
+          }
+        ]
+      },
+      "breathe": {
+        "speaker": "Park Yun-ha",
+        "text": "...I haven't seen you before. Your room is upstairs.",
+        "choices": [
+          {
+            "label": "Understood",
+            "next": "meet"
+          },
+          {
+            "label": "Could I get your name first?",
+            "next": "meet"
+          }
+        ]
+      },
+      "meet": {
+        "speaker": "Hong Se-eun",
+        "text": "So you're moving in today, then?",
+        "choices": [
+          {
+            "label": "Nice to meet you",
+            "next": "endA"
+          },
+          {
+            "label": "Let me think about it a bit longer",
+            "next": "endB"
+          }
+        ]
+      },
+      "endA": {
+        "text": "The first night begins.",
+        "ending": "A"
+      },
+      "endB": {
+        "text": "You pause at the entrance and think once more.",
+        "ending": "B"
+      }
+    },
+    "visit": "Visit Habom"
+  },
+  "GameDetail": {
+    "overview": "About",
+    "facts": "Details",
+    "genre": "Genre",
+    "platforms": "Platforms",
+    "developer": "Developer",
+    "status": "Status",
+    "steam": "Steam Store",
+    "official": "Official Site",
+    "backToWorks": "Back to Works",
+    "noSections": "Information for this title is coming soon.",
+    "experienceEyebrow": "Habom sample · Design only",
+    "experienceCta": "Open dialogue & choices"
+  },
+  "Footer": {
+    "desc": "Studio Elysian believes in the power of stories.\nWe communicate with the wider world through games.",
+    "quickLinks": "Quick Links",
+    "links": {
+      "about": "About Us",
+      "projects": "Works",
+      "news": "News"
+    },
+    "contact": "Contact",
+    "contactLinks": {
+      "inquiry": "Inquiry"
+    },
+    "rights": "© 2024 Studio Elysian. All rights reserved.",
+    "privacy": "Privacy Policy",
+    "hobom": "Studio Habom"
   },
   "ProjectSharehouse": {
-      "tag": "Romance Comedy",
-      "title": "Welcome to\nSharehouse!",
-      "subtitle": "Exciting sharehouse life with three heroines",
-      "historyTitle": "Project Timeline",
-      "history": {
-          "item1": { "date": "2024.05", "text": "PlayX4 B2C & B2B Exhibition" },
-          "item2": { "date": "2024.01", "text": "Tumblbug Crowdfunding 300% Achieved" },
-          "item3": { "date": "2023.11", "text": "Project Development Started" }
+    "tag": "Romance Comedy",
+    "title": "Welcome to\nSharehouse!",
+    "subtitle": "Exciting sharehouse life with three heroines",
+    "historyTitle": "Project Timeline",
+    "history": {
+      "item1": {
+        "date": "2024.05",
+        "text": "PlayX4 B2C & B2B Exhibition"
       },
-      "gameInfo": {
-          "title": "GAME INFO",
-          "lead": "Studio Elysian X Studio Habom Dating Sim Project!",
-          "desc": "Romance comedy daily life in a sharehouse! A special cohabitation life with three charming heroines begins. Discover the changing relationships and hidden stories based on your choices.",
-          "genreLabel": "Genre",
-          "genreValue": "Romance Comedy / Visual Novel",
-          "releaseLabel": "Release",
-          "releaseValue": "2024 (Coming Soon)",
-          "platformLabel": "Platform",
-          "platformValue": "PC (Steam), STOVE",
-          "devLabel": "Developer",
-          "devValue": "Studio Habom / Studio Elysian"
+      "item2": {
+        "date": "2024.01",
+        "text": "Tumblbug Crowdfunding 300% Achieved"
       },
-      "synopsis": {
-          "title": "SYNOPSIS",
-          "p1": "20XX, you've been living as a jobless homebody.\nAfter failing college entrance exams, you've been watching anime in your room as usual.",
-          "p2": "While communicating with your online girlfriends through the monitor,\nyou got smacked by your parents and sent to Seoul, moving into a sharehouse with other people.",
-          "quote": "\"Told to learn from hardworking people, you start living as a sharehouse member, but upon arrival, three pretty girls are at home...?\"",
-          "char1": "The lively and spirited 'Ryu Ji-hye'",
-          "char2": "The mature but surprisingly charming 'Park Yun-ha'",
-          "char3": "And the cute yet aloof 'Hong Se-eun'.",
-          "outro": "You begin your cohabitation story with three beautiful girls at the sharehouse.",
-          "credit": "(Provided by - Studio Habom)"
-      },
-      "store": {
-          "title": "STORE",
-          "status": "Coming Soon",
-          "wishlist": "Wishlist Now",
-          "officialSite": "Official Site"
+      "item3": {
+        "date": "2023.11",
+        "text": "Project Development Started"
       }
+    },
+    "gameInfo": {
+      "title": "GAME INFO",
+      "lead": "Studio Elysian X Studio Habom Dating Sim Project!",
+      "desc": "Romance comedy daily life in a sharehouse! A special cohabitation life with three charming heroines begins. Discover the changing relationships and hidden stories based on your choices.",
+      "genreLabel": "Genre",
+      "genreValue": "Romance Comedy / Visual Novel",
+      "releaseLabel": "Release",
+      "releaseValue": "2024 (Coming Soon)",
+      "platformLabel": "Platform",
+      "platformValue": "PC (Steam), STOVE",
+      "devLabel": "Developer",
+      "devValue": "Studio Habom / Studio Elysian"
+    },
+    "synopsis": {
+      "title": "SYNOPSIS",
+      "p1": "20XX, you've been living as a jobless homebody.\nAfter failing college entrance exams, you've been watching anime in your room as usual.",
+      "p2": "While communicating with your online girlfriends through the monitor,\nyou got smacked by your parents and sent to Seoul, moving into a sharehouse with other people.",
+      "quote": "\"Told to learn from hardworking people, you start living as a sharehouse member, but upon arrival, three pretty girls are at home...?\"",
+      "char1": "The lively and spirited 'Ryu Ji-hye'",
+      "char2": "The mature but surprisingly charming 'Park Yun-ha'",
+      "char3": "And the cute yet aloof 'Hong Se-eun'.",
+      "outro": "You begin your cohabitation story with three beautiful girls at the sharehouse.",
+      "credit": "(Provided by - Studio Habom)"
+    },
+    "store": {
+      "title": "STORE",
+      "status": "Coming Soon",
+      "wishlist": "Wishlist Now",
+      "officialSite": "Official Site"
+    }
+  },
+  "AboutPage": {
+    "eyebrow": "About Us",
+    "teamTitle": "Our Team",
+    "historyTitle": "History",
+    "noHistory": "No history events available.",
+    "statFounded": "Founded",
+    "statProjects": "Projects",
+    "statFunding": "Funding",
+    "statReach": "Reach",
+    "reachValue": "Global"
+  },
+  "NewsPage": {
+    "eyebrow": "Latest Updates",
+    "widgetTitle": "Latest on X",
+    "empty": "No news has been posted yet."
+  },
+  "NewsDetail": {
+    "backToNews": "Back to News"
+  },
+  "PressPage": {
+    "eyebrow": "Media Resources",
+    "title": "Press Kit",
+    "listTitle": "Download Press Kits",
+    "empty": "No press kits available yet. Check back later!",
+    "fallbackDescription": "Download press materials",
+    "preparing": "Preparing"
+  },
+  "ContactPage": {
+    "eyebrow": "Get in Touch",
+    "infoTitle": "Contact Information",
+    "emailLabel": "Email",
+    "followTitle": "Follow Us"
+  },
+  "ContactForm": {
+    "nameLabel": "Name",
+    "namePlaceholder": "Your name",
+    "emailLabel": "Email",
+    "emailPlaceholder": "your@email.com",
+    "messageLabel": "Message",
+    "messagePlaceholder": "Your message",
+    "submit": "Send Message",
+    "sending": "Sending...",
+    "successTitle": "Message Sent!",
+    "successBody": "Thank you for your message. We will get back to you soon.",
+    "successEmail": "A confirmation email has been sent to your inbox.",
+    "sendAnother": "Send another message",
+    "errorFallback": "Failed to send message. Please try again later."
+  },
+  "XTimeline": {
+    "fallback": "Follow Studio Elysian's latest news on X.",
+    "cta": "View on X"
+  },
+  "PrivacyPage": {
+    "eyebrow": "Legal",
+    "empty": "The privacy policy has not been published yet."
+  },
+  "TeamPage": {
+    "backToAbout": "Back to About",
+    "connect": "Connect",
+    "website": "Website",
+    "viewProject": "View Project",
+    "videoTitle": "Video"
   }
 }

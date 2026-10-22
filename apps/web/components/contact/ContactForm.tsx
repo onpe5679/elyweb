@@ -1,12 +1,20 @@
 'use client';
 
 import { useState } from 'react';
+import { useTranslations } from 'next-intl';
 
 interface ContactFormProps {
   inquiryLabel: string;
 }
 
+// Underline fields on paper. The focus outline is set explicitly because the
+// Tailwind forms plugin hides outlines on text inputs.
+const fieldClass =
+  'mt-3 block w-full rounded-none border-0 border-b border-ink bg-transparent px-0 py-3 text-base text-ink placeholder:text-ink-3 transition-colors focus:border-seal focus:ring-0 focus-visible:outline focus-visible:outline-2 focus-visible:outline-seal focus-visible:outline-offset-[3px]';
+const labelClass = 'block text-xs font-bold uppercase tracking-[0.16em] text-ink-3';
+
 export function ContactForm({ inquiryLabel }: ContactFormProps) {
+  const t = useTranslations('ContactForm');
   const [formData, setFormData] = useState({ name: '', email: '', message: '' });
   const [status, setStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle');
   const [errorMessage, setErrorMessage] = useState('');
@@ -27,7 +35,7 @@ export function ContactForm({ inquiryLabel }: ContactFormProps) {
       const data = await response.json();
 
       if (!response.ok) {
-        throw new Error(data.error || 'Failed to send message');
+        throw new Error(data.error || t('errorFallback'));
       }
 
       setEmailSent(data.userEmailSent === true);
@@ -35,7 +43,7 @@ export function ContactForm({ inquiryLabel }: ContactFormProps) {
       setFormData({ name: '', email: '', message: '' });
     } catch (error) {
       setStatus('error');
-      setErrorMessage(error instanceof Error ? error.message : 'Failed to send message');
+      setErrorMessage(error instanceof Error ? error.message : t('errorFallback'));
     }
   };
 
@@ -45,25 +53,22 @@ export function ContactForm({ inquiryLabel }: ContactFormProps) {
 
   if (status === 'success') {
     return (
-      <div className="bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 rounded-lg p-6 text-center">
-        <i className="fa-solid fa-check-circle text-green-500 text-4xl mb-4"></i>
-        <h3 className="text-lg font-bold text-green-700 dark:text-green-400 mb-2">
-          Message Sent!
-        </h3>
-        <p className="text-green-600 dark:text-green-300">
-          Thank you for your message. We will get back to you soon.
-        </p>
+      <div role="status" className="border-l-2 border-seal pl-6">
+        <i className="fa-solid fa-check text-2xl text-seal" aria-hidden="true"></i>
+        <h2 className="font-display mt-6 text-3xl leading-tight text-ink md:text-4xl">{t('successTitle')}</h2>
+        <p className="mt-4 leading-relaxed text-ink-2">{t('successBody')}</p>
         {emailSent && (
-          <p className="text-green-600 dark:text-green-300 text-sm mt-2">
-            <i className="fa-solid fa-envelope mr-1"></i>
-            A confirmation email has been sent to your inbox.
+          <p className="mt-3 flex items-center gap-2 text-sm text-ink-3">
+            <i className="fa-solid fa-envelope text-seal" aria-hidden="true"></i>
+            {t('successEmail')}
           </p>
         )}
         <button
+          type="button"
           onClick={() => setStatus('idle')}
-          className="mt-4 px-4 py-2 text-sm text-green-700 dark:text-green-400 hover:underline"
+          className="mt-10 border-b border-ink pb-1 text-sm font-bold text-ink transition-colors hover:border-seal hover:text-seal"
         >
-          Send another message
+          {t('sendAnother')}
         </button>
       </div>
     );
@@ -71,69 +76,70 @@ export function ContactForm({ inquiryLabel }: ContactFormProps) {
 
   return (
     <>
-      <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-6">
-        {inquiryLabel}
-      </h2>
-      <form onSubmit={handleSubmit} className="space-y-6">
+      <h2 className="font-display text-3xl leading-tight text-ink md:text-4xl">{inquiryLabel}</h2>
+      <form onSubmit={handleSubmit} className="mt-10 space-y-8">
         {status === 'error' && (
-          <div className="bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg p-4">
-            <p className="text-red-600 dark:text-red-400 text-sm">{errorMessage}</p>
+          <div role="alert" className="border-l-2 border-seal bg-seal-soft p-4">
+            <p className="text-sm text-ink">{errorMessage}</p>
           </div>
         )}
         <div>
-          <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-            Name
+          <label htmlFor="contact-name" className={labelClass}>
+            {t('nameLabel')}
           </label>
           <input
+            id="contact-name"
             type="text"
             name="name"
             value={formData.name}
             onChange={handleChange}
             required
-            className="w-full px-4 py-3 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-white focus:ring-2 focus:ring-primary focus:border-transparent"
-            placeholder="Your name"
+            placeholder={t('namePlaceholder')}
+            className={fieldClass}
           />
         </div>
         <div>
-          <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-            Email
+          <label htmlFor="contact-email" className={labelClass}>
+            {t('emailLabel')}
           </label>
           <input
+            id="contact-email"
             type="email"
             name="email"
             value={formData.email}
             onChange={handleChange}
             required
-            className="w-full px-4 py-3 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-white focus:ring-2 focus:ring-primary focus:border-transparent"
-            placeholder="your@email.com"
+            placeholder={t('emailPlaceholder')}
+            className={fieldClass}
           />
         </div>
         <div>
-          <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-            Message
+          <label htmlFor="contact-message" className={labelClass}>
+            {t('messageLabel')}
           </label>
           <textarea
+            id="contact-message"
             name="message"
             value={formData.message}
             onChange={handleChange}
             required
             rows={5}
-            className="w-full px-4 py-3 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-white focus:ring-2 focus:ring-primary focus:border-transparent"
-            placeholder="Your message"
+            placeholder={t('messagePlaceholder')}
+            className={`${fieldClass} resize-y`}
           />
         </div>
         <button
           type="submit"
           disabled={status === 'loading'}
-          className="w-full px-6 py-3 bg-primary text-white font-bold rounded-lg hover:bg-primary/90 transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+          className="btn-ink w-full disabled:cursor-not-allowed disabled:opacity-50"
         >
           {status === 'loading' ? (
             <>
-              <i className="fa-solid fa-spinner fa-spin"></i>
-              Sending...
+              <i className="fa-solid fa-spinner fa-spin" aria-hidden="true"></i>
+              {t('sending')}
             </>
           ) : (
-            'Send Message'
+            t('submit')
           )}
         </button>
       </form>

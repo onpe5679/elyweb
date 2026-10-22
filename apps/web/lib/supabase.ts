@@ -27,6 +27,7 @@ export type Game = {
   steam_url?: string;
   official_url?: string;
   platforms?: string[];
+  developer?: string | null;
   is_featured: boolean;
   created_at: string;
 };

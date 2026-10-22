@@ -4,7 +4,7 @@ test.describe('Games Pages', () => {
   test('games list page should display all games', async ({ page }) => {
     await page.goto('/ko/games');
     
-    await expect(page.getByRole('heading', { level: 1 })).toContainText(/게임|Games|ゲーム/i);
+    await expect(page.getByRole('heading', { level: 1 })).toContainText(/작품|게임|Games|Works|作品|ゲーム/i);
     
     const gameCards = page.locator('[data-testid="game-card"]');
     await expect(gameCards.first()).toBeVisible();
@@ -23,7 +23,7 @@ test.describe('Games Pages', () => {
   test('game detail page should display game info', async ({ page }) => {
     await page.goto('/ko/games/memorial-circuit');
     
-    await expect(page.getByText('메모리얼 서킷')).toBeVisible();
+    await expect(page.getByRole('heading', { level: 1, name: '메모리얼 서킷' })).toBeVisible();
     
     await expect(page.getByRole('main').first()).toContainText(/기억|전쟁|스토리/);
   });
@@ -60,7 +60,7 @@ test.describe('Game Detail Page - Sharehouse', () => {
   });
 
   test('should display game info section', async ({ page }) => {
-    await expect(page.getByRole('heading', { name: /쉐어하우스/i })).toBeVisible();
+    await expect(page.getByRole('heading', { level: 1, name: /쉐어하우스/i })).toBeVisible();
   });
 
   test('should display synopsis', async ({ page }) => {

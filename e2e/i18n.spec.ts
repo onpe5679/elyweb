@@ -36,11 +36,8 @@ test.describe('Internationalization (i18n)', () => {
   test('language switcher should change locale', async ({ page }) => {
     await page.goto('/ko');
     
-    const langSwitcher = page.locator('[data-testid="language-switcher"]');
-    if (await langSwitcher.isVisible()) {
-      await langSwitcher.click();
-      await page.getByText('English').click();
-      await expect(page).toHaveURL(/\/en/);
-    }
+    const langSwitcher = page.locator('[data-testid="language-switcher"]').first();
+    await langSwitcher.selectOption('en');
+    await expect(page).toHaveURL(/\/en/);
   });
 });

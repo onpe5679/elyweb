@@ -1,62 +1,66 @@
 import { getPressKits, getLocalizedField, PressKit } from '@/lib/supabase';
-import { getLocale } from 'next-intl/server';
+import { getLocale, getTranslations } from 'next-intl/server';
 
 export default async function PressPage() {
   const locale = await getLocale();
+  const t = await getTranslations('PressPage');
   const pressKits = await getPressKits();
 
   return (
-    <div className="pt-24 pb-16 bg-background-light dark:bg-background-dark min-h-screen">
-      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="text-center mb-16">
-          <h4 className="text-primary font-bold tracking-widest uppercase mb-2 text-sm">
-            Media Resources
-          </h4>
-          <h1 className="font-display font-black text-4xl md:text-5xl text-gray-900 dark:text-white">
-            Press Kit
-          </h1>
-        </div>
+    <div className="min-h-screen bg-paper pb-32 pt-36 md:pt-44">
+      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+        <header className="border-b border-ink pb-16">
+          <p className="eyebrow">{t('eyebrow')}</p>
+          <h1 className="font-display mt-6 text-6xl leading-none text-ink md:text-8xl">{t('title')}</h1>
+        </header>
 
-        <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-6">
-          Download Press Kits
-        </h2>
+        <section aria-labelledby="press-kits-heading" className="mt-20 grid gap-12 md:grid-cols-12">
+          <h2 id="press-kits-heading" className="font-display text-3xl leading-tight text-ink md:col-span-4 md:text-4xl">
+            {t('listTitle')}
+          </h2>
 
-        {pressKits.length === 0 ? (
-          <div className="bg-white dark:bg-surface-dark rounded-xl p-8 text-center border border-gray-100 dark:border-gray-800">
-            <i className="fa-solid fa-folder-open text-4xl text-gray-300 dark:text-gray-600 mb-4"></i>
-            <p className="text-gray-500 dark:text-gray-400">
-              No press kits available yet. Check back later!
-            </p>
+          <div className="md:col-span-7 md:col-start-6">
+            {pressKits.length === 0 ? (
+              <div className="border-t border-ink py-16 text-center">
+                <i className="fa-solid fa-folder-open text-4xl text-ink-3" aria-hidden="true"></i>
+                <p className="mt-6 text-ink-3">{t('empty')}</p>
+              </div>
+            ) : (
+              <ul className="border-t border-ink">
+                {pressKits.map((kit: PressKit) => {
+                  const available = !!kit.file_url;
+                  return (
+                    <li key={kit.id} className="border-b border-rule">
+                      <a
+                        href={kit.file_url || '#'}
+                        target={kit.file_url ? '_blank' : undefined}
+                        rel={kit.file_url ? 'noopener noreferrer' : undefined}
+                        aria-disabled={available ? undefined : true}
+                        className={[
+                          'group flex items-center justify-between gap-6 py-8 transition-colors',
+                          available ? '' : 'cursor-not-allowed opacity-60',
+                        ].join(' ')}
+                      >
+                        <div className="min-w-0">
+                          {!available && <p className="eyebrow mb-3 !text-ink-3">{t('preparing')}</p>}
+                          <h3 className="font-display text-2xl leading-snug text-ink transition-colors group-hover:text-seal">
+                            {getLocalizedField(kit, 'title', locale)}
+                          </h3>
+                          <p className="mt-2 text-sm leading-relaxed text-ink-2">
+                            {getLocalizedField(kit, 'description', locale) || t('fallbackDescription')}
+                          </p>
+                        </div>
+                        <span className="flex h-12 w-12 flex-none items-center justify-center border border-ink text-ink transition-colors group-hover:bg-ink group-hover:text-paper">
+                          <i className={`fa-solid ${available ? 'fa-download' : 'fa-clock'}`} aria-hidden="true"></i>
+                        </span>
+                      </a>
+                    </li>
+                  );
+                })}
+              </ul>
+            )}
           </div>
-        ) : (
-          <div className="space-y-4">
-            {pressKits.map((kit: PressKit) => (
-              <a
-                key={kit.id}
-                href={kit.file_url || '#'}
-                target={kit.file_url ? '_blank' : undefined}
-                rel={kit.file_url ? 'noopener noreferrer' : undefined}
-                className={`block bg-white dark:bg-surface-dark rounded-xl p-6 shadow-sm border border-gray-100 dark:border-gray-800 hover:border-primary dark:hover:border-primary transition-colors ${
-                  !kit.file_url ? 'cursor-not-allowed opacity-60' : ''
-                }`}
-              >
-                <div className="flex items-center justify-between">
-                  <div>
-                    <h3 className="text-lg font-bold text-gray-900 dark:text-white mb-1">
-                      {getLocalizedField(kit, 'title', locale)}
-                    </h3>
-                    <p className="text-gray-500 dark:text-gray-400 text-sm">
-                      {getLocalizedField(kit, 'description', locale) || 'Download press materials'}
-                    </p>
-                  </div>
-                  <div className="w-10 h-10 bg-primary/10 rounded-full flex items-center justify-center flex-shrink-0">
-                    <i className={`fa-solid ${kit.file_url ? 'fa-download' : 'fa-clock'} text-primary`}></i>
-                  </div>
-                </div>
-              </a>
-            ))}
-          </div>
-        )}
+        </section>
       </div>
     </div>
   );

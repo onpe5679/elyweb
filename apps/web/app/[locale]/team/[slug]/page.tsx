@@ -1,15 +1,21 @@
 import { notFound } from 'next/navigation';
-import Link from 'next/link';
-import { 
-  getTeamMemberBySlug, 
-  getLocalizedField, 
-  getTeamMembers, 
+import { getTranslations } from 'next-intl/server';
+import { Link } from '@/i18n/routing';
+import {
+  getTeamMemberBySlug,
+  getLocalizedField,
+  getTeamMembers,
   getTeamMemberSections,
-  TeamMemberSection 
+  TeamMemberSection
 } from '@/lib/supabase';
 
 type Props = {
   params: { locale: string; slug: string };
+};
+
+type SectionLabels = {
+  viewProject: string;
+  video: string;
 };
 
 export async function generateStaticParams() {
@@ -21,9 +27,10 @@ export async function generateStaticParams() {
 
 export default async function TeamMemberPage({ params }: Props) {
   const { locale, slug } = params;
-  const [member, sections] = await Promise.all([
+  const [member, sections, t] = await Promise.all([
     getTeamMemberBySlug(slug),
-    getTeamMemberSections(slug)
+    getTeamMemberSections(slug),
+    getTranslations('TeamPage'),
   ]);
 
   if (!member) {
@@ -33,98 +40,96 @@ export default async function TeamMemberPage({ params }: Props) {
   const name = getLocalizedField(member, 'name', locale);
   const role = getLocalizedField(member, 'role', locale);
   const bio = getLocalizedField(member, 'bio', locale);
+  const labels: SectionLabels = { viewProject: t('viewProject'), video: t('videoTitle') };
+  const hasLinks = !!(member.twitter_url || member.instagram_url || member.website_url);
 
   return (
-    <div className="pt-24 pb-16 bg-background-light dark:bg-background-dark min-h-screen">
-      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div className="min-h-screen bg-paper pb-32 pt-36 md:pt-44">
+      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <Link
-          href={`/${locale}/about`}
-          className="inline-flex items-center text-sm text-gray-500 hover:text-primary mb-8 transition-colors"
+          href="/about"
+          className="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-[0.16em] text-ink-3 transition-colors hover:text-ink"
         >
-          <i className="fa-solid fa-arrow-left mr-2"></i>
-          Back to About
+          <i className="fa-solid fa-arrow-left" aria-hidden="true"></i>
+          {t('backToAbout')}
         </Link>
 
-        <div className="bg-white dark:bg-surface-dark rounded-2xl shadow-lg overflow-hidden">
-          <div className="md:flex">
-            <div className="md:w-1/3">
-              <div className="aspect-square relative overflow-hidden bg-gray-100 dark:bg-gray-800">
-                {member.profile_image ? (
-                  <img
-                    src={member.profile_image}
-                    alt={name}
-                    className="w-full h-full object-cover"
-                  />
-                ) : (
-                  <div className="w-full h-full flex items-center justify-center">
-                    <i className="fa-solid fa-user text-8xl text-gray-300 dark:text-gray-600"></i>
-                  </div>
-                )}
-              </div>
-            </div>
-
-            <div className="md:w-2/3 p-8">
-              <h1 className="font-display font-black text-3xl md:text-4xl text-gray-900 dark:text-white">
-                {name}
-              </h1>
-              
-              {role && (
-                <p className="text-xl text-primary font-medium mt-2">{role}</p>
-              )}
-
-              {bio && (
-                <div className="mt-6 prose prose-lg dark:prose-invert max-w-none">
-                  <p className="text-gray-600 dark:text-gray-300 whitespace-pre-line">{bio}</p>
+        <div className="mt-14 grid gap-12 md:grid-cols-12 md:items-end lg:gap-16">
+          <figure className="md:col-span-5 lg:col-span-4">
+            <div className="aspect-[4/5] overflow-hidden bg-paper-alt">
+              {member.profile_image ? (
+                <img src={member.profile_image} alt={name} className="h-full w-full object-cover" />
+              ) : (
+                <div className="flex h-full w-full items-center justify-center">
+                  <i className="fa-solid fa-user text-8xl text-ink-3" aria-hidden="true"></i>
                 </div>
               )}
+            </div>
+          </figure>
 
-              {(member.twitter_url || member.instagram_url || member.website_url) && (
-                <div className="mt-8 pt-6 border-t border-gray-100 dark:border-gray-800">
-                  <h3 className="text-sm font-semibold text-gray-500 uppercase tracking-wide mb-4">
-                    Connect
-                  </h3>
-                  <div className="flex gap-4">
-                    {member.twitter_url && (
+          <div className="md:col-span-6 md:col-start-7 lg:col-span-6 lg:col-start-7">
+            {role && <p className="eyebrow">{role}</p>}
+            <h1 className="font-display mt-6 text-balance text-5xl leading-[1.02] text-ink md:text-7xl">{name}</h1>
+
+            {bio && (
+              <p className="mt-10 whitespace-pre-line text-base leading-loose text-ink-2 md:text-lg">{bio}</p>
+            )}
+
+            {hasLinks && (
+              <section aria-labelledby="team-connect-heading" className="mt-12 border-t border-rule pt-8">
+                <h2 id="team-connect-heading" className="eyebrow !text-ink-3">
+                  {t('connect')}
+                </h2>
+                <ul className="mt-5 flex flex-wrap gap-3">
+                  {member.twitter_url && (
+                    <li>
                       <a
                         href={member.twitter_url}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="w-10 h-10 bg-gray-100 dark:bg-gray-800 rounded-full flex items-center justify-center text-gray-600 dark:text-gray-400 hover:bg-primary hover:text-white transition-all"
+                        aria-label="Twitter"
+                        className="flex h-12 w-12 items-center justify-center border border-ink text-ink transition-colors hover:bg-ink hover:text-paper"
                       >
-                        <i className="fa-brands fa-twitter"></i>
+                        <i className="fa-brands fa-twitter text-lg" aria-hidden="true"></i>
                       </a>
-                    )}
-                    {member.instagram_url && (
+                    </li>
+                  )}
+                  {member.instagram_url && (
+                    <li>
                       <a
                         href={member.instagram_url}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="w-10 h-10 bg-gray-100 dark:bg-gray-800 rounded-full flex items-center justify-center text-gray-600 dark:text-gray-400 hover:bg-primary hover:text-white transition-all"
+                        aria-label="Instagram"
+                        className="flex h-12 w-12 items-center justify-center border border-ink text-ink transition-colors hover:bg-ink hover:text-paper"
                       >
-                        <i className="fa-brands fa-instagram"></i>
+                        <i className="fa-brands fa-instagram text-lg" aria-hidden="true"></i>
                       </a>
-                    )}
-                    {member.website_url && (
+                    </li>
+                  )}
+                  {member.website_url && (
+                    <li>
                       <a
                         href={member.website_url}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="w-10 h-10 bg-gray-100 dark:bg-gray-800 rounded-full flex items-center justify-center text-gray-600 dark:text-gray-400 hover:bg-primary hover:text-white transition-all"
+                        aria-label={t('website')}
+                        className="flex h-12 w-12 items-center justify-center border border-ink text-ink transition-colors hover:bg-ink hover:text-paper"
                       >
-                        <i className="fa-solid fa-globe"></i>
+                        <i className="fa-solid fa-globe text-lg" aria-hidden="true"></i>
                       </a>
-                    )}
-                  </div>
-                </div>
-              )}
-            </div>
+                    </li>
+                  )}
+                </ul>
+              </section>
+            )}
           </div>
         </div>
 
         {sections.length > 0 && (
-          <div className="mt-8 space-y-8">
+          <div className="mt-24 space-y-20">
             {sections.map((section) => (
-              <SectionRenderer key={section.id} section={section} locale={locale} />
+              <SectionRenderer key={section.id} section={section} locale={locale} labels={labels} />
             ))}
           </div>
         )}
@@ -133,39 +138,47 @@ export default async function TeamMemberPage({ params }: Props) {
   );
 }
 
-function SectionRenderer({ section, locale }: { section: TeamMemberSection; locale: string }) {
+function SectionRenderer({
+  section,
+  locale,
+  labels,
+}: {
+  section: TeamMemberSection;
+  locale: string;
+  labels: SectionLabels;
+}) {
   const title = getLocalizedField(section, 'title', locale);
   const content = getLocalizedField(section, 'content', locale);
+  const headingId = `team-section-${section.id}`;
 
   return (
-    <div className="bg-white dark:bg-surface-dark rounded-2xl shadow-lg overflow-hidden p-8">
+    <section aria-labelledby={title ? headingId : undefined} className="border-t border-ink pt-12">
       {title && (
-        <h2 className="font-display font-bold text-2xl text-gray-900 dark:text-white mb-6">
+        <h2 id={headingId} className="font-display mb-12 text-3xl leading-tight text-ink md:text-4xl">
           {title}
         </h2>
       )}
 
       {section.section_type === 'text' && content && (
-        <div className="prose prose-lg dark:prose-invert max-w-none">
-          <p className="text-gray-600 dark:text-gray-300 whitespace-pre-line">{content}</p>
-        </div>
+        <p className="whitespace-pre-line text-base leading-loose text-ink-2 md:text-lg">{content}</p>
       )}
 
       {section.section_type === 'gallery' && section.images && section.images.length > 0 && (
-        <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+        <ul className="grid grid-cols-2 gap-4 md:grid-cols-3">
           {section.images.map((image, idx) => (
-            <div key={idx} className="aspect-square rounded-lg overflow-hidden bg-gray-100 dark:bg-gray-800">
-              <img src={image} alt="" className="w-full h-full object-cover" />
-            </div>
+            <li key={idx} className="aspect-square overflow-hidden bg-paper-alt">
+              <img src={image} alt={title ? `${title} ${idx + 1}` : ''} className="h-full w-full object-cover" />
+            </li>
           ))}
-        </div>
+        </ul>
       )}
 
       {section.section_type === 'video' && section.video_url && (
-        <div className="aspect-video rounded-lg overflow-hidden">
+        <div className="aspect-video overflow-hidden bg-night">
           <iframe
             src={section.video_url}
-            className="w-full h-full"
+            title={title || labels.video}
+            className="h-full w-full"
             allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
             allowFullScreen
           />
@@ -173,101 +186,103 @@ function SectionRenderer({ section, locale }: { section: TeamMemberSection; loca
       )}
 
       {section.section_type === 'links' && section.links && section.links.length > 0 && (
-        <div className="flex flex-wrap gap-4">
+        <ul className="flex flex-wrap gap-3">
           {section.links.map((link, idx) => (
-            <a
-              key={idx}
-              href={link.url}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex items-center gap-2 px-4 py-2 bg-gray-100 dark:bg-gray-800 rounded-lg text-gray-700 dark:text-gray-300 hover:bg-primary hover:text-white transition-all"
-            >
-              <i className={getLinkIcon(link.icon)}></i>
-              {link.name}
-            </a>
+            <li key={idx}>
+              <a
+                href={link.url}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-3 border border-ink px-5 py-3 text-sm font-bold text-ink transition-colors hover:bg-ink hover:text-paper"
+              >
+                <i className={getLinkIcon(link.icon)} aria-hidden="true"></i>
+                {link.name}
+              </a>
+            </li>
           ))}
-        </div>
+        </ul>
       )}
 
       {section.section_type === 'projects' && section.projects && section.projects.length > 0 && (
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <ul className="grid grid-cols-1 gap-x-8 gap-y-14 md:grid-cols-2">
           {section.projects.map((project, idx) => {
             const projectTitle = locale === 'en' ? (project.title_en || project.title_ko) : project.title_ko;
             const projectDesc = locale === 'en' ? (project.description_en || project.description_ko) : project.description_ko;
             return (
-              <div key={idx} className="bg-gray-50 dark:bg-gray-800/50 rounded-xl overflow-hidden">
+              <li key={idx}>
                 {project.image && (
-                  <div className="aspect-video">
-                    <img src={project.image} alt={projectTitle || ''} className="w-full h-full object-cover" />
+                  <div className="aspect-video overflow-hidden bg-paper-alt">
+                    <img src={project.image} alt={projectTitle || ''} className="h-full w-full object-cover" />
                   </div>
                 )}
-                <div className="p-4">
+                <div className={project.image ? 'mt-6' : undefined}>
                   {projectTitle && (
-                    <h3 className="font-semibold text-gray-900 dark:text-white mb-2">{projectTitle}</h3>
+                    <h3 className="font-display text-2xl leading-snug text-ink">{projectTitle}</h3>
                   )}
                   {projectDesc && (
-                    <p className="text-sm text-gray-600 dark:text-gray-400">{projectDesc}</p>
+                    <p className="mt-3 text-sm leading-relaxed text-ink-2">{projectDesc}</p>
                   )}
                   {project.url && (
                     <a
                       href={project.url}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="inline-flex items-center gap-1 text-primary text-sm mt-3 hover:underline"
+                      className="mt-5 inline-flex items-center gap-2 border-b border-ink pb-1 text-sm font-bold text-ink transition-colors hover:border-seal hover:text-seal"
                     >
-                      View Project <i className="fa-solid fa-arrow-right text-xs"></i>
+                      {labels.viewProject}
+                      <i className="fa-solid fa-arrow-right text-xs" aria-hidden="true"></i>
                     </a>
                   )}
                 </div>
-              </div>
+              </li>
             );
           })}
-        </div>
+        </ul>
       )}
 
       {section.section_type === 'skills' && section.skills && section.skills.length > 0 && (
-        <div className="space-y-4">
+        <ul className="space-y-7">
           {section.skills.map((skill, idx) => {
             const skillName = locale === 'en' ? (skill.name_en || skill.name_ko) : skill.name_ko;
             return (
-              <div key={idx}>
-                <div className="flex justify-between mb-1">
-                  <span className="text-gray-700 dark:text-gray-300">{skillName}</span>
-                  <span className="text-gray-500 text-sm">{skill.level}/5</span>
+              <li key={idx}>
+                <div className="flex items-baseline justify-between gap-4">
+                  <span className="text-ink">{skillName}</span>
+                  <span className="text-sm tabular-nums text-ink-3">{skill.level}/5</span>
                 </div>
-                <div className="h-2 bg-gray-200 dark:bg-gray-700 rounded-full overflow-hidden">
-                  <div 
-                    className="h-full bg-primary rounded-full transition-all"
+                <div aria-hidden="true" className="mt-3 h-[3px] overflow-hidden bg-rule">
+                  <div
+                    className="h-full bg-seal transition-[width]"
                     style={{ width: `${((skill.level || 0) / 5) * 100}%` }}
                   />
                 </div>
-              </div>
+              </li>
             );
           })}
-        </div>
+        </ul>
       )}
 
       {section.section_type === 'timeline' && section.timeline_items && section.timeline_items.length > 0 && (
-        <div className="space-y-4">
+        <ol>
           {section.timeline_items.map((item, idx) => {
             const eventText = locale === 'ko' ? item.event_ko : (locale === 'ja' ? item.event_ja : item.event_en) || item.event_ko;
             return (
-              <div key={idx} className="flex gap-4">
-                <div className="flex-shrink-0 w-24 text-sm font-medium text-primary">{item.date}</div>
-                <div className="text-gray-600 dark:text-gray-300">{eventText}</div>
-              </div>
+              <li key={idx} className="grid grid-cols-[6.5rem_1fr] gap-6 border-b border-rule py-5">
+                <span className="font-display text-xl tabular-nums text-seal">{item.date}</span>
+                <span className="text-ink-2">{eventText}</span>
+              </li>
             );
           })}
-        </div>
+        </ol>
       )}
 
       {section.section_type === 'custom' && content && (
-        <div 
-          className="prose prose-lg dark:prose-invert max-w-none"
+        <div
+          className="prose prose-lg max-w-none text-ink-2 prose-headings:font-display prose-headings:text-ink prose-strong:text-ink prose-a:text-seal"
           dangerouslySetInnerHTML={{ __html: content }}
         />
       )}
-    </div>
+    </section>
   );
 }
 

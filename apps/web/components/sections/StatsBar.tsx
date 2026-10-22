@@ -17,24 +17,31 @@ export default function StatsBar(props: StatsBarProps) {
   const t = useTranslations('Stats');
 
   const items = [
-    { value: props.yearValue || '2022', label: props.yearLabel || t('year') },
-    { value: props.projectsValue || '3+', label: props.projectsLabel || t('projects') },
-    { value: props.releasedValue || '1', label: props.releasedLabel || t('funding') },
-    { value: props.globalValue || 'Global', label: props.globalLabel || t('global') },
+    {value: props.yearValue || '2022', label: props.yearLabel || t('year')},
+    {value: props.projectsValue || '3+', label: props.projectsLabel || t('projects')},
+    {value: props.releasedValue || '2', label: props.releasedLabel || t('released')},
+    {value: props.globalValue || 'Global', label: props.globalLabel || t('global')},
   ];
 
   return (
-    <section className="py-16 bg-primary text-white">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
-                {items.map((item, i) => (
-                    <div className="p-4" key={i}>
-                        <div className="text-4xl font-display font-black mb-2">{item.value}</div>
-                        <div className="text-sm font-medium opacity-80 uppercase tracking-wide">{item.label}</div>
-                    </div>
-                ))}
-            </div>
-        </div>
+    <section className="border-y border-rule bg-paper-alt" aria-label={t('year')}>
+      <dl className="mx-auto grid max-w-7xl grid-cols-2 md:grid-cols-4">
+        {items.map((item, i) => (
+          <div
+            key={i}
+            className={[
+              'px-6 py-12 md:py-16',
+              i % 2 === 1 ? 'border-l border-rule' : '',
+              i >= 2 ? 'border-t border-rule md:border-t-0' : '',
+              i >= 1 ? 'md:border-l md:border-rule' : '',
+              i === 0 ? 'md:border-l-0' : '',
+            ].join(' ')}
+          >
+            <dd className="font-display text-5xl tabular-nums leading-none text-ink md:text-6xl">{item.value}</dd>
+            <dt className="eyebrow mt-4 !text-ink-3">{item.label}</dt>
+          </div>
+        ))}
+      </dl>
     </section>
   );
 }
