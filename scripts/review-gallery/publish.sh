@@ -14,7 +14,7 @@ git clone --single-branch --branch design/review-pages https://github.com/onpe56
 rsync -a --delete --exclude=.git --exclude=.gitignore "$site_dir/" "$publish_dir/"
 git -C "$publish_dir" add -A
 if ! git -C "$publish_dir" diff --cached --quiet; then
-  git -C "$publish_dir" commit -m "Publish five Elysian design previews and review gallery"
+  git -C "$publish_dir" commit -q -m "Publish five Elysian design previews and review gallery"
   git -C "$publish_dir" push origin HEAD:design/review-pages
 fi
 printf 'Published branch: design/review-pages\nWorktree: %s\n' "$publish_dir"
