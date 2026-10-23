@@ -1,0 +1,107 @@
+[
+  {
+    "id": "editorial",
+    "label": "시안 A",
+    "title": "이야기를 펼치는 서가",
+    "description": "크림색 종이와 녹색 포인트, 여백이 넉넉한 서가 구성. 작품을 하나의 책처럼 소개하고 하봄은 별도의 밝은 분위기로 연결합니다.",
+    "tags": [
+      "크림 · 녹색",
+      "서가형 구성",
+      "넓은 여백"
+    ],
+    "sourceLabel": "design/elysian-redesign",
+    "version": "87c1c1d",
+    "image": "./assets/editorial.webp",
+    "baseUrl": "./previews/editorial",
+    "sourceUrl": "https://github.com/onpe5679/elyweb/tree/design/elysian-redesign",
+    "paths": {
+      "home": "/ko/",
+      "habom": "/ko/habom/",
+      "game": "/ko/games/sharehouse/"
+    }
+  },
+  {
+    "id": "paseo",
+    "label": "시안 B",
+    "title": "원고지 위의 아카이브",
+    "description": "원고지 격자와 붉은색 포인트, 타이틀 메뉴와 여러 작품을 나란히 보여주는 화면. 작품 선택과 스튜디오 아카이브를 전면에 둡니다.",
+    "tags": [
+      "원고지 · 붉은색",
+      "타이틀 메뉴",
+      "작품 파노라마"
+    ],
+    "sourceLabel": "Paseo 독립 시안",
+    "version": "2026-10-24 작업본",
+    "image": "./assets/paseo.webp",
+    "baseUrl": "./previews/paseo",
+    "sourceUrl": "",
+    "paths": {
+      "home": "/ko/",
+      "habom": "/ko/habom/",
+      "game": "/ko/games/sharehouse/"
+    }
+  },
+  {
+    "id": "literary",
+    "label": "시안 C",
+    "title": "문학적인 타이틀 화면",
+    "description": "따뜻한 종이색과 먹색, 주홍색 포인트. 원고지 제목과 여러 작품의 이미지가 이어지는 구성으로 스튜디오의 문학적 인상을 표현합니다.",
+    "tags": [
+      "종이 · 먹색",
+      "원고지 제목",
+      "작품 이미지"
+    ],
+    "sourceLabel": "design/independent-literary-concept",
+    "version": "c2ff9a5",
+    "image": "./assets/literary.webp",
+    "baseUrl": "./previews/literary",
+    "sourceUrl": "https://github.com/onpe5679/elyweb/tree/design/independent-literary-concept",
+    "paths": {
+      "home": "/ko/",
+      "habom": "/ko/habom/",
+      "game": "/ko/habom/games/sharehouse/"
+    }
+  },
+  {
+    "id": "manuscript",
+    "label": "시안 D",
+    "title": "원고와 인덱스",
+    "description": "흰 종이와 청흑색에 코발트 포인트를 더한 구성. 큰 제목, 인덱스 메뉴, 겹쳐지는 작품 이미지와 화면 테마 전환을 제안합니다.",
+    "tags": [
+      "청흑 · 코발트",
+      "인덱스 메뉴",
+      "테마 전환"
+    ],
+    "sourceLabel": "design/my-independent-concept",
+    "version": "bdcbdff",
+    "image": "./assets/manuscript.webp",
+    "baseUrl": "./previews/manuscript",
+    "sourceUrl": "https://github.com/onpe5679/elyweb/tree/design/my-independent-concept",
+    "paths": {
+      "home": "/ko/",
+      "habom": "/ko/habom/",
+      "game": "/ko/games/sharehouse/"
+    }
+  },
+  {
+    "id": "atelier",
+    "label": "시안 E",
+    "title": "타이틀에서 편집부로",
+    "description": "어두운 타이틀 화면에서 종이색 편집부로 이어지는 구성. 엘리시안의 시작 화면과 하봄의 별도 브랜드 화면을 살펴볼 수 있습니다.",
+    "tags": [
+      "어두운 타이틀",
+      "편집부 구성",
+      "브랜드 분리"
+    ],
+    "sourceLabel": "design/independent-brief",
+    "version": "79e5698",
+    "image": "./assets/atelier.webp",
+    "baseUrl": "./previews/atelier",
+    "sourceUrl": "https://github.com/onpe5679/elyweb/tree/design/independent-brief",
+    "paths": {
+      "home": "/ko/",
+      "habom": "/ko/hobom/",
+      "game": "/ko/games/sharehouse/"
+    }
+  }
+]

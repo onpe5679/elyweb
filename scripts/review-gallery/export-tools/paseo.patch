@@ -1,0 +1,249 @@
+--- a/next.config.mjs
++++ b/next.config.mjs
+@@ -4,7 +4,7 @@
+ 
+ /** @type {import('next').NextConfig} */
+ const nextConfig = {
+-  output: 'standalone',
++  output: 'export', trailingSlash: true, basePath: '/elyweb/previews/paseo', experimental: { cpus: 2 },
+   images: {
+     unoptimized: true,
+     remotePatterns: [
+--- a/app/[locale]/page.tsx
++++ b/app/[locale]/page.tsx
+@@ -1,3 +1,4 @@
++import { unstable_setRequestLocale } from 'next-intl/server';
+ import { Link } from '@/i18n/routing';
+ import ElysianTitleHero from '@/components/home/ElysianTitleHero';
+ import {
+@@ -12,6 +13,7 @@
+ };
+ 
+ export default function HomePage({ params: { locale } }: Props) {
++  unstable_setRequestLocale(locale);
+   const elysianGames = STUDIO_GAMES.filter((g) => g.studio === 'elysian');
+   const sharehouseGame = STUDIO_GAMES.find((g) => g.slug === 'sharehouse')!;
+   const recentMilestones = STUDIO_TIMELINE.slice(0, 6);
+--- a/app/[locale]/layout.tsx
++++ b/app/[locale]/layout.tsx
+@@ -1,3 +1,4 @@
++import { unstable_setRequestLocale } from 'next-intl/server';
+ import type { Metadata } from 'next';
+ import { NextIntlClientProvider } from 'next-intl';
+ import { getMessages } from 'next-intl/server';
+@@ -24,6 +25,7 @@
+     notFound();
+   }
+ 
++  unstable_setRequestLocale(locale);
+   const messages = await getMessages();
+   const settings = await getSettings([
+     'contact_email',
+--- a/app/[locale]/privacy/page.tsx
++++ b/app/[locale]/privacy/page.tsx
+@@ -1,9 +1,11 @@
++import { unstable_setRequestLocale } from 'next-intl/server';
+ import { getSetting, getLocalizedSettingValue } from '@/lib/supabase';
+ import { tText } from '@/lib/studio-data';
+ 
+ export const revalidate = 10;
+ 
+ export default async function PrivacyPage({ params }: { params: { locale: string } }) {
++  unstable_setRequestLocale(params.locale);
+   const { locale } = params;
+   const setting = await getSetting('privacy_policy');
+   const body = getLocalizedSettingValue(setting, locale);
+--- a/app/[locale]/contact/page.tsx
++++ b/app/[locale]/contact/page.tsx
+@@ -1,3 +1,4 @@
++import { unstable_setRequestLocale } from 'next-intl/server';
+ import { ContactForm } from '@/components/contact/ContactForm';
+ import { tText } from '@/lib/studio-data';
+ 
+@@ -6,6 +7,7 @@
+ };
+ 
+ export default function ContactPage({ params: { locale } }: Props) {
++  unstable_setRequestLocale(locale);
+   return (
+     <div className="min-h-screen bg-elysian-paper dark:bg-elysian-night text-elysian-ink dark:text-[#F4EFE6] py-12 sm:py-16">
+       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12">
+--- a/app/[locale]/press/page.tsx
++++ b/app/[locale]/press/page.tsx
+@@ -1,3 +1,4 @@
++import { unstable_setRequestLocale } from 'next-intl/server';
+ import { Link } from '@/i18n/routing';
+ import { STUDIO_GAMES, tText } from '@/lib/studio-data';
+ 
+@@ -6,6 +7,7 @@
+ };
+ 
+ export default function PressPage({ params: { locale } }: Props) {
++  unstable_setRequestLocale(locale);
+   return (
+     <div className="min-h-screen bg-elysian-paper dark:bg-elysian-night text-elysian-ink dark:text-[#F4EFE6] py-12 sm:py-16">
+       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12">
+--- a/app/[locale]/news/page.tsx
++++ b/app/[locale]/news/page.tsx
+@@ -1,3 +1,4 @@
++import { unstable_setRequestLocale } from 'next-intl/server';
+ import { Link } from '@/i18n/routing';
+ import { STUDIO_TIMELINE, STUDIO_GAMES, tText } from '@/lib/studio-data';
+ 
+@@ -6,6 +7,7 @@
+ };
+ 
+ export default function NewsPage({ params: { locale } }: Props) {
++  unstable_setRequestLocale(locale);
+   return (
+     <div className="min-h-screen bg-elysian-paper dark:bg-elysian-night text-elysian-ink dark:text-[#F4EFE6] py-12 sm:py-16">
+       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12">
+--- a/app/[locale]/about/page.tsx
++++ b/app/[locale]/about/page.tsx
+@@ -1,3 +1,4 @@
++import { unstable_setRequestLocale } from 'next-intl/server';
+ import { Link } from '@/i18n/routing';
+ import {
+   STUDIO_DIVISIONS,
+@@ -11,6 +12,7 @@
+ };
+ 
+ export default function AboutPage({ params: { locale } }: Props) {
++  unstable_setRequestLocale(locale);
+   return (
+     <div className="min-h-screen bg-elysian-paper dark:bg-elysian-night text-elysian-ink dark:text-[#F4EFE6] py-12 sm:py-16">
+       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-16">
+--- a/app/[locale]/games/page.tsx
++++ b/app/[locale]/games/page.tsx
+@@ -1,3 +1,4 @@
++import { unstable_setRequestLocale } from 'next-intl/server';
+ import MagazineWorksList from '@/components/games/MagazineWorksList';
+ import { tText } from '@/lib/studio-data';
+ 
+@@ -6,6 +7,7 @@
+ };
+ 
+ export default function GamesPage({ params: { locale } }: Props) {
++  unstable_setRequestLocale(locale);
+   return (
+     <div className="min-h-screen bg-elysian-paper dark:bg-elysian-night text-elysian-ink dark:text-[#F4EFE6] py-12 sm:py-16">
+       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-10">
+--- a/app/[locale]/habom/page.tsx
++++ b/app/[locale]/habom/page.tsx
+@@ -1,3 +1,4 @@
++import { unstable_setRequestLocale } from 'next-intl/server';
+ import { Link } from '@/i18n/routing';
+ import { STUDIO_GAMES, STUDIO_TEAM, tText } from '@/lib/studio-data';
+ import HabomDialogueExperience from '@/components/habom/HabomDialogueExperience';
+@@ -7,6 +8,7 @@
+ };
+ 
+ export default function HabomStudioPage({ params: { locale } }: Props) {
++  unstable_setRequestLocale(locale);
+   const sharehouse = STUDIO_GAMES.find((g) => g.slug === 'sharehouse')!;
+   const habomTeam = STUDIO_TEAM.filter(
+     (m) => m.slug === 'h1ut' || m.slug === 'anhanuel'
+--- a/app/[locale]/team/[slug]/page.tsx
++++ b/app/[locale]/team/[slug]/page.tsx
+@@ -1,3 +1,4 @@
++import { unstable_setRequestLocale } from 'next-intl/server';
+ import { notFound } from 'next/navigation';
+ import { Link } from '@/i18n/routing';
+ import {
+@@ -18,6 +19,7 @@
+ }
+ 
+ export default function TeamMemberPage({ params: { locale, slug } }: Props) {
++  unstable_setRequestLocale(locale);
+   const member = getTeamMemberBySlugLocal(slug);
+   if (!member) {
+     notFound();
+--- a/app/[locale]/games/[slug]/page.tsx
++++ b/app/[locale]/games/[slug]/page.tsx
+@@ -1,3 +1,4 @@
++import { unstable_setRequestLocale } from 'next-intl/server';
+ import { notFound } from 'next/navigation';
+ import { STUDIO_GAMES, getStudioGameBySlug } from '@/lib/studio-data';
+ import GameDetailClient from '@/components/games/GameDetailClient';
+@@ -7,6 +8,7 @@
+ };
+ 
+ export default function GameDetailPage({ params: { locale, slug } }: Props) {
++  unstable_setRequestLocale(locale);
+   const game = getStudioGameBySlug(slug);
+   if (!game) {
+     notFound();
+--- a/app/[locale]/news/[slug]/page.tsx
++++ b/app/[locale]/news/[slug]/page.tsx
+@@ -1,3 +1,4 @@
++import { unstable_setRequestLocale } from 'next-intl/server';
+ import { notFound } from 'next/navigation';
+ import Link from 'next/link';
+ import { getLocalizedField, supabase } from '@/lib/supabase';
+@@ -29,6 +30,7 @@
+ }
+ 
+ export default async function NewsDetailPage({ params }: Props) {
++  unstable_setRequestLocale(params.locale);
+   const { locale, slug } = params;
+   const decodedSlug = decodeURIComponent(slug);
+   const news = await getNewsBySlug(decodedSlug);
+@@ -83,3 +85,5 @@
+     </div>
+   );
+ }
++
++export async function generateStaticParams() { const {data} = await supabase.from("news").select("slug").eq("is_published", true); return (data?.length ? data : [{slug: "preview-unavailable"}]).map(row => ({slug: row.slug})); }
+--- a/components/contact/ContactForm.tsx
++++ b/components/contact/ContactForm.tsx
+@@ -19,31 +19,7 @@
+   const [status, setStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle');
+   const [errorMessage, setErrorMessage] = useState('');
+ 
+-  const handleSubmit = async (e: React.FormEvent) => {
+-    e.preventDefault();
+-    setStatus('loading');
+-    setErrorMessage('');
+-
+-    try {
+-      const response = await fetch('/api/contact', {
+-        method: 'POST',
+-        headers: { 'Content-Type': 'application/json' },
+-        body: JSON.stringify(formData),
+-      });
+-
+-      const data = await response.json();
+-
+-      if (!response.ok) {
+-        throw new Error(data.error || 'Failed to send message');
+-      }
+-
+-      setStatus('success');
+-      setFormData({ category: 'publishing', name: '', email: '', message: '' });
+-    } catch (error) {
+-      setStatus('error');
+-      setErrorMessage(error instanceof Error ? error.message : 'Failed to send message');
+-    }
+-  };
++  const handleSubmit = async (e: React.FormEvent) => { e.preventDefault(); };
+ 
+   const handleChange = (
+     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>
+@@ -98,7 +74,7 @@
+         <span className="font-mono text-xs text-elysian-stone">LETTER FORM</span>
+       </div>
+ 
+-      <form onSubmit={handleSubmit} className="space-y-5">
++      <p role="status" style={{padding:"12px", background:"#f5eee1", color:"#272520"}}>공개 시안에서는 문의가 전송되지 않습니다. · Sending is disabled in this preview.</p><form onSubmit={handleSubmit} className="space-y-5">
+         {status === 'error' && (
+           <div className="bg-red-50 dark:bg-red-900/20 border border-red-300 dark:border-red-800 p-3.5 text-xs text-red-700 dark:text-red-300">
+             {errorMessage}
+@@ -201,7 +177,7 @@
+         </div>
+ 
+         <button
+-          type="submit"
++          type="button" aria-disabled="true"
+           disabled={status === 'loading'}
+           className="w-full px-6 py-3 bg-elysian-ink text-elysian-paper dark:bg-elysian-paper dark:text-elysian-ink font-serif font-bold text-sm rounded-sm hover:bg-elysian-vermilion dark:hover:bg-elysian-vermilion dark:hover:text-white transition-colors disabled:opacity-50"
+         >

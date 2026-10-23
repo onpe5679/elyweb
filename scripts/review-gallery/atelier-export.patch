@@ -1,0 +1,815 @@
+diff --git a/apps/web/app/[locale]/about/page.tsx b/apps/web/app/[locale]/about/page.tsx
+index 3fca452..b20df1f 100644
+--- a/apps/web/app/[locale]/about/page.tsx
++++ b/apps/web/app/[locale]/about/page.tsx
+@@ -1,3 +1,4 @@
++import {unstable_setRequestLocale} from 'next-intl/server';
+ import { getTranslations } from 'next-intl/server';
+ import { getLocalizedField, getTimelineEvents, getSetting, getSettings, getLocalizedSettingValue, getTeamMembers } from '@/lib/supabase';
+ import { Link } from '@/i18n/routing';
+@@ -5,6 +6,7 @@ import { Link } from '@/i18n/routing';
+ const DEFAULT_ABOUT_IMAGE = 'https://lh3.googleusercontent.com/aida-public/AB6AXuCuH9zfscNU583mjOoxQHWwtrrxL_URj8Cn-XiQYYOWO8bL_cwElK-MXAWahlUtmzmPW6cc5MtnoE29qELOumVwb9xKsYn2_Z793_xKUJkd0g3lsf0vjq-bfcVaZksoNjdBUueHpyh4FtQ_O3OVsg0_C82cJ2CWkhZKUtWUay2m47G1RayxCQbbtPMHfj6w8-j9qkNUIa3wpaQNHiPg2Vvw5HAWHGsAYfZ-_5iOcsEeYvxeVJZl7vQ6Q2g02XZhZ_O8lRo2XIF-nd4';
+ 
+ export default async function AboutPage({ params }: { params: { locale: string } }) {
++  unstable_setRequestLocale(params.locale);
+   const { locale } = params;
+   const [t, tPage, timelineEvents, aboutImageSetting, teamMembers, siteSettings] = await Promise.all([
+     getTranslations('Vision'),
+diff --git a/apps/web/app/[locale]/contact/page.tsx b/apps/web/app/[locale]/contact/page.tsx
+index 560d664..3c61801 100644
+--- a/apps/web/app/[locale]/contact/page.tsx
++++ b/apps/web/app/[locale]/contact/page.tsx
+@@ -1,9 +1,11 @@
++import {unstable_setRequestLocale} from 'next-intl/server';
+ import { getTranslations } from 'next-intl/server';
+ import { getSettings, getLocalizedSettingValue } from '@/lib/supabase';
+ import { getLocale } from 'next-intl/server';
+ import { ContactForm } from '@/components/contact/ContactForm';
+ 
+-export default async function ContactPage() {
++export default async function ContactPage({ params }: { params: { locale: string } }) {
++  unstable_setRequestLocale(params.locale);
+   const t = await getTranslations('Footer');
+   const tPage = await getTranslations('ContactPage');
+   const locale = await getLocale();
+diff --git a/apps/web/app/[locale]/games/[slug]/page.tsx b/apps/web/app/[locale]/games/[slug]/page.tsx
+index 5e5c828..d4d47b7 100644
+--- a/apps/web/app/[locale]/games/[slug]/page.tsx
++++ b/apps/web/app/[locale]/games/[slug]/page.tsx
+@@ -1,3 +1,4 @@
++import {unstable_setRequestLocale} from 'next-intl/server';
+ import { getTranslations } from 'next-intl/server';
+ import { notFound } from 'next/navigation';
+ import { Link } from '@/i18n/routing';
+@@ -199,6 +200,7 @@ const SectionRenderer = ({ section, locale, index }: { section: GameSection; loc
+ };
+ 
+ export default async function GameDetailPage({ params }: { params: { locale: string; slug: string } }) {
++  unstable_setRequestLocale(params.locale);
+   const { locale, slug } = params;
+ 
+   const t = await getTranslations('GameDetail');
+diff --git a/apps/web/app/[locale]/games/page.tsx b/apps/web/app/[locale]/games/page.tsx
+index 7f6b6ae..f3ba97b 100644
+--- a/apps/web/app/[locale]/games/page.tsx
++++ b/apps/web/app/[locale]/games/page.tsx
+@@ -1,3 +1,4 @@
++import {unstable_setRequestLocale} from 'next-intl/server';
+ import { getTranslations } from 'next-intl/server';
+ import { getGames, getLocalizedField, getStatusText } from '@/lib/supabase';
+ import { isHobomGame } from '@/lib/studios';
+@@ -10,6 +11,7 @@ const ALL_LABEL: Record<string, string> = {
+ };
+ 
+ export default async function GamesPage({ params }: { params: { locale: string } }) {
++  unstable_setRequestLocale(params.locale);
+   const { locale } = params;
+   const tGames = await getTranslations('GamesPage');
+   const games = await getGames();
+diff --git a/apps/web/app/[locale]/hobom/page.tsx b/apps/web/app/[locale]/hobom/page.tsx
+index 52eb344..190898e 100644
+--- a/apps/web/app/[locale]/hobom/page.tsx
++++ b/apps/web/app/[locale]/hobom/page.tsx
+@@ -1,3 +1,4 @@
++import {unstable_setRequestLocale} from 'next-intl/server';
+ import { getTranslations } from 'next-intl/server';
+ import { Link } from '@/i18n/routing';
+ import { getGames, getLocalizedField, getStatusText } from '@/lib/supabase';
+@@ -5,6 +6,7 @@ import { isHobomGame } from '@/lib/studios';
+ import GameCard from '@/components/games/GameCard';
+ 
+ export default async function HobomPage({ params }: { params: { locale: string } }) {
++  unstable_setRequestLocale(params.locale);
+   const { locale } = params;
+   const t = await getTranslations('Hobom');
+   const games = (await getGames()).filter(isHobomGame);
+diff --git a/apps/web/app/[locale]/layout.tsx b/apps/web/app/[locale]/layout.tsx
+index e720981..49395ce 100644
+--- a/apps/web/app/[locale]/layout.tsx
++++ b/apps/web/app/[locale]/layout.tsx
+@@ -1,6 +1,6 @@
+ import type { Metadata } from 'next';
+ import { NextIntlClientProvider } from 'next-intl';
+-import { getMessages, getTranslations } from 'next-intl/server';
++import { getMessages, getTranslations, unstable_setRequestLocale } from 'next-intl/server';
+ import { notFound } from 'next/navigation';
+ import { routing } from '@/i18n/routing';
+ import Navigation from '@/components/layout/Navigation';
+@@ -35,6 +35,7 @@ export default async function LocaleLayout({ children, params: { locale } }: Pro
+     notFound();
+   }
+ 
++  unstable_setRequestLocale(locale);
+   const messages = await getMessages();
+   const tNav = await getTranslations({ locale, namespace: 'Navigation' });
+   const settings = await getSettings(['contact_email', 'twitter_url', 'youtube_url', 'instagram_url', 'favicon', 'logo_image', 'logo_icon']);
+diff --git a/apps/web/app/[locale]/news/[slug]/page.tsx b/apps/web/app/[locale]/news/[slug]/page.tsx
+index e6d02df..cc1728d 100644
+--- a/apps/web/app/[locale]/news/[slug]/page.tsx
++++ b/apps/web/app/[locale]/news/[slug]/page.tsx
+@@ -1,3 +1,4 @@
++import {unstable_setRequestLocale} from 'next-intl/server';
+ import { notFound } from 'next/navigation';
+ import { getTranslations } from 'next-intl/server';
+ import { Link } from '@/i18n/routing';
+@@ -30,6 +31,7 @@ function formatDate(dateString: string | undefined, locale: string): string {
+ }
+ 
+ export default async function NewsDetailPage({ params }: Props) {
++  unstable_setRequestLocale(params.locale);
+   const { locale, slug } = params;
+   const decodedSlug = decodeURIComponent(slug);
+   const t = await getTranslations('NewsDetail');
+@@ -78,3 +80,8 @@ export default async function NewsDetailPage({ params }: Props) {
+     </div>
+   );
+ }
++
++export async function generateStaticParams() {
++ const {data} = await supabase.from('news').select('slug').eq('is_published', true);
++ return data?.length ? data.map(({slug}) => ({slug})) : [{slug: 'preview-unavailable'}];
++}
+diff --git a/apps/web/app/[locale]/news/page.tsx b/apps/web/app/[locale]/news/page.tsx
+index fa8abba..4677710 100644
+--- a/apps/web/app/[locale]/news/page.tsx
++++ b/apps/web/app/[locale]/news/page.tsx
+@@ -1,9 +1,10 @@
++import {unstable_setRequestLocale} from 'next-intl/server';
+ import { getTranslations } from 'next-intl/server';
+ import { getNews, getLocalizedField, getSetting, getLocalizedSettingValue } from '@/lib/supabase';
+ import { Link } from '@/i18n/routing';
+ import XTimeline from '@/components/news/XTimeline';
+ 
+-export const revalidate = 10;
++
+ 
+ const DEFAULT_NEWS_IMAGE = 'https://lh3.googleusercontent.com/aida-public/AB6AXuDVHPTFZPasBZtcFBFsRlZf4vhSmH0uyRPHid_2dtW6N7nVFHK8qMryYJvTPiapEcHt3v__ZGBVm0pq9Ksh-4PNTtSOeIa2biWszDq-Vy1yAkc_QJKfml8I4kAhrKW_WXbHpZmFcWdKPw9ehmpkc6YkK9DBZaN_6DYjmUnwbjc9eOVDfDt1JR0eb5raAdiIelbQWh9ifO-cPkPWFf4ifVhmOI6IGXOrmlJK8cMuMKCkUDJg4L6Ziv-mYRjLAOvB_c2f6hnmdxTlyvQ';
+ 
+@@ -14,6 +15,7 @@ function formatDate(dateString: string | undefined): string {
+ }
+ 
+ export default async function NewsPage({ params }: { params: { locale: string } }) {
++  unstable_setRequestLocale(params.locale);
+   const { locale } = params;
+   const [t, tPage, modeSetting, handleSetting, newsItems] = await Promise.all([
+     getTranslations('Navigation'),
+diff --git a/apps/web/app/[locale]/page.tsx b/apps/web/app/[locale]/page.tsx
+index c28a1d3..1f65646 100644
+--- a/apps/web/app/[locale]/page.tsx
++++ b/apps/web/app/[locale]/page.tsx
+@@ -1,3 +1,4 @@
++import {unstable_setRequestLocale} from 'next-intl/server';
+ import Hero from '@/components/sections/Hero';
+ import VisionSection from '@/components/sections/VisionSection';
+ import StatsBar from '@/components/sections/StatsBar';
+@@ -6,9 +7,10 @@ import TimelineSection from '@/components/sections/TimelineSection';
+ import HobomTeaser from '@/components/sections/HobomTeaser';
+ import { getGames, getFeaturedGame, getHomeTimelineEvents, getSettings, getLocalizedSettingValue, Game } from '@/lib/supabase';
+ 
+-export const revalidate = 10;
++
+ 
+ export default async function HomePage({ params }: { params: { locale: string } }) {
++  unstable_setRequestLocale(params.locale);
+   const [games, featuredGame, timelineEvents, siteSettings] = await Promise.all([
+     getGames(),
+     getFeaturedGame(),
+diff --git a/apps/web/app/[locale]/press/page.tsx b/apps/web/app/[locale]/press/page.tsx
+index abb3c1c..37aca61 100644
+--- a/apps/web/app/[locale]/press/page.tsx
++++ b/apps/web/app/[locale]/press/page.tsx
+@@ -1,7 +1,9 @@
++import {unstable_setRequestLocale} from 'next-intl/server';
+ import { getPressKits, getLocalizedField, PressKit } from '@/lib/supabase';
+ import { getLocale, getTranslations } from 'next-intl/server';
+ 
+-export default async function PressPage() {
++export default async function PressPage({ params }: { params: { locale: string } }) {
++  unstable_setRequestLocale(params.locale);
+   const locale = await getLocale();
+   const t = await getTranslations('PressPage');
+   const pressKits = await getPressKits();
+diff --git a/apps/web/app/[locale]/privacy/page.tsx b/apps/web/app/[locale]/privacy/page.tsx
+index f20b13e..3041ed8 100644
+--- a/apps/web/app/[locale]/privacy/page.tsx
++++ b/apps/web/app/[locale]/privacy/page.tsx
+@@ -1,9 +1,11 @@
++import {unstable_setRequestLocale} from 'next-intl/server';
+ import { getTranslations } from 'next-intl/server';
+ import { getSetting, getLocalizedSettingValue } from '@/lib/supabase';
+ 
+-export const revalidate = 10;
++
+ 
+ export default async function PrivacyPage({ params }: { params: { locale: string } }) {
++  unstable_setRequestLocale(params.locale);
+   const { locale } = params;
+   const t = await getTranslations('PrivacyPage');
+   const tFooter = await getTranslations('Footer');
+diff --git a/apps/web/app/[locale]/team/[slug]/page.tsx b/apps/web/app/[locale]/team/[slug]/page.tsx
+index 6966afa..73f0904 100644
+--- a/apps/web/app/[locale]/team/[slug]/page.tsx
++++ b/apps/web/app/[locale]/team/[slug]/page.tsx
+@@ -1,3 +1,4 @@
++import {unstable_setRequestLocale} from 'next-intl/server';
+ import { notFound } from 'next/navigation';
+ import { getTranslations } from 'next-intl/server';
+ import { Link } from '@/i18n/routing';
+@@ -26,6 +27,7 @@ export async function generateStaticParams() {
+ }
+ 
+ export default async function TeamMemberPage({ params }: Props) {
++  unstable_setRequestLocale(params.locale);
+   const { locale, slug } = params;
+   const [member, sections, t] = await Promise.all([
+     getTeamMemberBySlug(slug),
+diff --git a/apps/web/app/api/admin/users/[id]/route.ts b/apps/web/app/api/admin/users/[id]/route.ts
+deleted file mode 100644
+index bf2f04f..0000000
+--- a/apps/web/app/api/admin/users/[id]/route.ts
++++ /dev/null
+@@ -1,126 +0,0 @@
+-import { NextRequest, NextResponse } from 'next/server';
+-
+-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
+-const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY!;
+-
+-const corsHeaders = {
+-  'Access-Control-Allow-Origin': '*',
+-  'Access-Control-Allow-Methods': 'GET, PUT, DELETE, OPTIONS',
+-  'Access-Control-Allow-Headers': 'Content-Type, Authorization',
+-};
+-
+-export async function OPTIONS() {
+-  return NextResponse.json({}, { headers: corsHeaders });
+-}
+-
+-export async function GET(
+-  request: NextRequest,
+-  { params }: { params: { id: string } }
+-) {
+-  const authHeader = request.headers.get('authorization');
+-  if (!authHeader) {
+-    return NextResponse.json({ error: 'Unauthorized' }, { status: 401, headers: corsHeaders });
+-  }
+-
+-  try {
+-    const response = await fetch(`${supabaseUrl}/auth/v1/admin/users/${params.id}`, {
+-      headers: {
+-        'apikey': supabaseServiceKey,
+-        'Authorization': `Bearer ${supabaseServiceKey}`,
+-      },
+-    });
+-
+-    const user = await response.json();
+-
+-    if (!response.ok) {
+-      return NextResponse.json({ error: 'User not found' }, { status: 404, headers: corsHeaders });
+-    }
+-
+-    return NextResponse.json({
+-      id: user.id,
+-      email: user.email,
+-      created_at: user.created_at,
+-      last_sign_in_at: user.last_sign_in_at,
+-      email_confirmed_at: user.email_confirmed_at,
+-    }, { headers: corsHeaders });
+-  } catch (error) {
+-    console.error('Failed to fetch user:', error);
+-    return NextResponse.json({ error: 'Failed to fetch user' }, { status: 500, headers: corsHeaders });
+-  }
+-}
+-
+-export async function PUT(
+-  request: NextRequest,
+-  { params }: { params: { id: string } }
+-) {
+-  const authHeader = request.headers.get('authorization');
+-  if (!authHeader) {
+-    return NextResponse.json({ error: 'Unauthorized' }, { status: 401, headers: corsHeaders });
+-  }
+-
+-  try {
+-    const body = await request.json();
+-    const { password, email } = body;
+-
+-    const updateData: any = {};
+-    if (password) updateData.password = password;
+-    if (email) updateData.email = email;
+-
+-    const response = await fetch(`${supabaseUrl}/auth/v1/admin/users/${params.id}`, {
+-      method: 'PUT',
+-      headers: {
+-        'apikey': supabaseServiceKey,
+-        'Authorization': `Bearer ${supabaseServiceKey}`,
+-        'Content-Type': 'application/json',
+-      },
+-      body: JSON.stringify(updateData),
+-    });
+-
+-    const user = await response.json();
+-
+-    if (!response.ok) {
+-      return NextResponse.json({ error: user.message || 'Failed to update user' }, { status: response.status, headers: corsHeaders });
+-    }
+-
+-    return NextResponse.json({
+-      id: user.id,
+-      email: user.email,
+-      created_at: user.created_at,
+-      last_sign_in_at: user.last_sign_in_at,
+-      email_confirmed_at: user.email_confirmed_at,
+-    }, { headers: corsHeaders });
+-  } catch (error) {
+-    console.error('Failed to update user:', error);
+-    return NextResponse.json({ error: 'Failed to update user' }, { status: 500, headers: corsHeaders });
+-  }
+-}
+-
+-export async function DELETE(
+-  request: NextRequest,
+-  { params }: { params: { id: string } }
+-) {
+-  const authHeader = request.headers.get('authorization');
+-  if (!authHeader) {
+-    return NextResponse.json({ error: 'Unauthorized' }, { status: 401, headers: corsHeaders });
+-  }
+-
+-  try {
+-    const response = await fetch(`${supabaseUrl}/auth/v1/admin/users/${params.id}`, {
+-      method: 'DELETE',
+-      headers: {
+-        'apikey': supabaseServiceKey,
+-        'Authorization': `Bearer ${supabaseServiceKey}`,
+-      },
+-    });
+-
+-    if (!response.ok) {
+-      const error = await response.json();
+-      return NextResponse.json({ error: error.message || 'Failed to delete user' }, { status: response.status, headers: corsHeaders });
+-    }
+-
+-    return NextResponse.json({ success: true }, { headers: corsHeaders });
+-  } catch (error) {
+-    console.error('Failed to delete user:', error);
+-    return NextResponse.json({ error: 'Failed to delete user' }, { status: 500, headers: corsHeaders });
+-  }
+-}
+diff --git a/apps/web/app/api/admin/users/route.ts b/apps/web/app/api/admin/users/route.ts
+deleted file mode 100644
+index 0c96f38..0000000
+--- a/apps/web/app/api/admin/users/route.ts
++++ /dev/null
+@@ -1,90 +0,0 @@
+-import { NextRequest, NextResponse } from 'next/server';
+-
+-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
+-const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY!;
+-
+-const corsHeaders = {
+-  'Access-Control-Allow-Origin': '*',
+-  'Access-Control-Allow-Methods': 'GET, PUT, POST, DELETE, OPTIONS',
+-  'Access-Control-Allow-Headers': 'Content-Type, Authorization',
+-};
+-
+-export async function OPTIONS() {
+-  return NextResponse.json({}, { headers: corsHeaders });
+-}
+-
+-export async function GET(request: NextRequest) {
+-  const authHeader = request.headers.get('authorization');
+-  if (!authHeader) {
+-    return NextResponse.json({ error: 'Unauthorized' }, { status: 401, headers: corsHeaders });
+-  }
+-
+-  try {
+-    const response = await fetch(`${supabaseUrl}/auth/v1/admin/users`, {
+-      headers: {
+-        'apikey': supabaseServiceKey,
+-        'Authorization': `Bearer ${supabaseServiceKey}`,
+-      },
+-    });
+-
+-    const data = await response.json();
+-    
+-    const users = data.users?.map((user: any) => ({
+-      id: user.id,
+-      email: user.email,
+-      created_at: user.created_at,
+-      last_sign_in_at: user.last_sign_in_at,
+-      email_confirmed_at: user.email_confirmed_at,
+-    })) || [];
+-
+-    return NextResponse.json(users, { headers: corsHeaders });
+-  } catch (error) {
+-    console.error('Failed to fetch users:', error);
+-    return NextResponse.json({ error: 'Failed to fetch users' }, { status: 500, headers: corsHeaders });
+-  }
+-}
+-
+-export async function POST(request: NextRequest) {
+-  const authHeader = request.headers.get('authorization');
+-  if (!authHeader) {
+-    return NextResponse.json({ error: 'Unauthorized' }, { status: 401, headers: corsHeaders });
+-  }
+-
+-  try {
+-    const body = await request.json();
+-    const { email, password } = body;
+-
+-    if (!email || !password) {
+-      return NextResponse.json({ error: 'Email and password required' }, { status: 400, headers: corsHeaders });
+-    }
+-
+-    const response = await fetch(`${supabaseUrl}/auth/v1/admin/users`, {
+-      method: 'POST',
+-      headers: {
+-        'apikey': supabaseServiceKey,
+-        'Authorization': `Bearer ${supabaseServiceKey}`,
+-        'Content-Type': 'application/json',
+-      },
+-      body: JSON.stringify({
+-        email,
+-        password,
+-        email_confirm: true,
+-      }),
+-    });
+-
+-    const data = await response.json();
+-
+-    if (!response.ok) {
+-      return NextResponse.json({ error: data.message || 'Failed to create user' }, { status: response.status, headers: corsHeaders });
+-    }
+-
+-    return NextResponse.json({
+-      id: data.id,
+-      email: data.email,
+-      created_at: data.created_at,
+-    }, { headers: corsHeaders });
+-  } catch (error) {
+-    console.error('Failed to create user:', error);
+-    return NextResponse.json({ error: 'Failed to create user' }, { status: 500, headers: corsHeaders });
+-  }
+-}
+diff --git a/apps/web/app/api/contact/route.ts b/apps/web/app/api/contact/route.ts
+deleted file mode 100644
+index a0228b4..0000000
+--- a/apps/web/app/api/contact/route.ts
++++ /dev/null
+@@ -1,149 +0,0 @@
+-import { NextRequest, NextResponse } from 'next/server';
+-import { createClient } from '@supabase/supabase-js';
+-import { Resend } from 'resend';
+-
+-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
+-const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY!;
+-const resendApiKey = process.env.RESEND_API_KEY;
+-const resendFromEmail = process.env.RESEND_FROM_EMAIL || 'onboarding@resend.dev';
+-
+-const supabaseAdmin = createClient(supabaseUrl, supabaseServiceKey);
+-const resend = resendApiKey ? new Resend(resendApiKey) : null;
+-
+-const corsHeaders = {
+-  'Access-Control-Allow-Origin': '*',
+-  'Access-Control-Allow-Methods': 'POST, OPTIONS',
+-  'Access-Control-Allow-Headers': 'Content-Type',
+-};
+-
+-async function getNotificationEmail(): Promise<string | null> {
+-  const { data } = await supabaseAdmin
+-    .from('company_settings')
+-    .select('value_ko')
+-    .eq('key', 'notification_email')
+-    .single();
+-  return data?.value_ko || null;
+-}
+-
+-export async function OPTIONS() {
+-  return NextResponse.json({}, { headers: corsHeaders });
+-}
+-
+-export async function POST(request: NextRequest) {
+-  try {
+-    const body = await request.json();
+-    const { name, email, message } = body;
+-
+-    if (!name || !email || !message) {
+-      return NextResponse.json(
+-        { error: 'Name, email, and message are required' },
+-        { status: 400, headers: corsHeaders }
+-      );
+-    }
+-
+-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+-    if (!emailRegex.test(email)) {
+-      return NextResponse.json(
+-        { error: 'Invalid email format' },
+-        { status: 400, headers: corsHeaders }
+-      );
+-    }
+-
+-    const { error: dbError } = await supabaseAdmin
+-      .from('contact_submissions')
+-      .insert({
+-        name,
+-        email,
+-        message,
+-        status: 'new',
+-      });
+-
+-    if (dbError) {
+-      console.error('Error saving contact submission:', dbError);
+-      return NextResponse.json(
+-        { error: 'Failed to submit message' },
+-        { status: 500, headers: corsHeaders }
+-      );
+-    }
+-
+-    let adminEmailSent = false;
+-    let userEmailSent = false;
+-
+-    if (resend) {
+-      const notificationEmail = await getNotificationEmail();
+-      console.log('[Contact API] Resend configured, notification_email:', notificationEmail);
+-      console.log('[Contact API] From email:', resendFromEmail);
+-
+-      if (notificationEmail) {
+-        try {
+-          const adminResult = await resend.emails.send({
+-            from: `Studio Elysian <${resendFromEmail}>`,
+-            to: notificationEmail,
+-            subject: `[문의] ${name}님의 새로운 문의`,
+-            html: `
+-              <h2>새로운 문의가 접수되었습니다</h2>
+-              <p><strong>이름:</strong> ${name}</p>
+-              <p><strong>이메일:</strong> ${email}</p>
+-              <p><strong>메시지:</strong></p>
+-              <div style="background: #f5f5f5; padding: 16px; border-radius: 8px; white-space: pre-wrap;">${message}</div>
+-              <hr />
+-              <p style="color: #666; font-size: 12px;">이 이메일은 Studio Elysian 웹사이트 문의 폼에서 자동으로 발송되었습니다.</p>
+-            `,
+-          });
+-          if (adminResult.error) {
+-            console.error('[Contact API] Admin email rejected by Resend:', adminResult.error);
+-          } else {
+-            console.log('[Contact API] Admin email sent:', adminResult.data?.id);
+-            adminEmailSent = true;
+-          }
+-        } catch (adminEmailError) {
+-          console.error('[Contact API] Failed to send admin email:', adminEmailError);
+-        }
+-      }
+-
+-      try {
+-        const userResult = await resend.emails.send({
+-          from: `Studio Elysian <${resendFromEmail}>`,
+-          to: email,
+-          subject: `[Studio Elysian] 문의가 접수되었습니다`,
+-          html: `
+-            <div style="max-width: 600px; margin: 0 auto; font-family: sans-serif;">
+-              <h2 style="color: #333;">문의해 주셔서 감사합니다</h2>
+-              <p>${name}님, 안녕하세요!</p>
+-              <p>문의가 정상적으로 접수되었습니다. 빠른 시일 내에 답변 드리겠습니다.</p>
+-              <hr style="border: none; border-top: 1px solid #eee; margin: 24px 0;" />
+-              <h3 style="color: #666; font-size: 14px;">문의 내용</h3>
+-              <div style="background: #f5f5f5; padding: 16px; border-radius: 8px; white-space: pre-wrap;">${message}</div>
+-              <hr style="border: none; border-top: 1px solid #eee; margin: 24px 0;" />
+-              <p style="color: #999; font-size: 12px;">
+-                본 메일은 발신 전용입니다. 추가 문의 사항은 웹사이트를 통해 연락 부탁드립니다.
+-              </p>
+-              <p style="color: #999; font-size: 12px;">© Studio Elysian</p>
+-            </div>
+-          `,
+-        });
+-        if (userResult.error) {
+-          console.error('[Contact API] User confirmation email rejected by Resend:', userResult.error);
+-        } else {
+-          console.log('[Contact API] User confirmation email sent:', userResult.data?.id);
+-          userEmailSent = true;
+-        }
+-      } catch (userEmailError) {
+-        console.error('[Contact API] Failed to send user confirmation email:', userEmailError);
+-      }
+-    } else {
+-      console.log('[Contact API] Resend not configured - RESEND_API_KEY missing');
+-    }
+-
+-    return NextResponse.json(
+-      { success: true, adminEmailSent, userEmailSent, message: 'Message saved' },
+-      { headers: corsHeaders }
+-    );
+-  } catch (error) {
+-    console.error('Contact submission error:', error);
+-    return NextResponse.json(
+-      { error: 'Internal server error' },
+-      { status: 500, headers: corsHeaders }
+-    );
+-  }
+-}
+diff --git a/apps/web/app/api/revalidate/route.ts b/apps/web/app/api/revalidate/route.ts
+deleted file mode 100644
+index 6b4b817..0000000
+--- a/apps/web/app/api/revalidate/route.ts
++++ /dev/null
+@@ -1,22 +0,0 @@
+-import { revalidatePath } from 'next/cache';
+-import { NextRequest, NextResponse } from 'next/server';
+-
+-export async function POST(request: NextRequest) {
+-  try {
+-    const { path, secret } = await request.json();
+-    
+-    if (secret !== process.env.REVALIDATE_SECRET && process.env.REVALIDATE_SECRET) {
+-      return NextResponse.json({ error: 'Invalid secret' }, { status: 401 });
+-    }
+-
+-    if (path) {
+-      revalidatePath(path);
+-    } else {
+-      revalidatePath('/', 'layout');
+-    }
+-
+-    return NextResponse.json({ revalidated: true, now: Date.now() });
+-  } catch (error) {
+-    return NextResponse.json({ error: 'Failed to revalidate' }, { status: 500 });
+-  }
+-}
+diff --git a/apps/web/app/api/upload/route.ts b/apps/web/app/api/upload/route.ts
+deleted file mode 100644
+index dfa98e9..0000000
+--- a/apps/web/app/api/upload/route.ts
++++ /dev/null
+@@ -1,92 +0,0 @@
+-import { NextRequest, NextResponse } from 'next/server';
+-import { createClient } from '@supabase/supabase-js';
+-import { randomUUID } from 'crypto';
+-
+-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
+-const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY!;
+-
+-const supabase = createClient(supabaseUrl, supabaseServiceKey);
+-
+-const corsHeaders = {
+-  'Access-Control-Allow-Origin': '*',
+-  'Access-Control-Allow-Methods': 'GET, POST, DELETE, OPTIONS',
+-  'Access-Control-Allow-Headers': 'Content-Type, Authorization',
+-};
+-
+-export async function OPTIONS() {
+-  return NextResponse.json({}, { headers: corsHeaders });
+-}
+-
+-export async function POST(request: NextRequest) {
+-  try {
+-    const formData = await request.formData();
+-    const file = formData.get('file') as File | null;
+-    const folder = (formData.get('folder') as string) || 'general';
+-
+-    if (!file) {
+-      return NextResponse.json({ error: 'No file provided' }, { status: 400, headers: corsHeaders });
+-    }
+-
+-    const bytes = await file.arrayBuffer();
+-    const buffer = Buffer.from(bytes);
+-
+-    const ext = file.name.split('.').pop() || 'jpg';
+-    const filename = `${randomUUID()}.${ext}`;
+-    const filePath = `${folder}/${filename}`;
+-
+-    const { error: uploadError } = await supabase.storage
+-      .from('uploads')
+-      .upload(filePath, buffer, {
+-        contentType: file.type,
+-        upsert: false,
+-      });
+-
+-    if (uploadError) {
+-      console.error('Supabase upload error:', uploadError);
+-      return NextResponse.json({ error: 'Upload failed' }, { status: 500, headers: corsHeaders });
+-    }
+-
+-    const { data: { publicUrl } } = supabase.storage
+-      .from('uploads')
+-      .getPublicUrl(filePath);
+-
+-    return NextResponse.json({ url: publicUrl }, { headers: corsHeaders });
+-  } catch (error) {
+-    console.error('Upload error:', error);
+-    return NextResponse.json({ error: 'Upload failed' }, { status: 500, headers: corsHeaders });
+-  }
+-}
+-
+-export async function DELETE(request: NextRequest) {
+-  try {
+-    const { searchParams } = new URL(request.url);
+-    const fileUrl = searchParams.get('path');
+-
+-    if (!fileUrl) {
+-      return NextResponse.json({ error: 'Invalid path' }, { status: 400, headers: corsHeaders });
+-    }
+-
+-    const urlPattern = /\/storage\/v1\/object\/public\/uploads\/(.+)$/;
+-    const match = fileUrl.match(urlPattern);
+-    
+-    if (!match) {
+-      return NextResponse.json({ error: 'Invalid storage URL' }, { status: 400, headers: corsHeaders });
+-    }
+-
+-    const filePath = match[1];
+-
+-    const { error } = await supabase.storage
+-      .from('uploads')
+-      .remove([filePath]);
+-
+-    if (error) {
+-      console.error('Delete error:', error);
+-      return NextResponse.json({ error: 'Delete failed' }, { status: 500, headers: corsHeaders });
+-    }
+-
+-    return NextResponse.json({ success: true }, { headers: corsHeaders });
+-  } catch (error) {
+-    console.error('Delete error:', error);
+-    return NextResponse.json({ error: 'Delete failed' }, { status: 500, headers: corsHeaders });
+-  }
+-}
+diff --git a/apps/web/components/contact/ContactForm.tsx b/apps/web/components/contact/ContactForm.tsx
+index 2cb9be2..0891af7 100644
+--- a/apps/web/components/contact/ContactForm.tsx
++++ b/apps/web/components/contact/ContactForm.tsx
+@@ -22,29 +22,8 @@ export function ContactForm({ inquiryLabel }: ContactFormProps) {
+ 
+   const handleSubmit = async (e: React.FormEvent) => {
+     e.preventDefault();
+-    setStatus('loading');
+-    setErrorMessage('');
+-
+-    try {
+-      const response = await fetch('/api/contact', {
+-        method: 'POST',
+-        headers: { 'Content-Type': 'application/json' },
+-        body: JSON.stringify(formData),
+-      });
+-
+-      const data = await response.json();
+-
+-      if (!response.ok) {
+-        throw new Error(data.error || t('errorFallback'));
+-      }
+-
+-      setEmailSent(data.userEmailSent === true);
+-      setStatus('success');
+-      setFormData({ name: '', email: '', message: '' });
+-    } catch (error) {
+-      setStatus('error');
+-      setErrorMessage(error instanceof Error ? error.message : t('errorFallback'));
+-    }
++    setStatus('error');
++    setErrorMessage('공개 시안에서는 문의가 전송되지 않습니다. Preview only: sending is disabled.');
+   };
+ 
+   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+diff --git a/apps/web/components/sections/Hero.tsx b/apps/web/components/sections/Hero.tsx
+index 23450b1..43f58c0 100644
+--- a/apps/web/components/sections/Hero.tsx
++++ b/apps/web/components/sections/Hero.tsx
+@@ -115,7 +115,7 @@ export default function Hero({heroImage, heroTitle, heroDescription}: HeroProps)
+               {t('eyebrow')} · {t('label')}
+             </p>
+             <h1
+-              className="font-display mt-6 text-[clamp(2.75rem,6vw,6rem)] md:whitespace-nowrap font-normal leading-[0.92] tracking-tight text-moon animate-fade-in-up"
++              className="font-display mt-6 text-[clamp(2.75rem,6vw,6rem)] font-normal leading-[0.92] tracking-tight text-moon animate-fade-in-up"
+               style={{animationDelay: '0.15s'}}
+             >
+               {heroTitle ? (
+diff --git a/apps/web/middleware.ts b/apps/web/middleware.ts
+deleted file mode 100644
+index 9fc6f61..0000000
+--- a/apps/web/middleware.ts
++++ /dev/null
+@@ -1,11 +0,0 @@
+-import createMiddleware from 'next-intl/middleware';
+-import {routing} from './i18n/routing';
+-
+-export default createMiddleware(routing);
+-
+-export const config = {
+-  matcher: [
+-    '/',
+-    '/(ko|en|ja)/:path*'
+-  ]
+-};
+diff --git a/apps/web/next.config.mjs b/apps/web/next.config.mjs
+index 05f1532..b0120db 100644
+--- a/apps/web/next.config.mjs
++++ b/apps/web/next.config.mjs
+@@ -4,7 +4,9 @@ const withNextIntl = createNextIntlPlugin();
+ 
+ /** @type {import('next').NextConfig} */
+ const nextConfig = {
+-  output: 'standalone',
++  output: 'export',
++  basePath: '/elyweb/previews/atelier',
++  trailingSlash: true,
+   images: {
+     unoptimized: true,
+     remotePatterns: [
