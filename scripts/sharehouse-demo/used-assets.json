@@ -1,9 +1,11 @@
 {
   "bg": [
-    "living-evening",
+    "apartment",
+    "home-room",
+    "living-day",
     "living-night",
     "room-night",
-    "saeun-room"
+    "saeun-room-night"
   ],
   "ecg": [
     "jihye-cooking"
@@ -21,6 +23,28 @@
     "saeun/pout",
     "saeun/startled",
     "saeun/surprised",
-    "saeun/tired"
+    "saeun/tired",
+    "yunha/base",
+    "yunha/closed",
+    "yunha/stern"
+  ],
+  "bgm": [
+    "crossed",
+    "early-spring",
+    "refreshing",
+    "welcome"
+  ],
+  "voice": [
+    "00_voice_024",
+    "00_voice_029",
+    "00_voice_031",
+    "00_voice_042",
+    "00_voice_049",
+    "00_voice_051",
+    "00_voice_059",
+    "00_voice_064"
+  ],
+  "sfx": [
+    "touch"
   ]
 }

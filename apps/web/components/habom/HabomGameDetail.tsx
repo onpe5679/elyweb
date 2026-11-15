@@ -194,7 +194,7 @@ export default async function HabomGameDetail({ m, locale, related }: Props) {
               <SectionTitle id="demo-title" n={num.demo} title={td('title')} />
               <p className="mt-4 max-w-2xl text-[1.0625rem] leading-relaxed text-plum-soft">{td('lead')}</p>
               <div className="mx-auto mt-8 max-w-[70rem]">
-                <SharehouseDemo steamUrl={steam?.url} />
+                <SharehouseDemo key={locale} steamUrl={steam?.url} />
               </div>
             </section>
           )}

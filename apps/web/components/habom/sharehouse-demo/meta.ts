@@ -7,9 +7,3 @@ export const DEMO_BASE = '/habom/sharehouse-demo';
 export const DEMO_TITLE_IMAGE = `${DEMO_BASE}/img/title.webp`;
 export const DEMO_LOGO_IMAGE = `${DEMO_BASE}/img/logo.webp`;
 export const demoDataUrl = (locale: string) => `${DEMO_BASE}/data/${['ko', 'en', 'ja'].includes(locale) ? locale : 'en'}.json`;
-
-/**
- * 효과음 id → 파일 경로. 권리 확인 전이라 비워 둔다.
- * 파일을 public/habom/sharehouse-demo/sfx/ 에 넣고 여기에 적으면 플레이어가 재생한다.
- */
-export const SFX: Record<string, string> = {};

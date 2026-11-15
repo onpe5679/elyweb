@@ -1,13 +1,23 @@
 import { test, expect, type Page } from '@playwright/test';
 
-/** 미니 체험: 시작 → 장면(pick 번째) 고르기까지 */
-async function openScene(page: Page, pick = 0) {
+/** 미니 체험: 새 게임 → (이름) → 프롤로그 시작까지 */
+async function newGame(page: Page, name?: string) {
   const stage = page.getByTestId('demo-stage');
   await stage.scrollIntoViewIfNeeded();
-  await stage.getByTestId('demo-start').click();
-  await expect(stage.getByTestId('demo-choice')).toHaveCount(2);
+  await stage.getByTestId('demo-new').click();
+  if (name) await stage.getByTestId('demo-name').fill(name);
+  await stage.getByTestId('demo-name-ok').click();
+  await expect(stage.getByTestId('demo-line')).toBeAttached();
+  return stage;
+}
+
+/** 프롤로그를 빨리 넘겨 장면 선택에서 pick 번째 장면을 연다 */
+async function openScene(page: Page, pick = 0) {
+  const stage = await newGame(page);
+  await stage.getByTestId('demo-skip').click();
+  await expect(stage.getByTestId('demo-choice')).toHaveCount(2, { timeout: 60_000 });
   await stage.getByTestId('demo-choice').nth(pick).click();
-  await expect(stage.getByTestId('demo-line')).toBeVisible();
+  await expect(stage.getByTestId('demo-line')).toBeAttached();
   return stage;
 }
 
@@ -22,7 +32,7 @@ async function next(page: Page, times = 1) {
 
 /** 진행 표시("3 / 147")의 현재 줄 번호 */
 async function lineNo(page: Page) {
-  const txt = await page.locator('#demo').getByText(/^\d+ \/ \d+$/).innerText();
+  const txt = await page.getByTestId('demo-counter').innerText();
   return Number(txt.split('/')[0].trim());
 }
 
@@ -86,6 +96,19 @@ test.describe('Habom game detail', () => {
 });
 
 test.describe('Mini demo (Habom only, inline)', () => {
+  // 프롤로그(202줄)와 장면을 빨리 넘기는 테스트가 있어 넉넉하게
+  test.describe.configure({ timeout: 90_000 });
+  test.beforeEach(async ({ page }) => {
+    // 이전 테스트의 저장·설정이 섞이지 않게
+    await page.addInitScript(() => {
+      if (!sessionStorage.getItem('e2e-cleared')) {
+        localStorage.removeItem('sharehouse-demo:saves');
+        localStorage.removeItem('sharehouse-demo:settings');
+        sessionStorage.setItem('e2e-cleared', '1');
+      }
+    });
+  });
+
   test('is part of the page: the hero button only scrolls to it, no dialog or new window', async ({ page }) => {
     await page.goto('/ko/games/sharehouse');
     const heroLink = page.getByTestId('game-banner').getByRole('link', { name: /미니 체험/ });
@@ -94,30 +117,38 @@ test.describe('Mini demo (Habom only, inline)', () => {
     await expect(page).toHaveURL(/#demo$/);
     const stage = page.locator('#demo').getByTestId('demo-stage');
     await expect(stage).toBeInViewport();
-    await expect(page.getByRole('dialog')).toHaveCount(0);
     await expect(page.locator('#demo dialog, #demo [role="dialog"]')).toHaveCount(0);
-    // 실제 게임 리소스(타이틀 그림·로고)를 쓴다
+    // 게임 타이틀 화면(메인 일러스트 + 로고 + 메뉴)
     await expect(stage.locator('img[src*="/habom/sharehouse-demo/img/title.webp"]')).toHaveCount(1);
-    await expect(page.getByTestId('demo-sample-badge')).toHaveCount(0);
+    await expect(stage.getByTestId('demo-new')).toBeVisible();
+    await expect(stage.getByTestId('demo-continue')).toBeDisabled();
+    // 소리는 시작 전에는 나오지 않는다
+    await expect(stage).toHaveAttribute('data-bgm', '');
   });
 
-  test('start, pick a scene, advance lines with the real script and art', async ({ page }) => {
+  test('new game: the prologue plays with the game UI, default name and real art', async ({ page }) => {
+    await page.emulateMedia({ reducedMotion: 'reduce' });
     await page.goto('/ko/games/sharehouse');
-    const stage = await openScene(page, 0);
+    const stage = await newGame(page);
     expect(await lineNo(page)).toBe(1);
-    await next(page, 10); // 11번째 줄 = 지혜 등장
-    expect(await lineNo(page)).toBe(11);
-    await expect(stage.getByTestId('demo-text')).toContainText('류지혜');
-    await expect(stage.locator('img[src*="/sharehouse-demo/img/stand/jihye-"]')).toHaveCount(1);
-    await expect(stage.locator('img[src*="/sharehouse-demo/img/bg/"]')).toHaveCount(1);
+    await expect(stage).toHaveAttribute('data-bgm', /.+/);
+    // 프롤로그 3번째 줄은 주인공 대사 — 이름을 비우면 영상처럼 "플레이어"
+    await next(page, 2);
+    await expect(stage.getByTestId('demo-text')).toContainText('플레이어');
+    // 집에 들어가 지혜가 나오는 장면(대사 뒤쪽)까지 넘긴다
+    for (let i = 0; i < 60 && !(await stage.locator('img[data-char="jihye"]').count()); i++) await next(page, 1);
+    await expect(stage.locator('img[data-char="jihye"]')).toHaveAttribute('src', /\/sharehouse-demo\/img\/stand\/jihye-/);
+    await expect(stage.locator('img[src*="/sharehouse-demo/img/bg/living-day"]')).toHaveCount(1);
+    // 빠른 메뉴(게임과 같은 키 안내)
+    for (const id of ['demo-menu', 'demo-auto', 'demo-skip', 'demo-log-button', 'demo-hide', 'demo-next']) await expect(stage.getByTestId(id)).toBeVisible();
     await expect(page.getByTestId('demo-live')).not.toBeEmpty();
   });
 
   test('Enter/Space advance only while the stage has focus (page keys are left alone)', async ({ page, isMobile }) => {
     test.skip(isMobile, '키보드 시나리오');
-    await page.emulateMedia({ reducedMotion: 'reduce' }); // 타자 효과 없이 한 번에
+    await page.emulateMedia({ reducedMotion: 'reduce' });
     await page.goto('/ko/games/sharehouse');
-    await openScene(page, 1);
+    await newGame(page);
     const advance = page.getByTestId('demo-line');
     const text = page.getByTestId('demo-text');
     await expect(advance).toBeFocused();
@@ -127,60 +158,119 @@ test.describe('Mini demo (Habom only, inline)', () => {
     await expect(text).toContainText('▼');
     await page.keyboard.press(' ');
     await expect.poll(() => lineNo(page)).toBe(3);
+    // 게임 단축키: A 자동 진행, H UI 숨기기
+    await page.keyboard.press('a');
+    await expect(page.getByTestId('demo-auto')).toHaveAttribute('aria-pressed', 'true');
+    await page.keyboard.press('a');
+    // Ctrl 은 누르고 있는 동안만 스킵
+    await page.keyboard.down('Control');
+    await expect(page.getByTestId('demo-skip')).toHaveAttribute('aria-pressed', 'true');
+    await page.keyboard.up('Control');
+    await expect(page.getByTestId('demo-skip')).toHaveAttribute('aria-pressed', 'false');
+    await page.keyboard.press('h');
+    await expect(text).toHaveCount(0);
+    await advance.click();
+    await expect(text).toBeVisible();
     // 무대 밖에 포커스가 있으면 Space 는 페이지 스크롤에 쓰인다
     await page.locator('#demo h2').click();
     const y = await page.evaluate(() => window.scrollY);
+    const before = await lineNo(page);
     await page.keyboard.press(' ');
     await expect.poll(() => page.evaluate(() => window.scrollY)).toBeGreaterThan(y);
-    expect(await lineNo(page)).toBe(3);
+    expect(await lineNo(page)).toBe(before);
   });
 
-  test('fast-forward reaches the ending card; the other scene and restart work', async ({ page }) => {
+  test('skip the prologue, choose a scene, reach the ending; the other scene and restart work', async ({ page }) => {
     await page.goto('/ko/games/sharehouse');
     const stage = await openScene(page, 1);
-    await page.getByTestId('demo-skip').click();
+    await expect(page.getByTestId('demo-progress')).not.toHaveAttribute('aria-valuenow', '100');
+    await stage.getByTestId('demo-skip').click();
     const end = stage.getByTestId('demo-end');
-    await expect(end).toBeVisible({ timeout: 30_000 });
+    await expect(end).toBeVisible({ timeout: 60_000 });
     await expect(end.getByRole('link', { name: /Steam/ })).toHaveAttribute('href', /steampowered/);
     await expect(page.getByTestId('demo-progress')).toHaveAttribute('aria-valuenow', '100');
     await end.getByRole('button', { name: '다른 장면 보기' }).click();
-    await expect(stage.getByTestId('demo-line')).toBeVisible();
+    await expect(stage.getByTestId('demo-line')).toBeAttached();
     expect(await lineNo(page)).toBe(1);
     await next(page, 2);
     expect(await lineNo(page)).toBe(3);
-    await page.getByTestId('demo-restart').click();
+    await stage.getByTestId('demo-menu').click();
+    await stage.getByTestId('demo-restart').click();
     expect(await lineNo(page)).toBe(1);
   });
 
-  test('backlog lists past lines and closes with Escape', async ({ page }) => {
+  test('backlog lists past lines (L key) and closes with Escape', async ({ page, isMobile }) => {
     await page.emulateMedia({ reducedMotion: 'reduce' });
     await page.goto('/ko/games/sharehouse');
-    const stage = await openScene(page, 0);
+    const stage = await newGame(page);
     await next(page, 12);
-    await page.getByTestId('demo-log-button').click();
+    if (isMobile) await stage.getByTestId('demo-log-button').click();
+    else await page.keyboard.press('l');
     const log = stage.getByTestId('demo-log');
     await expect(log.locator('li')).toHaveCount(13);
     await page.keyboard.press('Escape');
     await expect(log).toHaveCount(0);
   });
 
-  test('the player name replaces the protagonist name tag', async ({ page }) => {
+  test('save to a slot, back to title, and continue from there', async ({ page }) => {
     await page.emulateMedia({ reducedMotion: 'reduce' });
+    await page.goto('/ko/games/sharehouse');
+    const stage = await newGame(page, '하루');
+    await next(page, 5);
+    expect(await lineNo(page)).toBe(6);
+    await stage.getByTestId('demo-menu').click();
+    await stage.getByTestId('demo-open-save').click();
+    await stage.getByTestId('demo-save-slot').first().click();
+    await expect(stage.getByTestId('demo-save-slot').first()).toContainText('프롤로그 · 6');
+    await page.keyboard.press('Escape');
+    await stage.getByTestId('demo-to-title').click();
+    await page.reload();
+    await page.getByTestId('demo-stage').scrollIntoViewIfNeeded();
+    await expect(page.getByTestId('demo-continue')).toBeEnabled();
+    await page.getByTestId('demo-title-load').click();
+    await page.getByTestId('demo-load-slot').nth(1).click();
+    await expect.poll(() => lineNo(page)).toBe(6);
+  });
+
+  test('sound: volume and mute are remembered; music stops outside the demo', async ({ page }) => {
     await page.goto('/ko/games/sharehouse');
     const stage = page.getByTestId('demo-stage');
     await stage.scrollIntoViewIfNeeded();
-    await stage.getByTestId('demo-name').fill('하루');
-    await stage.getByTestId('demo-start').click();
-    await stage.getByTestId('demo-choice').first().click();
+    await stage.getByTestId('demo-title-settings').click();
+    const bgm = stage.getByTestId('demo-vol-bgm');
+    await bgm.fill('25');
+    await stage.getByTestId('demo-mute-check').check();
+    await page.reload();
+    await page.getByTestId('demo-stage').scrollIntoViewIfNeeded();
+    await expect(page.getByTestId('demo-mute')).toHaveAttribute('aria-pressed', 'true');
+    await page.getByTestId('demo-mute').click();
+    await expect(page.getByTestId('demo-mute')).toHaveAttribute('aria-pressed', 'false');
+    const saved = await page.evaluate(() => JSON.parse(localStorage.getItem('sharehouse-demo:settings') || '{}'));
+    expect(saved).toMatchObject({ bgm: 0.25, muted: false });
+    // 새 게임을 누르면 소리가 켜지고, 구역이 화면 밖으로 나가면 멈췄다가 돌아오면 이어진다
+    const stage2 = await newGame(page);
+    await expect(stage2).toHaveAttribute('data-bgm', /.+/);
+    await expect(stage2).toHaveAttribute('data-sound', 'on');
+    await page.locator('#credits').scrollIntoViewIfNeeded();
+    await expect(stage2).toHaveAttribute('data-sound', 'paused');
+    await stage2.scrollIntoViewIfNeeded();
+    await expect(stage2).toHaveAttribute('data-sound', 'on');
+  });
+
+  test('the player name replaces the protagonist name tag and <PlayerName> in text', async ({ page }) => {
+    await page.emulateMedia({ reducedMotion: 'reduce' });
+    await page.goto('/ko/games/sharehouse');
+    const stage = await newGame(page, '하루');
+    await next(page, 2);
     await expect(stage.getByTestId('demo-text')).toContainText('하루');
   });
 
   test('uses the localized script', async ({ page }) => {
     await page.emulateMedia({ reducedMotion: 'reduce' });
     await page.goto('/ja/games/sharehouse');
-    const stage = await openScene(page, 1);
-    await next(page, 10); // 11번째 줄 = 세은(紗夜) 등장
-    await expect(stage.getByTestId('demo-text')).toContainText('紗夜');
+    const stage = await newGame(page);
+    await next(page, 2);
+    await expect(stage.getByTestId('demo-text')).toContainText('プレイヤー');
   });
 
   test('is never offered on Elysian works', async ({ page }) => {
@@ -195,8 +285,8 @@ test.describe('Mini demo (Habom only, inline)', () => {
     await page.setViewportSize({ width: 390, height: 844 });
     await page.goto('/ko/games/sharehouse');
     const stage = await openScene(page, 0);
-    await page.getByTestId('demo-skip').click();
-    await expect(stage.getByTestId('demo-end')).toBeVisible({ timeout: 30_000 });
+    await stage.getByTestId('demo-skip').click();
+    await expect(stage.getByTestId('demo-end')).toBeVisible({ timeout: 60_000 });
     const { sw, cw } = await page.evaluate(() => ({ sw: document.documentElement.scrollWidth, cw: document.documentElement.clientWidth }));
     expect(sw).toBeLessThanOrEqual(cw);
   });

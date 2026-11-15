@@ -3,122 +3,157 @@
 `/[locale]/games/sharehouse#demo` 구역에서 바로 플레이하는 "어서오세요, 셰어하우스에!" 웹 데모.
 모달·새 창 없이 페이지 본문 안의 16:9 무대에서 시작한다. 히어로와 하봄 홈의 "미니 체험"은 이 구역으로 이동하는 링크다.
 
+**기준 자료:** 실제 게임 플레이 영상 `20 제출자료/260506 인디시드챌린지/…플레이 영상.mp4`(2분, 프롤로그 9000 의 50~103행).
+화면 구성·대사창·이름표·키 안내·캐릭터 배치·어둡게 처리·기본 이름("플레이어")을 이 영상 프레임에서 재서 맞췄다.
+
+## 흐름
+
+타이틀(게임 메인 일러스트 + 로고 · 새 게임 / 이어하기 / 불러오기 / 설정) → 주인공 이름 입력(비우면 "플레이어")
+→ **프롤로그(9000, 202줄)** → 장면 선택(지혜 · 김치볶음밥 / 세은 · 새벽 스터디) → **장면(1000 147줄 / 3020 161줄)** → 엔딩 카드
+(Steam 에서 이어서 · 다른 장면 보기 · 타이틀로). 선택지는 원본 대본에 없어서, 게임의 히로인별 시나리오 구조를 따른 장면 선택만 둔다.
+
+## 무대 UI (영상 1920×1080 기준 측정값 → `demo.module.css` 에 cqw 로)
+
+| 요소 | 원본 | 웹 |
+| --- | --- | --- |
+| 대사창 | x 397~1524, y 800~1018, 모서리 28px, 밝은 회색 반투명 + 흰 테두리 + 아래쪽 물방울 점무늬 | `.box` |
+| 이름표 | x 451~621, y 773~822, 모서리 10px, 흰 굵은 글씨. 지혜 `#ECB363` · 윤하 `#B67AE5` · 세은 `#7AD3E5` · ???·주인공·엄마 `#191919` | `.tag` (색은 `staging.mjs` SPEAKERS) |
+| 본문 | 왼쪽 여백 70px, 약 30px, `#1B1B1B`, 끝에 ▼ | `.text` |
+| 키 안내 | 하단 가운데: ESC 메뉴 · A 자동 진행 · CTRL 스킵 · L 백로그 · H UI 숨기기 · SPACE 넘기기 | `.keys` (누를 수 있는 버튼 + 같은 단축키) |
+| 캐릭터 | 말하지 않는 캐릭터는 어둡게(지문일 때는 모두 밝게), 셋이면 세은 왼쪽 · 윤하 가운데 · 지혜 오른쪽 | `.charIdle` brightness(0.58), `CAST.slot` |
+
+- 캐릭터 크기·위치는 영상 프레임에 스탠딩을 맞춰 자동으로 잰 값: 윤하 캔버스 높이 = 화면의 190% · 윗변 -2.2%, 세은 180% · 14.4%, 지혜 180% · 0%(지혜는 머리 위치로 맞춤).
+- 메뉴(저장 6칸 + 자동 저장 / 불러오기 / 설정 / 이 장면 처음부터 / 타이틀로), 설정(배경음·음성·효과음 볼륨, 음소거), 백로그(음성 다시 듣기), UI 숨기기는 영상에 화면이 없어 대사창과 같은 재질로 만들었다.
+- 무대 폭 760px 미만(폰·작은 태블릿)에서는 대사창·키 안내·메뉴를 그림 아래로 내린다(같은 재질 유지).
+- 무대 아래(하봄 스타일): 진행률, 음소거 버튼, 조작 안내.
+
 ## 구성
 
 ```
 scripts/sharehouse-demo/
-  staging.mjs          연출표(손으로 정한 값): 배경·스탠딩·표정·CG·흔들기·효과음 id, 원본 → 웹 이미지 표,
-                       화자 이름/색, 3020 일본어 줄 맞춤표, 일본어 임시 번역
-  build-script.mjs     대본 변환 → apps/web/public/habom/sharehouse-demo/data/{ko,en,ja}.json, used-assets.json
-  build-images.mjs     이미지 변환(sharp) → apps/web/public/habom/sharehouse-demo/img/**
+  staging.mjs          연출표(배경·캐릭터·표정·위치·CG·BGM·효과음), 원본 → 웹 파일 표(ASSETS·CAST·AUDIO), 화자, 3020 일본어 줄 맞춤표, 일본어 임시 번역
+  build-script.mjs     대본 변환 → apps/web/public/habom/sharehouse-demo/data/{ko,en,ja}.json, used-assets.json, voice-missing.txt
+  build-images.mjs     이미지(sharp) → .../img/**
+  build-audio.mjs      소리(ffmpeg, MP3) → .../audio/**
   lib/xlsx.mjs         의존성 없는 xlsx/csv 리더
-  used-assets.json     대본에서 실제로 쓰는 이미지 목록(build-images 입력)
 apps/web/components/habom/sharehouse-demo/
-  SharehouseDemo.tsx   플레이어(클라이언트 컴포넌트)
-  demo.module.css      무대 스타일(게임 UI 재현 + 좁은 화면 배치)
-  meta.ts              데모가 있는 slug, 타이틀/로고 경로, 효과음 표(SFX)
-  types.ts             데이터 형태
+  SharehouseDemo.tsx   플레이어   audio.ts  소리 엔진   storage.ts  설정·저장(localStorage)
+  demo.module.css      무대 UI    meta.ts   데모가 있는 slug·경로   types.ts  데이터 형태
 ```
 
-다시 만들기(저장소 루트, 원본 폴더는 기본값 `../elyweb/sharehouse`, 다르면 `SHAREHOUSE_SRC=...`):
+다시 만들기(저장소 루트, 원본 폴더 기본값 `../elyweb/sharehouse`, 다르면 `SHAREHOUSE_SRC=...`):
 
 ```
 node scripts/sharehouse-demo/build-script.mjs
 node scripts/sharehouse-demo/build-images.mjs
+node scripts/sharehouse-demo/build-audio.mjs
 ```
 
 ## 대본
 
-| 장면 | 원본 | 대사 | 배경 | 비고 |
-| --- | --- | --- | --- | --- |
-| 지혜 · 김치볶음밥 | Scenario 1000 | 147줄 | 거실(저녁) | 63~81행은 요리 ECG |
-| 세은 · 새벽 스터디 | Scenario 3020 | 161줄 | 주인공 방(밤) → 거실(밤) → 세은 방 | |
+- 한/영(+9000 일본어): `20260221 백업 _ 20260126 데모 분량 시나리오 번역 내보내기 공간 작업용.xlsx` 의 `9000(수정 완)`·`1000(수정 완)`·`3020(수정 완)`.
+- 1000·3020 일본어: `260126 데모 분량 시나리오 CSV`. 3020 은 구판 대본 기준 번역이라 `buildJaMap3020()` 으로 줄을 맞췄고,
+  원본에 없는 9줄(111, 157~164)은 `JA_DRAFT` 의 **임시 번역**(`"draft": true`, 검수 필요). `「セウン」` → `紗夜` 등 정리 내역은 staging 주석.
+- 연출 키는 시트의 **데이터 행 순번**(머리글 다음 행 = 0). 빈 행·`<Blank>` 는 대사로 보이지 않고 전환 자리로만 쓴다.
+- `<PlayerName>` 은 이름표와 본문(9000 의 "<PlayerName>입니다.") 모두 입력한 이름으로 바꾼다. 영어판에서 지워졌던 자리("I'm .")는 변환기가 되살린다.
 
-- 한국어·영어: `20260221 백업 _ 20260126 데모 분량 시나리오 번역 내보내기 공간 작업용.xlsx` 의 `1000(수정 완)`, `3020(수정 완)` 시트.
-  260126 CSV 보다 새 판본이다(영어가 다듬어져 있고, 3020 CSV 는 영어·일본어·이름 열이 한국어와 몇 줄씩 어긋나 있음).
-- 일본어: `260126 데모 분량 시나리오 CSV` 의 Text_Jp.
-  - 1000 은 한국어와 줄이 맞아 그대로 쓴다(변환기가 수정본과 CSV 의 한국어를 대조해 다르면 경고).
-  - 3020 은 구판 대본 기준 번역이라 줄 순서가 다르다. `staging.mjs` 의 `buildJaMap3020()` 으로 수정본 한국어 줄에 맞췄고,
-    원본에 없는 9줄(111, 157~164 — 마지막 대화 포함)은 `JA_DRAFT` 의 **임시 번역**이다. 데이터에 `"draft": true` 로 표시된다. **검수 필요.**
-  - 일본어판에 남아 있던 `「セウン」`·`ホン・「セウン」` 은 일본어 이름 `紗夜` 로 바꿨다. `ガチャ…`(타닥타닥 오역) → `（カタカタ）`, `きゃ` → `キィッ`.
-  - 3020 일본어는 말투(세은이 반말 `〜しなさいよ`, 주인공이 `〜わね` 등)가 원문과 맞지 않는 줄이 많다. 손대지 않았다.
-- 빈 행·`<Blank>` 는 대사로 보여 주지 않고 연출 전환 자리로만 쓴다. `<br>` 는 줄바꿈.
-- 연출 키는 시트의 **데이터 행 순번**(머리글 다음 행 = 0). ScriptIndex 는 3020 수정본에서 중복·누락이 있어 쓰지 않는다.
-- `<PlayerName>`: 대본 본문에는 나오지 않고 이름표에만 쓰인다. 타이틀 화면의 "주인공 이름" 입력값(최대 10자)을 쓰고,
-  비우면 `HabomDemo.defaultName`(나 / Me / 俺).
-- 선택지: 두 원본 대본에는 선택지가 없다. 게임 구조(히로인별 시나리오)를 따라 시작할 때 "어느 장면을 볼까요?"에서 장면을 고른다.
-  대본에 없는 대사는 만들지 않았다.
-
-### 데이터 형태(`data/{locale}.json`)
+### 데이터 형태(`data/{locale}.json`, version 2)
 
 ```jsonc
 {
-  "version": 1, "locale": "ko",
-  "speakers": { "jihye": { "name": "류지혜", "color": "#F7A35C" }, "saeun": {...}, "unknown": {...} },
-  "chapters": [{ "id": "jihye", "cast": "jihye", "source": "1000(수정 완)", "steps": [
-    { "n": 11, "text": "에헤~", "who": "jihye", "bg": "living-evening", "stand": "jihye/happy" },
-    { "n": 43, "text": "찰팍-", "bg": "living-evening", "stand": "jihye/worry", "fx": "shake", "sfx": "splat" }
+  "speakers": { "yunha": { "name": "박윤하", "color": "#B67AE5" }, ... },
+  "chapters": [{ "id": "prologue", "steps": [
+    { "n": 92, "text": "저기 앉아서 빵 먹고 있는 애는 홍세은.", "who": "yunha", "bg": "living-day",
+      "chars": [{ "id": "saeun", "face": "base", "x": 0.19 }, { "id": "yunha", "face": "base", "x": 0.5 }],
+      "bgm": "welcome", "voice": "00_voice_021" }
   ]}],
-  "images": { "bg": { "living-evening": "/habom/sharehouse-demo/img/bg/living-evening.webp" }, "ecg": {...}, "stand": {...} }
+  "images": { "bg": {...}, "ecg": {...}, "stand": { "yunha/base": "/habom/sharehouse-demo/img/stand/yunha-base.webp" } },
+  "cast": { "yunha": { "scale": 1.9, "top": -0.022, "crop": 0.558 } },
+  "audio": { "titleBgm": "welcome", "bgm": {...}, "voice": { "00_voice_031": ".../audio/voice/00_voice_031.mp3" }, "sfx": {...} }
 }
 ```
 
-줄마다 장면 상태(bg/stand/ecg)를 풀어 두어 어느 줄로든 바로 이동할 수 있다(백로그·처음부터·미리 불러오기).
-`who` 가 없으면 지문(내레이션·속마음), `player` 는 주인공.
+줄마다 장면 상태(bg·chars·ecg·bgm)를 풀어 두어 어느 줄에서든 시작할 수 있다(저장/불러오기·백로그·처음부터).
 
-## 이미지 (총 1.77MB, WebP)
+## 소리
 
-| 웹 파일 | 원본(`02 그래픽/`) | 처리 |
+| 종류 | 파일 | 쓰는 곳 |
 | --- | --- | --- |
-| `bg/living-evening` | `01 배경/#1 아파트 거실/소스/#01-거실 (저녁) 조명OFF (배경O).png` | 1920×1080 |
-| `bg/living-night` | 같은 파일 | **임시 밤 톤**(푸른 단색조, 게임 UI 목업의 밤 거실 참고) |
-| `bg/room-night` | `01 배경/#3 주인공 방/#03-주인공방(낮).png` | **임시 밤 톤**(창밖 구름은 그대로 보임) |
-| `bg/saeun-room` | `01 배경/#99-세은이 방 추가본/#10-세은이 방 추가(저녁).png` | 살짝 어둡게 |
-| `ecg/jihye-cooking` | `00 ECG/99 IngameResource/지혜_요리_기본_보정.png` | 1920×1080 |
-| `stand/jihye-*` (7) | `00 SCG/Jihye/지혜_잠옷_흥미_없음.png` + `Resource/Face/{base,Smile,Fear,Panic_B,fatigue,사연3}.png` | 몸 + 표정 합성 |
-| `stand/saeun-*` (6) | `00 SCG/Saeun/세은_잠옷_기본_없음.png` + `Resource/Face/{Kidding,Panic,Tired,sad,surprised}.png` | 몸 + 표정 합성 |
-| `title` | `00 ECG/00 Special/메인화면 CG/메인화면 일러스트하늘X_인쇄용.png` | 타이틀 화면 |
-| `logo` | `03 etc/Logo/로고.png` | |
+| BGM | `SH Soundtrack/001.Welcome to our house!` | 타이틀·이름·장면 선택, 프롤로그 집 도착(51행~) |
+| BGM | `SH Soundtrack/006.You crossed the line` | 프롤로그 첫 회상(0~10행) |
+| BGM | `BGM/외주_뮤스/일상 BGM 1_/Refreshing steps` | 프롤로그 본가(11~44행), 지혜 장면 |
+| BGM | `250504 PV 리소스/사운드 리소스/Muse_My_early_spring` | 세은 장면(새벽) |
+| 효과음 | `TouchSFX.mp3` | 메뉴 버튼 |
+| 음성 | `성우 샘플_장예나 성우님/*` 8개 | 프롤로그 8줄(아래) |
 
-- 표정 id: 지혜 `interest`(몸 그림 기본) `happy` `smile` `worry` `cry` `grin` `awkward`, 세은 `base` `grin` `startled` `tired` `pout` `surprised` (`teary` 는 표에만 있고 미사용).
-- 스탠딩 구도는 게임 UI 목업 `99 old result/UXUI/2024.09 Renewal/Text/00 Mergeimage_Dark_Off.png` 를 따랐다:
-  캔버스(2393×4700)를 화면 높이의 160% 로, 위쪽을 화면 위에 맞춤 → 보이는 위쪽 62.5% 만 잘라 1400px 높이로 내보낸다.
-  지혜 `Base/` 폴더(금발 니트)는 현행 디자인과 달라 쓰지 않았다(요리 ECG·표정 파츠는 잠옷 스탠딩 기준).
-- 대사창: 같은 목업처럼 상자 없이 아래쪽 그라데이션 + 캐릭터 색 이름(세은 `#7BD4E7` 은 `TextNameSaeun.png` 색, 지혜·주인공 색은 임의) + 흰 대사.
-- 불러오기: 대본 JSON 은 구역이 화면 600px 앞에 오면 받는다. 타이틀 그림은 `loading="lazy"`. 장면 고르기 화면에서 두 장면의 첫 그림을,
-  진행 중에는 다음 6줄의 그림을 미리 받는다.
+- **영상의 BGM 은 로컬 곡과 일치하는 것이 없었다**(스펙트럼 대조). SH Soundtrack 은 001·006 만 있고 002~005 가 없어 그쪽일 가능성이 높다 — 곡 배정은 임시.
+  라이선스 곡(`라이선스_단무/danmoo_-_be_better`)은 쓰지 않았다.
+- 형식: MP3(BGM 스테레오 128kbps, 음성 모노 64kbps·음량 맞춤, 효과음 96kbps). AAC 는 오픈소스 Chromium 계열에서 재생되지 않아 MP3 로 했다.
+- 재생 규칙: "새 게임/이어하기/불러오기"를 누른 뒤에만, 쓰는 곡만 그때 받는다. 무대가 화면에서 25% 미만으로 보이거나 탭이 숨겨지면 BGM·음성을 멈추고 돌아오면 이어서 재생.
+  볼륨(배경음·음성·효과음)·음소거는 `localStorage['sharehouse-demo:settings']`, 저장은 `['sharehouse-demo:saves']`.
+- 자동 진행은 음성이 있는 줄에서 음성이 끝날 때까지 기다린다. 빨리 넘기기 중에는 음성·효과음·흔들기를 생략한다. 화면 밖·탭 숨김이면 자동·스킵도 멈춘다.
+- Ctrl 은 누르고 있는 동안만 스킵(다른 키와 조합하면 취소), 단축키는 한글 입력 상태에서도 동작(키 위치 기준). iOS Safari 대비로 시작 버튼을 누를 때 오디오 요소를 미리 무음 재생해 둔다.
+- 효과음 자리(파일 없음): `doorlock`(도어락) · `door`(문) · `knock`(노크) · `splat`(계란) · `crash`(쿵·쨍그랑) · `phone`(전화) · `typing`(폰 타자).
+  파일을 구하면 `staging.mjs` 의 `AUDIO.sfx` 에 추가하고 변환기를 다시 돌린다.
 
-### 이미지 바꾸기
+### 음성 연결
 
-1. `staging.mjs` 의 `ASSETS` 에서 해당 id 의 `src` 를 새 원본으로 바꾼다(밤 배경이 생기면 `tone` 을 지운다).
-2. 표정을 추가하려면 `ASSETS.stand.<캐릭터>.faces` 에 id 와 파츠 경로를 넣고, 연출표(`CHAPTERS[].stage`)에서 `face: '<id>'` 로 쓴다.
-3. `build-script.mjs` → `build-images.mjs` 순서로 다시 돌린다. 안 쓰게 된 webp 는 자동으로 지워진다.
+녹음 대본 `01 기획/02 시나리오/00 메인 시나리오/250622 오디오 CSV용/비교 본.xlsx`(Scripts 시트)의 `File Name` 을 대사 텍스트로 대조해 줄마다 음성 id 를 붙였다.
+파일명 규칙: **`{장 코드}_voice_{번호 3자리}`** — 장 코드 00 = 튜토리얼(프롤로그 9000), 01 = 지혜1(1000), 09 = 세은3(3020).
 
-## 플레이어
+| 장 | 히로인 대사 | 음성 id 연결 | 파일 있음 |
+| --- | --- | --- | --- |
+| 프롤로그(00) | 57줄(+??? 표기 16줄) | 73 | 8 |
+| 지혜(01) | 68줄 | 66 | 0 |
+| 세은(09) | 76줄 | 72 | 0 |
 
-- 진행: 무대 클릭/탭, 또는 무대(진행 버튼)에 포커스가 있을 때 Enter·Space. 타자 중에 누르면 문장만 완성한다.
-  무대 밖에 포커스가 있으면 키를 가로채지 않는다(페이지 스크롤 유지). 포커스 이동은 사용자가 버튼을 눌렀을 때만, `preventScroll`.
-- 무대 아래(하봄 스타일): 진행률(`n / 전체`), 자동, 빨리 넘기기(누르면 엔딩까지 빠르게, 무대를 누르면 멈춤), 대사 기록(Escape 로 닫힘),
-  이 장면 처음부터, 장면 선택.
-- 엔딩 카드: Steam 에서 이어서(작품의 Steam 스토어 링크가 있을 때) · 다른 장면 보기 · 처음부터.
-- `prefers-reduced-motion`: 타자 효과·흔들기·페이드 없음.
-- 접근성: 대사는 `aria-live="polite"` 로 "화자: 대사" 를 알림, 선택지·컨트롤은 버튼, 포커스 링 표시. 진행률은 `role="progressbar"`.
-- 좁은 화면(무대 폭 600px 미만): 16:9 그림 아래에 대사·선택지·엔딩 카드를 둔다.
+지금 있는 파일은 장예나 성우님 **샘플** 8개뿐이고, 음성 인식으로 내용을 확인해 프롤로그 줄에 연결했다:
+`00_voice_024`(박윤하_003 "류지혜! 학교 안 갈 거야?!") · `00_voice_029`(박윤하_006) · `00_voice_031`(류지혜_008) · `00_voice_042`(류지혜_011) ·
+`00_voice_049`(류지혜_017) · `00_voice_051`(홍세은_002) · `00_voice_059`(홍세은_005 "(우물우물)") · `00_voice_064`(홍세은_010).
+**이 샘플은 영상 속 게임 음성과 파형이 일치하지 않는다** — 정식 녹음본이 아닐 수 있다(오디션 샘플로 보임). 정식 파일이 오면 `AUDIO.voice` 표만 바꾼다.
 
-## 소리(나중에 붙이기)
+**필요한 파일(203개):** `scripts/sharehouse-demo/voice-missing.txt` 에 전체 목록.
+- `00_voice_001–005, 007–023, 025–028, 030, 032–041, 043–048, 050, 052–058, 061–063, 065–075` (65개)
+- `01_voice_001–017, 019–038, 040–068` (66개)
+- `09_voice_001–014, 016–032, 036–061, 063–070, 072, 074, 076–080` (72개)
+- 녹음 대본에는 있지만 대사가 "⋯" 이거나 수정본과 문장이 달라 줄에 못 붙인 id: `00_voice_006, 060`, `01_voice_018, 039`, `09_voice_015, 033–035, 062, 071, 073, 075` — 파일이 오면 staging 에서 수동 지정이 필요할 수 있다.
 
-음성·BGM·효과음은 권리 확인 전이라 넣지 않았다. 효과음 자리는 데이터의 `sfx` 에 남아 있다:
-`doorlock`(도어락), `door`(문), `splat`(계란), `crash`(그릇), `phone`(전화), `typing`(폰 타자).
+## 이미지 (총 2.3MB, WebP)
 
-- 효과음: 파일을 `apps/web/public/habom/sharehouse-demo/sfx/` 에 두고 `meta.ts` 의 `SFX` 에 `{ door: '/habom/sharehouse-demo/sfx/door.mp3' }` 처럼 적으면
-  해당 줄에서 재생한다(빨리 넘기기 중에는 생략).
-- 음성: 원본 행의 `ScriptGuid` 를 키로 쓰는 것을 권장 — 변환기에서 step 에 guid 를 넣고 플레이어에서 줄이 바뀔 때 재생하면 된다.
-- BGM: 장면(chapter)별 한 곡이면 `staging.mjs` 의 CHAPTERS 에 `bgm` 을 두는 정도로 충분하다. 자동 재생 정책 때문에 첫 클릭 후 시작해야 한다.
+| 웹 파일 | 원본 | 처리 |
+| --- | --- | --- |
+| `bg/living-day` | `01 배경/#1 아파트 거실/소스/#01-거실 (저녁) 조명OFF (배경O).png` + PV `#01-거실 (밤) 조명ON (배경X).png`(창 마스크) + `#2 대학거리/#02-낮.png`(하늘) | **임시 합성**: 노을빛 제거, 창에 낮 하늘. 영상의 낮 거실 원본 필요 |
+| `bg/living-night` | PV `#01-거실 (밤) 조명ON (배경X).png` + `#01-밤.png` | 원본 합성 |
+| `bg/home-room` | `01 배경/#3 주인공 방/#03-주인공방(낮).png` | 프롤로그 본가 |
+| `bg/apartment` | `01 배경/#16-아파트/#16-아파트(새벽).png` | 이사 날 |
+| `bg/room-night` | `#03-주인공방(낮)` | **임시 밤 톤**(창밖 구름 보임) |
+| `bg/saeun-room-night` | PV `#10 세은이 방/#10-세은이 방(밤)01.png` | |
+| `ecg/jihye-cooking` | `00 ECG/99 IngameResource/지혜_요리_기본_보정.png` | |
+| `stand/jihye-*` (7) | `00 SCG/Jihye/지혜_잠옷_흥미_없음.png` + `Resource/Face/*` | **영상의 교복(분홍 가디건) 스탠딩이 없어 잠옷으로 대신** |
+| `stand/saeun-*` (6) | `00 SCG/Saeun/세은_잠옷_기본_없음.png` + `Resource/Face/*` | 영상의 세은은 헤드셋 없음 — 헤드셋 없는 잠옷 스탠딩 필요 |
+| `stand/yunha-*` (3) | `00 SCG/Yunha/99 old result/윤하 사복_수정 전.png` + `Base/Yunha_Base_{Thinking,Angry}.png` | 영상과 같은 흰 셔츠·사원증. `Resource/Face` 는 새 몸(재킷)용이라 맞지 않음 |
+| `title`, `logo` | `메인화면 일러스트하늘X_인쇄용.png`, `03 etc/Logo/로고.png` | 타이틀 |
 
-## 남은 일
+표정 id — 지혜 `interest`(몸 기본) `happy` `smile` `worry` `cry` `grin` `awkward`, 세은 `base` `grin` `startled` `tired` `pout` `surprised`, 윤하 `base` `closed`(감은 눈) `stern`.
+불러오기: 대본 JSON 은 구역이 화면 600px 앞에 오면, 그림은 다음 6줄을 미리 받는다(이름·장면 선택 화면에서는 각 장의 첫 줄).
 
-- 3020 일본어 임시 번역 9줄과 일본어 말투 검수, 3020 일본어 원본을 수정본 대본 기준으로 다시 번역할지 결정.
-- 밤 배경 3종은 톤 보정 임시본. 주인공 방(밤)·거실(밤) 원본이 있으면 교체.
-- 지혜·주인공 이름 색, 표정 배치는 임의로 정했다. 기획 확인 필요.
-- 요리 ECG(노출이 있는 일러스트)를 웹 데모에 쓸지 최종 확인.
-- 효과음·음성 권리 확인 후 연결.
+### 바꾸는 법
+
+- 그림: `staging.mjs` 의 `ASSETS`/`CAST` 의 경로를 바꾸고(교복 지혜·헤드셋 없는 세은·낮 거실이 오면 여기만), 표정은 `CAST.<id>.faces` 에 추가.
+  크기가 다른 캔버스면 `scale`/`top` 을 다시 잰다(영상 프레임에 맞춰 보거나 기존 값 유지).
+- 연출: `CHAPTERS[].stage` (지시어 설명은 파일 머리 주석). 장을 더 넣으려면 같은 형식으로 시트 이름과 `voiceCode` 를 적는다(1010~3010 도 같은 xlsx 에 있다).
+- 소리: `AUDIO.bgm`/`AUDIO.voice`/`AUDIO.sfx`. 변환기 세 개를 차례로 다시 돌리면 안 쓰는 파일은 지워진다.
+
+## 용량
+
+이미지 2.3MB + 소리 5.8MB + 대본 0.27MB(3개 언어) = **약 8.3MB**. 페이지 첫 로딩에는 포함되지 않는다
+(대본은 구역 근처에서, 타이틀 그림은 lazy, 소리는 시작 후 쓰는 곡만).
+
+## 남은 일 / 필요한 원본
+
+- **히로인 정식 음성**: 위 203개(`{장}_voice_{번호}.wav`). 샘플 8개를 정식 파일로 교체할지 확인.
+- **BGM**: 영상에 쓰인 곡(SH Soundtrack 002~005 로 추정) — 장면별 배정표가 있으면 `stage` 의 `bgm` 만 바꾸면 된다.
+- **효과음**: 도어락·문·노크·쿵·전화·폰 타자 등(위 id).
+- **그림**: 지혜 교복 스탠딩(+표정), 헤드셋 없는 세은 잠옷, 낮 거실, 주인공 방(밤), 원본 UI 이미지(대사창·이름표·키캡 — 지금은 CSS 재현).
+- 3020 일본어 임시 번역 9줄과 말투 검수.
+- 요리 ECG(노출 있는 일러스트)를 웹 데모에 쓸지 확인.
