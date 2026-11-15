@@ -1,10 +1,11 @@
 import type { Metadata } from 'next';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
-import { getGames } from '@/lib/supabase';
+import { getAllGameSectionRows, getGames } from '@/lib/supabase';
 import { toCard } from '@/lib/game-model';
 import Shell from '@/components/shell/Shell';
 import Cells from '@/components/ui/Cells';
 import WorksList from '@/components/works/WorksList';
+import HabomSiteBanner from '@/components/works/HabomSiteBanner';
 
 export const revalidate = 10;
 
@@ -16,8 +17,8 @@ export async function generateMetadata({ params: { locale } }: { params: { local
 export default async function GamesPage({ params: { locale } }: { params: { locale: string } }) {
   setRequestLocale(locale);
   const t = await getTranslations('Works');
-  const games = await getGames();
-  const items = games.map((g) => toCard(g, locale));
+  const [games, rows] = await Promise.all([getGames(), getAllGameSectionRows()]);
+  const items = games.map((g) => toCard(g, locale, rows));
 
   return (
     <Shell locale={locale}>
@@ -32,6 +33,7 @@ export default async function GamesPage({ params: { locale } }: { params: { loca
           <div className="mt-14">
             <WorksList items={items} />
           </div>
+          <HabomSiteBanner />
         </div>
       </div>
     </Shell>

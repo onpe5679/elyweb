@@ -6,8 +6,9 @@
    Studio Elysian — design tokens
    --------------------------------------------------------------------------
    컨셉: "원고(原稿)". 종이 위에 놓인 글자와 도판. 원고지 칸, 잉크 마커, 얇은 괘선.
-   - 엘리시안(기본) : 흰 종이 + 블루블랙 잉크 + 코발트 / 밤 테마는 같은 구조의 어두운 판
-   - 하봄([data-brand="habom"]) : 연한 핑크 + 버터 옐로 + 둥근 모서리
+   - 엘리시안(기본) : 흰 종이 + 블루블랙 잉크 + 코발트 (종이 테마 하나만 둔다)
+   - 하봄 : 시안 C 팔레트(크림·블러시·로즈·버터·플럼, tailwind 고정색)로 별도 화면을 쓴다.
+           [data-brand="habom"] 토큰은 엘리시안 화면 안의 하봄 요소에만 남아 있다.
    색은 RGB 3값(--c-*)으로 두고 tailwind 에서 alpha 와 함께 쓴다.
    ========================================================================== */
 
@@ -41,21 +42,6 @@ html:lang(ja) {
   --font-serif: "Shippori Mincho", "Hahmlet", "Noto Serif JP", "Noto Serif KR", serif;
 }
 
-:root[data-theme="night"] {
-  --c-paper: 13 16 32;
-  --c-paper-2: 20 24 49;
-  --c-paper-3: 24 29 58;
-  --c-ink: 236 237 243;
-  --c-ink-2: 184 188 204;
-  --c-ink-3: 138 143 168;
-  --c-accent: 142 162 255;
-  --c-accent-text: 142 162 255;
-  --c-accent-ink: 13 16 32;
-  --c-sub: 40 48 96;
-  --c-grid: 48 56 100;
-  color-scheme: dark;
-}
-
 /* Habom · Paper */
 [data-brand="habom"] {
   --c-paper: 255 247 243;
@@ -75,21 +61,6 @@ html:lang(ja) {
   --font-sans: "Gowun Dodum", "M PLUS Rounded 1c", "Noto Sans KR", "Noto Sans JP", system-ui, sans-serif;
   --radius-ui: 999px;
   --radius-card: 28px;
-}
-
-/* Habom · Night */
-:root[data-theme="night"] [data-brand="habom"] {
-  --c-paper: 38 25 35;
-  --c-paper-2: 52 34 47;
-  --c-paper-3: 62 42 56;
-  --c-ink: 255 240 244;
-  --c-ink-2: 224 196 207;
-  --c-ink-3: 184 150 165;
-  --c-accent: 247 143 174;
-  --c-accent-text: 255 160 188;
-  --c-accent-ink: 59 36 51;
-  --c-sub: 255 214 102;
-  --c-grid: 86 58 76;
 }
 
 /* ==========================================================================
@@ -419,6 +390,11 @@ img { max-width: 100%; }
   .title-menu__item { grid-template-columns: 2rem minmax(0, 1fr) auto; }
   .title-menu__dots { display: none; }
 }
+/* 번호 없는 메뉴(메인 표지) */
+.title-menu--plain .title-menu__item { grid-template-columns: minmax(0, auto) minmax(1.5rem, 1fr) auto; padding-top: .8rem; padding-bottom: .8rem; }
+@media (max-width: 639px) {
+  .title-menu--plain .title-menu__item { grid-template-columns: minmax(0, 1fr) auto; }
+}
 
 /* ==========================================================================
    Page transitions & reveal
@@ -481,3 +457,36 @@ textarea.field { resize: vertical; min-height: 160px; }
 
 /* 스크롤바 */
 html { scrollbar-color: rgb(var(--c-ink) / .4) transparent; }
+
+/* ==========================================================================
+   크레딧 · 가로 캐러셀 · 하봄 플로팅 버튼
+   ========================================================================== */
+
+/* 역할 ······ 이름 (목차처럼 점선으로 잇는다) */
+.leader { display: flex; align-items: baseline; gap: .5rem; }
+.leader::after {
+  content: "";
+  order: 1;
+  flex: 1 1 auto;
+  min-width: 1.5rem;
+  border-bottom: 1px dotted currentColor;
+  opacity: .35;
+  transform: translateY(-.3em);
+}
+.leader > :last-child { order: 2; }
+
+.no-scrollbar { scrollbar-width: none; }
+.no-scrollbar::-webkit-scrollbar { display: none; }
+
+/* 하봄 원고지(분홍 칸) 배경 */
+.manuscript-grid--habom {
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='34' height='44'><path d='M0 .5H34M0 34.5H34M.5 .5V34.5' fill='none' stroke='rgb(244,154,181)' stroke-opacity='.35'/></svg>");
+}
+
+/* 하봄 바로가기(엘리시안 화면 오른쪽 아래에 항상 떠 있는 버튼) */
+.habom-fab {
+  position: fixed;
+  right: max(16px, env(safe-area-inset-right));
+  bottom: max(16px, env(safe-area-inset-bottom));
+  z-index: 70;
+}

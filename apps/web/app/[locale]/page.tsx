@@ -1,6 +1,7 @@
 import { Link } from '@/i18n/routing';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
 import {
+  getAllGameSectionRows,
   getFeaturedGame,
   getGames,
   getHomeTimelineEvents,
@@ -15,15 +16,16 @@ import WorksIndex from '@/components/home/WorksIndex';
 import Statement from '@/components/home/Statement';
 import HabomPortal from '@/components/home/HabomPortal';
 import Chronology from '@/components/home/Chronology';
-import { fmtDate, stripEmoji } from '@/lib/format';
+import { fmtDate, newestFirst, stripEmoji } from '@/lib/format';
 
 export const revalidate = 10;
 
 export default async function HomePage({ params: { locale } }: { params: { locale: string } }) {
   setRequestLocale(locale);
-  const [t, games, featuredRow, events, s] = await Promise.all([
+  const [t, games, rows, featuredRow, events, s] = await Promise.all([
     getTranslations('Home'),
     getGames(),
+    getAllGameSectionRows(),
     getFeaturedGame(),
     getHomeTimelineEvents(),
     getSettings([
@@ -32,7 +34,7 @@ export default async function HomePage({ params: { locale } }: { params: { local
     ]),
   ]);
 
-  const cards = games.map((g) => toCard(g, locale));
+  const cards = games.map((g) => toCard(g, locale, rows));
   const elysian = cards.filter((c) => c.brand === 'elysian');
   const habom = cards.find((c) => c.brand === 'habom');
 
@@ -49,7 +51,7 @@ export default async function HomePage({ params: { locale } }: { params: { local
   return (
     <Shell locale={locale}>
       <Cover
-        works={ordered.map((c) => ({ slug: c.slug, title: c.title, series: c.series, status: c.status, image: c.wide }))}
+        works={ordered.map((c) => ({ slug: c.slug, title: c.title, series: c.series, status: c.status, image: c.wide, year: c.year }))}
       />
       <WorksIndex featured={featured} others={ordered.filter((c) => c.slug !== featured?.slug)} />
       <Statement
@@ -65,7 +67,7 @@ export default async function HomePage({ params: { locale } }: { params: { local
       />
       <HabomPortal game={habom} />
       <Chronology
-        items={events.map((e) => ({ date: fmtDate(e.date, locale), title: stripEmoji(getLocalizedField(e, 'title', locale)) }))}
+        items={newestFirst(events).map((e) => ({ date: fmtDate(e.date, locale), title: stripEmoji(getLocalizedField(e, 'title', locale)) }))}
       />
       <section className="border-t border-ink/15 bg-ink text-paper">
         <div className="mx-auto flex max-w-page flex-wrap items-center justify-between gap-8 px-5 py-16 md:px-10">

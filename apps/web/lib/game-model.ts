@@ -5,6 +5,7 @@ import {
   type GameSectionDB,
 } from './supabase';
 import { resolveBrand, type BrandId } from './brands';
+import { dateKey } from './format';
 
 /**
  * 작품 목록/상세가 공통으로 읽는 "화면용 모델".
@@ -26,9 +27,78 @@ export type GameCardModel = {
   wide: string;
   tall: string;
   hero: string;
+  /** 출시 연도(예: "2024"). 아직 출시 전이면 undefined → 화면에서는 "Coming Soon" */
+  year?: string;
 };
 
-export function toCard(game: Game, locale: string): GameCardModel {
+export type StoreKind = 'steam' | 'stove' | 'itch' | 'web';
+export type StoreLink = { name: string; url: string; kind: StoreKind };
+
+export type StoryBlock = { id: string; title: string; body: string; kind: 'synopsis' | 'text' };
+export type CreditGroup = { id: string; title: string; rows: { role: string; name: string }[] };
+export type TimelineItem = { date: string; text: string };
+export type VideoItem = { id: string; title: string; youtubeId: string; url: string };
+
+export type GameDetailModel = GameCardModel & {
+  officialUrl?: string;
+  platforms: string[];
+  story: StoryBlock[];
+  credits: CreditGroup[];
+  videos: VideoItem[];
+  /** 이미지 캐러셀에 들어가는 이미지(키 비주얼·포스터·갤러리 섹션) */
+  images: string[];
+  stores: StoreLink[];
+  release?: { date: string; label: string };
+  /** 작품 정보의 "주요 전시": 연혁 중 전시·선정·수상 항목만(최신순, 최대 5개) */
+  exhibitions: TimelineItem[];
+};
+
+const EMOJI = /[\p{Extended_Pictographic}️]/gu;
+const clean = (s: string) => s.replace(EMOJI, '').replace(/\s+/g, ' ').trim();
+const SYNOPSIS = /시놉시스|synopsis|あらすじ|줄거리|story|ストーリー/i;
+const RELEASE = /출시|release|リリース|発売|launch/i;
+const STEAM = /steam|스팀/i;
+const EXHIBIT = /전시|선정|수상|쇼케이스|showcase|expo|exhibit|award|festival|페스|\bBIC\b|지스타|g-?star|展|受賞|選出|選定/i;
+const NOT_EXHIBIT = /펀딩|funding|텀블벅|tumblbug|ファンディング/i;
+
+function youtubeId(url: string): string {
+  const m = url.match(/(?:youtube(?:-nocookie)?\.com\/(?:watch\?v=|embed\/|shorts\/)|youtu\.be\/)([\w-]{6,})/);
+  return m ? m[1] : url;
+}
+
+export function storeKind(name: string, url: string): StoreKind {
+  const hay = `${name} ${url}`;
+  if (/steampowered|steam|스팀/i.test(hay)) return 'steam';
+  if (/onstove|stove|스토브/i.test(hay)) return 'stove';
+  if (/itch\.io|itch/i.test(hay)) return 'itch';
+  return 'web';
+}
+
+export const yearOf = (date?: string | null) => date?.match(/\d{4}/)?.[0];
+
+function timelineItems(rows: GameSectionDB[], locale: string): TimelineItem[] {
+  return rows
+    .filter((r) => r.section_type === 'timeline')
+    .flatMap((r) => r.timeline_items || [])
+    .map((it) => ({
+      date: it.date,
+      text: clean(((it as Record<string, unknown>)[`event_${locale}`] as string) || it.event_ko || ''),
+    }))
+    .filter((it) => it.text);
+}
+
+/** 출시일: games.release_date → 연혁의 "출시" 항목(Steam 우선). */
+function releaseOf(game: Game, items: TimelineItem[]): { date: string; label: string } | undefined {
+  if (game.release_date) return { date: game.release_date.slice(0, 10), label: '' };
+  const releases = items.filter((i) => RELEASE.test(i.text));
+  const picked = releases.find((i) => STEAM.test(i.text)) || releases[0];
+  return picked ? { date: picked.date, label: picked.text } : undefined;
+}
+
+/**
+ * @param rows 이 작품의 game_sections(있으면 출시 연도를 계산한다)
+ */
+export function toCard(game: Game, locale: string, rows: GameSectionDB[] = []): GameCardModel {
   const brand = resolveBrand(game);
   // 엘리시안 작품은 가로 배너를, 하봄 작품은 캐주얼한 커버를 목록·카드의 대표 이미지로 쓴다(상세 히어로는 항상 배너).
   const wide =
@@ -37,6 +107,7 @@ export function toCard(game: Game, locale: string): GameCardModel {
       : game.banner_image || game.thumbnail_image || game.cover_image) || '';
   const tall = game.cover_image || game.thumbnail_image || game.banner_image || '';
   const hero = game.banner_image || game.thumbnail_image || game.cover_image || '';
+  const release = releaseOf(game, timelineItems(rows.filter((r) => r.game_id === game.id), locale));
   return {
     slug: game.slug,
     title: getLocalizedField(game, 'title', locale),
@@ -48,49 +119,17 @@ export function toCard(game: Game, locale: string): GameCardModel {
     wide,
     tall,
     hero,
+    year: yearOf(release?.date),
   };
 }
 
-export type StoryBlock = { id: string; title: string; body: string; kind: 'synopsis' | 'text' };
-export type CreditGroup = { id: string; title: string; rows: { role: string; name: string }[] };
-export type TimelineGroup = { id: string; title: string; items: { date: string; text: string }[] };
-export type VideoItem = { id: string; title: string; youtubeId: string; url: string };
-export type GalleryGroup = { id: string; title: string; images: string[] };
-
-export type GameDetailModel = GameCardModel & {
-  steamUrl?: string;
-  officialUrl?: string;
-  platforms: string[];
-  story: StoryBlock[];
-  credits: CreditGroup[];
-  timeline: TimelineGroup[];
-  videos: VideoItem[];
-  gallery: GalleryGroup[];
-  keyArt: string[];
-  stores: { name: string; url: string }[];
-  release?: { date: string; label: string };
-  keyStaff: { role: string; name: string }[];
-};
-
-const EMOJI = /[\p{Extended_Pictographic}️]/gu;
-const clean = (s: string) => s.replace(EMOJI, '').replace(/\s+/g, ' ').trim();
-const SYNOPSIS = /시놉시스|synopsis|あらすじ|줄거리|story|ストーリー/i;
-const RELEASE = /출시|release|リリース|発売|launch/i;
-const STEAM = /steam|스팀/i;
-
-function youtubeId(url: string): string {
-  const m = url.match(/(?:youtube(?:-nocookie)?\.com\/(?:watch\?v=|embed\/)|youtu\.be\/)([\w-]{6,})/);
-  return m ? m[1] : url;
-}
-
 export function toDetail(game: Game, rows: GameSectionDB[], locale: string): GameDetailModel {
-  const card = toCard(game, locale);
+  const card = toCard(game, locale, rows);
   const story: StoryBlock[] = [];
   const credits: CreditGroup[] = [];
-  const timeline: TimelineGroup[] = [];
   const videos: VideoItem[] = [];
-  const gallery: GalleryGroup[] = [];
-  const stores: { name: string; url: string }[] = [];
+  const gallery: string[] = [];
+  const stores: StoreLink[] = [];
 
   const pick = (row: GameSectionDB, base: 'title' | 'content') =>
     ((row as Record<string, unknown>)[`${base}_${locale}`] as string) ||
@@ -104,11 +143,11 @@ export function toDetail(game: Game, rows: GameSectionDB[], locale: string): Gam
       case 'custom': {
         const body = pick(row, 'content').trim();
         if (body) story.push({ id: row.id, title, body, kind: SYNOPSIS.test(title) ? 'synopsis' : 'text' });
-        if (row.section_type === 'custom' && row.images?.length) gallery.push({ id: row.id, title, images: row.images });
+        if (row.section_type === 'custom' && row.images?.length) gallery.push(...row.images);
         break;
       }
       case 'gallery':
-        if (row.images?.length) gallery.push({ id: row.id, title, images: row.images });
+        if (row.images?.length) gallery.push(...row.images);
         break;
       case 'video':
         if (row.video_url) {
@@ -117,52 +156,40 @@ export function toDetail(game: Game, rows: GameSectionDB[], locale: string): Gam
         }
         break;
       case 'credits':
-        if (row.credits?.length) credits.push({ id: row.id, title, rows: row.credits });
-        break;
-      case 'timeline':
-        if (row.timeline_items?.length) {
-          timeline.push({
-            id: row.id,
-            title,
-            items: row.timeline_items.map((it) => ({
-              date: it.date,
-              text: clean(
-                ((it as Record<string, unknown>)[`event_${locale}`] as string) || it.event_ko || ''
-              ),
-            })),
-          });
-        }
+        if (row.credits?.length) credits.push({ id: row.id, title, rows: row.credits.filter((c) => c.role || c.name) });
         break;
       case 'store':
-        (row.store_links || []).forEach((l) => stores.push({ name: l.name, url: l.url }));
+        (row.store_links || []).forEach((l) => l.url && stores.push({ name: l.name, url: l.url, kind: storeKind(l.name, l.url) }));
         break;
     }
   }
 
-  // 스토어: 전용 섹션이 없으면 games.steam_url 로 대신한다.
-  if (!stores.length && game.steam_url) stores.push({ name: 'Steam', url: game.steam_url });
+  // 스토어: games.steam_url 이 스토어 섹션에 없으면 맨 앞에 더한다.
+  if (game.steam_url && !stores.some((s) => s.url === game.steam_url)) {
+    stores.unshift({ name: 'Steam', url: game.steam_url, kind: 'steam' });
+  }
 
-  // 출시일: 연혁 중 "출시" 항목(Steam 우선)
-  const releases = timeline.flatMap((g) => g.items).filter((i) => RELEASE.test(i.text));
-  const picked = releases.find((i) => STEAM.test(i.text)) || releases[0];
-  const release = picked ? { date: picked.date, label: picked.text } : undefined;
+  const items = timelineItems(rows, locale);
+  const release = releaseOf(game, items);
 
-  // 키아트: 서로 다른 이미지가 2장 이상일 때만 "도판" 섹션으로 보여 준다(없는 이미지를 만들지 않는다).
-  const keyArt = Array.from(new Set([card.wide, card.tall].filter(Boolean)));
+  const exhibitions = items
+    .filter((i) => EXHIBIT.test(i.text) && !RELEASE.test(i.text) && !NOT_EXHIBIT.test(i.text))
+    .sort((a, b) => dateKey(b.date) - dateKey(a.date))
+    .slice(0, 5);
+
+  // 이미지: 키 비주얼(배너)·포스터(커버)에 갤러리 섹션 이미지를 잇는다. 없는 이미지는 만들지 않는다.
+  const images = Array.from(new Set([card.hero, card.tall, ...(game.gallery_images || []), ...gallery].filter(Boolean)));
 
   return {
     ...card,
-    steamUrl: game.steam_url,
     officialUrl: game.official_url,
     platforms: game.platforms || [],
     story,
     credits,
-    timeline,
     videos,
-    gallery,
-    keyArt,
+    images,
     stores,
     release,
-    keyStaff: (credits[0]?.rows || []).slice(0, 4),
+    exhibitions,
   };
 }

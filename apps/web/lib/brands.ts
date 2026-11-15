@@ -33,9 +33,4 @@ export function resolveBrand(game: BrandSource): BrandId {
   return 'elysian';
 }
 
-/** 대사·선택지 체험은 하봄 소속 게임에만 연다. */
-export function hasExperience(game: BrandSource): boolean {
-  return resolveBrand(game) === 'habom';
-}
-
 export const SITE_URL_DEFAULT_LOGO = '/snapshot/company_settings/2de92d57-7a42-40f6-a99e-783411918a3c.webp';

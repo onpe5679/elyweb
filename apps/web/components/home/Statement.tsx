@@ -23,7 +23,6 @@ export default async function Statement({ title, paragraphs, image, stats }: Pro
                 {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img src={image} alt="" loading="lazy" className="plate__img" />
               </div>
-              <p className="mt-2 px-1 pb-1 font-mono text-[11px] uppercase tracking-[.14em] text-ink-3">{t('vision.plate')}</p>
             </div>
           )}
         </div>

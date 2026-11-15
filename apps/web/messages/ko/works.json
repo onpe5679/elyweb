@@ -2,12 +2,19 @@
   "Works": {
     "eyebrow": "Our Works",
     "title": "작품",
-    "lead": "엘리시안과 하봄이 펼쳐 온 이야기들입니다. 이미지나 제목을 눌러 작품 상세로 들어가 보세요.",
+    "lead": "스튜디오 엘리시안과 산하 스튜디오 하봄이 만든 이야기들입니다.",
     "filterLabel": "시리즈",
     "filterAll": "전체",
     "count": "{count}편",
     "open": "작품 보기",
-    "habomLink": "스튜디오 하봄"
+    "habomLink": "스튜디오 하봄",
+    "comingSoon": "Coming Soon",
+    "habom": {
+      "badge": "산하 스튜디오",
+      "title": "하봄 스튜디오",
+      "body": "밝고 말랑한 이야기를 만드는 엘리시안의 산하 스튜디오입니다.\n하봄의 작품과 소식은 하봄 웹사이트에서 더 자세히 만나 보세요.",
+      "cta": "하봄 웹사이트 바로가기"
+    }
   },
   "Game": {
     "breadcrumb": "현재 위치",
@@ -20,10 +27,9 @@
     "about": "About",
     "tabs": {
       "overview": "소개",
-      "gallery": "도판",
+      "gallery": "이미지",
       "video": "영상",
       "credits": "제작진",
-      "history": "연혁",
       "related": "다른 작품"
     },
     "info": {
@@ -33,13 +39,7 @@
       "platform": "플랫폼",
       "genre": "장르",
       "release": "출시",
-      "staff": "주요 제작진"
-    },
-    "keyart": {
-      "title": "도판",
-      "lead": "작품의 대표 이미지입니다. 누르면 크게 볼 수 있어요.",
-      "visual": "키 비주얼",
-      "poster": "포스터"
+      "exhibitions": "주요 전시"
     },
     "videos": {
       "title": "영상",
@@ -48,9 +48,6 @@
     },
     "credits": {
       "title": "제작진"
-    },
-    "history": {
-      "title": "프로젝트 연혁"
     },
     "related": {
       "series": "같은 시리즈의 작품",
@@ -65,7 +62,11 @@
       "close": "닫기",
       "prev": "이전 이미지",
       "next": "다음 이미지",
-      "counter": "{current} / {total}"
-    }
+      "counter": "{current} / {total}",
+      "listLabel": "{title} 이미지"
+    },
+    "stores": "스토어",
+    "imagesLabel": "작품 이미지",
+    "comingSoon": "Coming Soon"
   }
 }

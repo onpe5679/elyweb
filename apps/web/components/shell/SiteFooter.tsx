@@ -55,12 +55,12 @@ export default async function SiteFooter({ brand, logoSrc, contactEmail, twitter
           <nav aria-label={t('sitemap')} className="md:col-span-4">
             <h2 className="t-eyebrow mb-4">{t('sitemap')}</h2>
             <ul className="grid grid-cols-2 gap-x-6 gap-y-2 text-[15px]">
-              <li><Link href="/games" className="link-u">{tn('works')}</Link></li>
               <li><Link href="/about" className="link-u">{tn('studio')}</Link></li>
+              <li><Link href="/games" className="link-u">{tn('works')}</Link></li>
               <li><Link href="/news" className="link-u">{tn('news')}</Link></li>
-              <li><Link href="/habom" className="link-u">{tn('habom')}</Link></li>
               <li><Link href="/contact" className="link-u">{tn('contact')}</Link></li>
               <li><Link href="/press" className="link-u">{tn('press')}</Link></li>
+              <li><Link href="/habom" className="link-u">{tn('habom')}</Link></li>
             </ul>
           </nav>
 

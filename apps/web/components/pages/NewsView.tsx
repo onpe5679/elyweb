@@ -1,7 +1,6 @@
 import { getTranslations } from 'next-intl/server';
 import { Link } from '@/i18n/routing';
 import { getLocalizedField, type News } from '@/lib/supabase';
-import { pad2 } from '@/lib/format';
 import XTimeline from '@/components/news/XTimeline';
 import SectionHead from './SectionHead';
 import { ArrowUpRightIcon, XIcon } from './Icons';
@@ -29,7 +28,7 @@ export default async function NewsView({ locale, items, handle, showWidget, show
 
   const posts = (
     <ol className="border-t border-ink" data-testid="news-list">
-      {items.map((item, i) => {
+      {items.map((item) => {
         const title = getLocalizedField(item, 'title', locale);
         const body = stripTags(getLocalizedField(item, 'content', locale));
         const iso = (item.published_at || item.created_at || '').slice(0, 10);
@@ -41,7 +40,6 @@ export default async function NewsView({ locale, items, handle, showWidget, show
               className="group grid gap-x-8 gap-y-4 py-8 sm:grid-cols-[7.5rem_minmax(0,1fr)] md:py-10 lg:grid-cols-[7.5rem_minmax(0,1fr)_11rem]"
             >
               <p className="font-mono text-[13px] leading-7 text-accent-text">
-                <span aria-hidden className="mr-2 text-ink-3">{pad2(i + 1)}</span>
                 {date && <time dateTime={iso}>{date}</time>}
               </p>
               <div className="min-w-0">
@@ -71,8 +69,7 @@ export default async function NewsView({ locale, items, handle, showWidget, show
     <div className="relative isolate overflow-hidden border border-ink/60 bg-paper-3" data-testid="news-empty">
       <div aria-hidden className="ruled absolute inset-0 -z-10 opacity-40" />
       <div className="p-8 md:p-12">
-        <p className="font-mono text-[12px] uppercase tracking-[.14em] text-ink-3">No.00 / 00</p>
-        <h2 className="t-display mt-4 break-keep text-[clamp(26px,3.2vw,40px)]">{t('empty.title')}</h2>
+        <h2 className="t-display break-keep text-[clamp(26px,3.2vw,40px)]">{t('empty.title')}</h2>
         <p className="mt-4 max-w-md break-keep font-serif text-[16px] leading-8 text-ink-2">{t('empty.body')}</p>
         <div className="mt-8 flex flex-wrap gap-3">
           <Link href="/games" className="btn">{t('empty.works')}</Link>

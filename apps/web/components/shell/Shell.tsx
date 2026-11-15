@@ -1,7 +1,8 @@
-import { getGames, getLocalizedSettingValue, getSettings } from '@/lib/supabase';
-import { hasExperience, type BrandId } from '@/lib/brands';
+import { getLocalizedSettingValue, getSettings } from '@/lib/supabase';
+import type { BrandId } from '@/lib/brands';
 import SiteHeader from './SiteHeader';
 import SiteFooter from './SiteFooter';
+import HabomFab from './HabomFab';
 
 type Props = {
   brand?: BrandId;
@@ -12,21 +13,16 @@ type Props = {
 };
 
 /**
- * 모든 페이지의 바깥 틀. brand 에 따라 색·서체·모서리 토큰이 바뀐다(globals.css 의 [data-brand]).
+ * 엘리시안 페이지의 바깥 틀(하봄 화면은 components/habom/HabomShell 을 쓴다).
  */
 export default async function Shell({ brand = 'elysian', locale, children, bare }: Props) {
-  const [settings, games] = await Promise.all([
-    getSettings(['contact_email', 'twitter_url', 'youtube_url', 'instagram_url', 'logo_image']),
-    brand === 'habom' ? getGames() : Promise.resolve([]),
-  ]);
+  const settings = await getSettings(['contact_email', 'twitter_url', 'youtube_url', 'instagram_url', 'logo_image']);
   const logoSrc = settings.logo_image?.value_ko || null;
-  const exp = games.find((g) => hasExperience(g));
-  const experienceHref = exp ? `/games/${exp.slug}?play=1` : undefined;
 
   return (
     <div data-brand={brand} className="flex min-h-screen flex-col bg-paper text-ink">
       <a href="#main" className="skip-link">{locale === 'ko' ? '본문으로 건너뛰기' : locale === 'ja' ? '本文へ移動' : 'Skip to content'}</a>
-      {!bare && <SiteHeader brand={brand} logoSrc={logoSrc} experienceHref={experienceHref} />}
+      {!bare && <SiteHeader logoSrc={logoSrc} />}
       <main id="main" className="flex-grow">
         {children}
       </main>
@@ -40,6 +36,7 @@ export default async function Shell({ brand = 'elysian', locale, children, bare 
           instagramUrl={getLocalizedSettingValue(settings.instagram_url, locale)}
         />
       )}
+      {!bare && brand === 'elysian' && <HabomFab />}
     </div>
   );
 }

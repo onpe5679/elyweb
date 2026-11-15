@@ -17,7 +17,8 @@ import {
     DeleteButton,
     useRecordContext,
     ChipField,
-    BooleanField
+    BooleanField,
+    DateInput
 } from 'react-admin';
 import { LocalizedInput } from '../../components/LocalizedInput';
 import { LocalizedArrayInput } from '../../components/LocalizedArrayInput';
@@ -169,8 +170,17 @@ export const GameEdit = () => (
             <TextInput source="steam_url" fullWidth label="Steam URL" />
             <TextInput source="trailer_url" fullWidth label="Trailer URL" />
             <TextInput source="official_url" fullWidth label="Official Website" />
-            
-            <BooleanInput source="is_featured" />
+            <DateInput
+                source="release_date"
+                label="Release date (출시일)"
+                helperText="작품 목록·상세의 출시 연도로 쓰입니다. 비워 두면 연혁의 '출시' 항목에서 찾고, 그래도 없으면 Coming Soon으로 표시합니다."
+            />
+
+            <BooleanInput
+                source="is_featured"
+                label="Featured (메인 '현재 펼쳐진 이야기')"
+                helperText="켜 둔 작품이 메인 화면 대표작이 됩니다. 한 작품만 켜 두세요."
+            />
             <NumberInput source="display_order" />
 
             <GameSectionsPanel />

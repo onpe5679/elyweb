@@ -2,12 +2,19 @@
   "Works": {
     "eyebrow": "Our Works",
     "title": "作品",
-    "lead": "エリシアンとハボムが開いてきた物語です。画像やタイトルを選ぶと作品の詳細に進みます。",
+    "lead": "スタジオ・エリシアンとレーベルスタジオ「ハボム」がつくった物語です。",
     "filterLabel": "シリーズ",
     "filterAll": "すべて",
     "count": "{count}本",
     "open": "作品を見る",
-    "habomLink": "スタジオ ハボム"
+    "habomLink": "スタジオ ハボム",
+    "comingSoon": "Coming Soon",
+    "habom": {
+      "badge": "レーベルスタジオ",
+      "title": "ハボム スタジオ",
+      "body": "明るくやわらかな物語をつくる、エリシアンのレーベルスタジオです。\nハボムの作品やお知らせは、ハボムのサイトでご覧いただけます。",
+      "cta": "ハボムのサイトへ"
+    }
   },
   "Game": {
     "breadcrumb": "現在位置",
@@ -20,10 +27,9 @@
     "about": "About",
     "tabs": {
       "overview": "紹介",
-      "gallery": "図版",
+      "gallery": "画像",
       "video": "映像",
       "credits": "スタッフ",
-      "history": "沿革",
       "related": "ほかの作品"
     },
     "info": {
@@ -33,13 +39,7 @@
       "platform": "プラットフォーム",
       "genre": "ジャンル",
       "release": "発売",
-      "staff": "主なスタッフ"
-    },
-    "keyart": {
-      "title": "図版",
-      "lead": "作品の代表的なイメージです。選ぶと大きく表示されます。",
-      "visual": "キービジュアル",
-      "poster": "ポスター"
+      "exhibitions": "主な出展"
     },
     "videos": {
       "title": "映像",
@@ -48,9 +48,6 @@
     },
     "credits": {
       "title": "スタッフ"
-    },
-    "history": {
-      "title": "プロジェクト沿革"
     },
     "related": {
       "series": "同じシリーズの作品",
@@ -65,7 +62,11 @@
       "close": "閉じる",
       "prev": "前の画像",
       "next": "次の画像",
-      "counter": "{current} / {total}"
-    }
+      "counter": "{current} / {total}",
+      "listLabel": "{title}の画像"
+    },
+    "stores": "ストア",
+    "imagesLabel": "作品画像",
+    "comingSoon": "Coming Soon"
   }
 }

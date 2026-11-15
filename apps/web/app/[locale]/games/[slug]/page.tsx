@@ -3,17 +3,17 @@ import { notFound } from 'next/navigation';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
 import { getGameBySlug, getGameSectionRows, getGames } from '@/lib/supabase';
 import { toCard, toDetail } from '@/lib/game-model';
-import { hasExperience } from '@/lib/brands';
-import { fmtDate } from '@/lib/format';
+import { fmtDate, yearLabel } from '@/lib/format';
 import { Link } from '@/i18n/routing';
 import Shell from '@/components/shell/Shell';
 import StatusMarker from '@/components/ui/StatusMarker';
 import DetailNav from '@/components/game/DetailNav';
-import Gallery from '@/components/game/Gallery';
+import ImageCarousel from '@/components/game/ImageCarousel';
+import CreditsGrid from '@/components/game/CreditsGrid';
+import StoreIcon from '@/components/game/StoreIcon';
 import VideoCard from '@/components/game/VideoCard';
 import RichText from '@/components/game/RichText';
-import RememberGame from '@/components/game/RememberGame';
-import ExperienceLauncher from '@/components/habom/ExperienceLauncher';
+import HabomGameDetail from '@/components/habom/HabomGameDetail';
 
 export const revalidate = 10;
 
@@ -38,27 +38,22 @@ export default async function GameDetailPage({ params: { locale, slug } }: Props
   const [t, rows, all] = await Promise.all([getTranslations('Game'), getGameSectionRows(slug), getGames()]);
 
   const m = toDetail(game, rows, locale);
-  const habom = m.brand === 'habom';
-  const experience = hasExperience(game);
-  const primaryStore = m.stores[0];
   const related = all
     .filter((g) => g.slug !== slug)
     .map((g) => toCard(g, locale))
     .filter((c) => c.brand === m.brand);
+
+  // 하봄 작품은 하봄 화면(시안 C)으로 그린다.
+  if (m.brand === 'habom') return <HabomGameDetail m={m} locale={locale} related={related} />;
+
   const sameSeries = related.filter((c) => c.series === m.series);
   const relatedList = (sameSeries.length ? sameSeries : related).slice(0, 3);
 
-  const plates = [
-    ...(m.keyArt.length > 1 ? m.keyArt.map((src, i) => ({ src, caption: i === 0 ? t('keyart.visual') : t('keyart.poster') })) : []),
-    ...m.gallery.flatMap((g) => g.images.map((src) => ({ src, caption: g.title }))),
-  ];
-
   const tabs = [
     { id: 'overview', label: t('tabs.overview'), show: true },
-    { id: 'gallery', label: t('tabs.gallery'), show: plates.length > 0 },
+    { id: 'gallery', label: t('tabs.gallery'), show: m.images.length > 0 },
     { id: 'video', label: t('tabs.video'), show: m.videos.length > 0 },
     { id: 'credits', label: t('tabs.credits'), show: m.credits.length > 0 },
-    { id: 'history', label: t('tabs.history'), show: m.timeline.length > 0 },
     { id: 'related', label: t('tabs.related'), show: relatedList.length > 0 },
   ].filter((x) => x.show);
 
@@ -67,13 +62,16 @@ export default async function GameDetailPage({ params: { locale, slug } }: Props
     { label: t('info.status'), value: <StatusMarker status={m.status} /> },
     { label: t('info.platform'), value: m.platforms.join(', ') },
     { label: t('info.genre'), value: m.genres.join(' · ') },
-    { label: t('info.release'), value: m.release ? fmtDate(m.release.date, locale) : '' },
+    { label: t('info.release'), value: m.release ? fmtDate(m.release.date, locale) : yearLabel(m.year, t('comingSoon')) },
     {
-      label: t('info.staff'),
-      value: m.keyStaff.length ? (
-        <ul className="space-y-1">
-          {m.keyStaff.slice(0, 3).map((s) => (
-            <li key={s.role + s.name}><span className="text-ink-3">{s.role}</span> {s.name}</li>
+      label: t('info.exhibitions'),
+      value: m.exhibitions.length ? (
+        <ul className="space-y-1.5" data-testid="exhibitions">
+          {m.exhibitions.map((e, i) => (
+            <li key={i} className="grid grid-cols-[3.2rem_minmax(0,1fr)] gap-2">
+              <span className="font-mono text-[12px] leading-6 text-ink-3">{e.date.match(/\d{4}/)?.[0] ?? e.date}</span>
+              <span className="break-keep">{e.text}</span>
+            </li>
           ))}
         </ul>
       ) : '',
@@ -81,10 +79,8 @@ export default async function GameDetailPage({ params: { locale, slug } }: Props
   ].filter((r) => r.value);
 
   return (
-    <Shell brand={m.brand} locale={locale}>
-      <RememberGame slug={m.slug} title={m.title} />
-
-      {/* 히어로: 큰 작품 비주얼 · 작품명 · 주요 버튼 */}
+    <Shell locale={locale}>
+      {/* 히어로: 큰 작품 비주얼 · 작품명 · 스토어 */}
       <header className="on-dark relative isolate overflow-hidden bg-[#0b0d14] text-white">
         <div className="absolute inset-0 -z-10">
           {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -100,36 +96,45 @@ export default async function GameDetailPage({ params: { locale, slug } }: Props
               <span>{m.series}</span>
             </nav>
             <div className="flex flex-wrap items-center gap-2">
-              <span className={`marker ${habom ? 'marker--sub' : ''} !bg-white !text-black`} style={habom ? { background: 'rgb(var(--c-sub))', color: 'rgb(59 36 51)' } : undefined}>{m.series}</span>
+              <span className="marker !bg-white !text-black">{m.series}</span>
               <StatusMarker status={m.status} className="!bg-transparent !text-white !shadow-[inset_0_0_0_1px_rgba(255,255,255,.7)]" />
+              <span className="ml-1 font-mono text-[12px] tracking-[.14em] text-white/75">{yearLabel(m.year, t('comingSoon'))}</span>
             </div>
             <h1 className="t-display mt-5 whitespace-pre-line text-[clamp(40px,7.4vw,112px)] text-white [text-shadow:0_2px_30px_rgba(0,0,0,.45)]">{m.title}</h1>
             <p className="mt-6 max-w-xl whitespace-pre-line break-keep font-serif text-[clamp(16px,1.4vw,20px)] leading-8 text-white/85">{m.desc}</p>
             <p className="mt-5 font-mono text-[12px] uppercase tracking-[.14em] text-white/70">
               {[m.platforms.join(', '), m.genres.join(' · ')].filter(Boolean).join('   ·   ')}
             </p>
-            <div className="mt-9 flex flex-wrap gap-3">
-              {primaryStore && (
-                <a href={primaryStore.url} target="_blank" rel="noopener noreferrer" className={`btn btn--on-dark ${habom ? '!border-ink' : ''}`}>
-                  {t('buy', { name: primaryStore.name })} <span aria-hidden>↗</span>
+            <div className="mt-9 flex flex-wrap gap-3" aria-label={t('stores')} data-testid="hero-stores">
+              {m.stores.map((s, i) => (
+                <a
+                  key={s.url}
+                  href={s.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className={`btn ${i === 0 ? 'btn--on-dark' : 'btn--on-dark-ghost'}`}
+                >
+                  <StoreIcon kind={s.kind} size={18} />
+                  {t('buy', { name: s.name })} <span aria-hidden>↗</span>
+                </a>
+              ))}
+              {m.officialUrl && (
+                <a href={m.officialUrl} target="_blank" rel="noopener noreferrer" className="btn btn--on-dark-ghost">
+                  <StoreIcon kind="web" size={18} /> {t('official')} <span aria-hidden>↗</span>
                 </a>
               )}
-              {experience && <ExperienceLauncher slug={m.slug} title={m.title} image={m.wide || m.tall} variant="primary" />}
               {m.videos.length > 0 && (
                 <a href="#video" className="btn btn--on-dark-ghost">
                   <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" aria-hidden><path d="M8 5v14l11-7z" /></svg>
                   {t('watch')}
                 </a>
               )}
-              {m.officialUrl && (
-                <a href={m.officialUrl} target="_blank" rel="noopener noreferrer" className="btn btn--on-dark-ghost">{t('official')} ↗</a>
-              )}
             </div>
           </div>
           {m.tall && (
             <div className="hidden lg:block">
-              <div className="plate rotate-[1.5deg]">
-                <div className="aspect-[3/4] overflow-hidden" style={{ borderRadius: 'calc(var(--radius-card) - 8px)' }}>
+              <div className="plate">
+                <div className="aspect-[3/4] overflow-hidden">
                   {/* eslint-disable-next-line @next/next/no-img-element */}
                   <img src={m.tall} alt={m.title} className="plate__img" />
                 </div>
@@ -150,8 +155,7 @@ export default async function GameDetailPage({ params: { locale, slug } }: Props
             ) : (
               m.story.map((s, i) => (
                 <div key={s.id} className={i > 0 ? 'mt-16 border-t border-ink/15 pt-12' : ''}>
-                  <p className="t-eyebrow">{s.kind === 'synopsis' ? t('synopsis') : t('about')}</p>
-                  <h2 className="t-display mt-3 mb-7 text-[clamp(26px,3vw,38px)]">{s.title}</h2>
+                  <h2 className="t-display mb-7 text-[clamp(26px,3vw,38px)]">{s.title}</h2>
                   <RichText text={s.body} />
                 </div>
               ))
@@ -160,7 +164,7 @@ export default async function GameDetailPage({ params: { locale, slug } }: Props
           <aside className="lg:col-span-4 lg:col-start-9" aria-label={t('info.title')}>
             <div className="sticky top-[calc(var(--header-h)+80px)]">
               <h2 className="t-eyebrow mb-4">{t('info.title')}</h2>
-              <dl className="border-t border-ink">
+              <dl className="border-t border-ink" data-testid="game-info">
                 {info.map((r) => (
                   <div key={r.label} className="grid grid-cols-[6.5rem_minmax(0,1fr)] gap-4 border-b border-ink/15 py-4 text-[15px]">
                     <dt className="font-mono text-[12px] uppercase tracking-wider text-ink-3">{r.label}</dt>
@@ -168,31 +172,13 @@ export default async function GameDetailPage({ params: { locale, slug } }: Props
                   </div>
                 ))}
               </dl>
-              {m.stores.length > 0 && (
-                <div className="mt-8 flex flex-col gap-3">
-                  {m.stores.map((s) => (
-                    <a key={s.url} href={s.url} target="_blank" rel="noopener noreferrer" className="btn btn--ghost justify-between">
-                      <span>{s.name}</span><span aria-hidden>↗</span>
-                    </a>
-                  ))}
-                </div>
-              )}
-              {experience && (
-                <div className="mt-8 rounded-card bg-paper-2 p-6 ring-2 ring-ink">
-                  <p className="font-display text-[22px]">{t('experience.title')}</p>
-                  <p className="mt-2 break-keep text-[14px] leading-7 text-ink-2">{t('experience.body')}</p>
-                  <div className="mt-5"><ExperienceLauncher slug={m.slug} title={m.title} image={m.wide || m.tall} variant="card" /></div>
-                </div>
-              )}
             </div>
           </aside>
         </section>
 
-        {plates.length > 0 && (
-          <section id="gallery" className="scroll-mt-[calc(var(--header-h)+60px)] border-t border-ink/15 py-16 md:py-24">
-            <h2 className="t-display mb-3 text-[clamp(26px,3vw,38px)]">{t('keyart.title')}</h2>
-            <p className="mb-10 max-w-xl break-keep font-serif text-[15px] leading-8 text-ink-2">{t('keyart.lead')}</p>
-            <Gallery items={plates} title={m.title} />
+        {m.images.length > 0 && (
+          <section id="gallery" aria-label={t('imagesLabel')} className="scroll-mt-[calc(var(--header-h)+60px)] border-t border-ink/15 py-16 md:py-20">
+            <ImageCarousel images={m.images} title={m.title} />
           </section>
         )}
 
@@ -210,37 +196,7 @@ export default async function GameDetailPage({ params: { locale, slug } }: Props
         {m.credits.length > 0 && (
           <section id="credits" className="scroll-mt-[calc(var(--header-h)+60px)] border-t border-ink/15 py-16 md:py-24">
             <h2 className="t-display mb-10 text-[clamp(26px,3vw,38px)]">{t('credits.title')}</h2>
-            <div className="gap-x-14 lg:columns-2">
-              {m.credits.map((g) => (
-                <section key={g.id} className="mb-12 break-inside-avoid">
-                  <h3 className="mb-3 font-mono text-[12px] uppercase tracking-[.14em] text-accent-text">{g.title}</h3>
-                  <dl className="border-t border-ink">
-                    {g.rows.map((r, i) => (
-                      <div key={i} className="grid grid-cols-[minmax(7rem,40%)_minmax(0,1fr)] gap-4 border-b border-ink/12 py-2.5 text-[15px]">
-                        <dt className="text-ink-3">{r.role}</dt>
-                        <dd className="font-medium">{r.name}</dd>
-                      </div>
-                    ))}
-                  </dl>
-                </section>
-              ))}
-            </div>
-          </section>
-        )}
-
-        {m.timeline.length > 0 && (
-          <section id="history" className="scroll-mt-[calc(var(--header-h)+60px)] border-t border-ink/15 py-16 md:py-24">
-            <h2 className="t-display mb-10 text-[clamp(26px,3vw,38px)]">{t('history.title')}</h2>
-            {m.timeline.map((g) => (
-              <ol key={g.id} className="max-w-3xl border-t border-ink">
-                {g.items.map((it, i) => (
-                  <li key={i} className="grid grid-cols-[8.5rem_minmax(0,1fr)] gap-6 border-b border-ink/15 py-4">
-                    <span className="font-display text-[22px] font-extrabold text-accent-text">{fmtDate(it.date, locale)}</span>
-                    <span className="break-keep font-serif text-[17px] leading-8 text-ink-2">{it.text}</span>
-                  </li>
-                ))}
-              </ol>
-            ))}
+            <CreditsGrid groups={m.credits} />
           </section>
         )}
 
@@ -252,7 +208,7 @@ export default async function GameDetailPage({ params: { locale, slug } }: Props
                 <li key={c.slug}>
                   <Link href={`/games/${c.slug}`} className="group block">
                     <div className="plate">
-                      <div className="aspect-[16/10] overflow-hidden" style={{ borderRadius: 'calc(var(--radius-card) - 8px)' }}>
+                      <div className="aspect-[16/10] overflow-hidden">
                         {/* eslint-disable-next-line @next/next/no-img-element */}
                         <img src={c.wide} alt="" loading="lazy" className="plate__img zoom-img object-[50%_28%]" />
                       </div>

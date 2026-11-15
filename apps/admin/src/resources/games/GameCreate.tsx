@@ -1,4 +1,4 @@
-import { Create, SimpleForm, TextInput, SelectInput, ArrayInput, SimpleFormIterator, BooleanInput, NumberInput, ImageInput, ImageField } from 'react-admin';
+import { Create, SimpleForm, TextInput, SelectInput, ArrayInput, SimpleFormIterator, BooleanInput, NumberInput, ImageInput, ImageField, DateInput } from 'react-admin';
 import { LocalizedInput } from '../../components/LocalizedInput';
 import { LocalizedArrayInput } from '../../components/LocalizedArrayInput';
 
@@ -49,8 +49,9 @@ export const GameCreate = () => (
 
             <TextInput source="steam_url" fullWidth />
             <TextInput source="trailer_url" fullWidth />
-            
-            <BooleanInput source="is_featured" />
+            <DateInput source="release_date" label="Release date (출시일)" />
+
+            <BooleanInput source="is_featured" label="Featured (메인 '현재 펼쳐진 이야기')" />
             <NumberInput source="display_order" />
         </SimpleForm>
     </Create>

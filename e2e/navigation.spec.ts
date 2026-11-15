@@ -14,22 +14,26 @@ test.describe('Header navigation (Elysian)', () => {
     await expect(page).toHaveURL(/\/ko\/?$/);
   });
 
+  test('header order: 스튜디오 소개 · 작품 · 새 소식 · 문의 · 프레스 (no 하봄)', async ({ page }) => {
+    await expect(nav(page).getByRole('link')).toHaveText(['스튜디오 소개', '작품', '새 소식', '문의', '프레스']);
+  });
+
   for (const [label, url] of [
+    ['스튜디오 소개', /\/ko\/about\/?$/],
     ['작품', /\/ko\/games\/?$/],
-    ['스튜디오', /\/ko\/about\/?$/],
-    ['새소식', /\/ko\/news\/?$/],
-    ['하봄', /\/ko\/habom\/?$/],
+    ['새 소식', /\/ko\/news\/?$/],
     ['문의', /\/ko\/contact\/?$/],
+    ['프레스', /\/ko\/press\/?$/],
   ] as const) {
     test(`header link "${label}" navigates`, async ({ page }) => {
-      await nav(page).getByRole('link', { name: label }).click();
+      await nav(page).getByRole('link', { name: label, exact: true }).click();
       await expect(page).toHaveURL(url);
     });
   }
 
   test('current page is marked in the header', async ({ page }) => {
     await page.goto('/ko/games');
-    await expect(nav(page).getByRole('link', { name: '작품' })).toHaveAttribute('aria-current', 'page');
+    await expect(nav(page).getByRole('link', { name: '작품', exact: true })).toHaveAttribute('aria-current', 'page');
   });
 
   test('press kit is reachable from the footer', async ({ page }) => {
@@ -42,7 +46,7 @@ test.describe('Footer', () => {
   test('sitemap, social links and copyright', async ({ page }) => {
     await page.goto('/ko');
     const footer = page.locator('footer');
-    for (const name of ['작품', '스튜디오', '새소식', '하봄', '문의', '프레스']) {
+    for (const name of ['스튜디오 소개', '작품', '새 소식', '문의', '프레스', '하봄 스튜디오']) {
       await expect(footer.getByRole('link', { name, exact: true })).toBeVisible();
     }
     await expect(footer).toContainText(/© \d{4} Studio Elysian/);
@@ -53,7 +57,7 @@ test.describe('Footer', () => {
 test.describe('Secondary pages render', () => {
   for (const [path, text] of [
     ['/ko/about', /무궁한 이야기의 지평선/],
-    ['/ko/news', /새소식|News/],
+    ['/ko/news', /새소식|새 소식|News/],
     ['/ko/press', /프레스|Press/i],
     ['/ko/contact', /문의|Contact/i],
     ['/ko/privacy', /개인정보/],
@@ -67,9 +71,26 @@ test.describe('Secondary pages render', () => {
     });
   }
 
-  test('about page has the history anchor used by the home page', async ({ page }) => {
+  test('about page: history newest first, no team list', async ({ page }) => {
     await page.goto('/ko/about');
     await expect(page.locator('#history')).toBeVisible();
+    await expect(page.getByTestId('team-list')).toHaveCount(0);
+    const dates = await page.locator('[data-testid="history-table"] tbody th').allInnerTexts();
+    const numeric = dates.map((d) => d.trim()).filter((d) => /^\d{4}/.test(d));
+    expect(numeric.length).toBeGreaterThan(2);
+    expect([...numeric].sort().reverse()).toEqual(numeric);
+  });
+
+  test('press page has per-title sections', async ({ page }) => {
+    await page.goto('/ko/press');
+    await expect(page.getByTestId('press-games').locator('li[id^="press-"]')).toHaveCount(5);
+    await expect(page.locator('#press-memorial-circuit')).toContainText('키 비주얼');
+  });
+
+  test('contact page is email-only (no form)', async ({ page }) => {
+    await page.goto('/ko/contact');
+    await expect(page.locator('form')).toHaveCount(0);
+    await expect(page.getByTestId('contact-email').getByRole('link').first()).toHaveAttribute('href', /^mailto:/);
   });
 
   test('unknown route shows a branded 404', async ({ page }) => {

@@ -50,6 +50,11 @@ export type Game = {
   banner_image?: string;
   steam_url?: string;
   official_url?: string;
+  trailer_url?: string;
+  /** 출시일(YYYY-MM-DD). 비어 있으면 연혁의 "출시" 항목에서 추정한다. */
+  release_date?: string | null;
+  developer?: string;
+  gallery_images?: string[];
   platforms?: string[];
   is_featured: boolean;
   display_order?: number;
@@ -589,6 +594,21 @@ export async function getGameSectionRows(gameIdOrSlug: string): Promise<GameSect
     .from('game_sections')
     .select('*')
     .eq('game_id', game?.id || gameIdOrSlug)
+    .eq('is_visible', true)
+    .order('display_order', { ascending: true });
+  if (error) {
+    console.error('Error fetching game sections:', error);
+    return [];
+  }
+  return (data as GameSectionDB[]) || [];
+}
+
+/** 공개된 모든 작품의 섹션(목록 화면에서 출시 연도 등을 계산할 때 사용). */
+export async function getAllGameSectionRows(): Promise<GameSectionDB[]> {
+  if (!supabase) return snap.sections.filter((x) => x.is_visible).sort((a, b) => a.display_order - b.display_order);
+  const { data, error } = await supabase
+    .from('game_sections')
+    .select('*')
     .eq('is_visible', true)
     .order('display_order', { ascending: true });
   if (error) {

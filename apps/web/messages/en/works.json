@@ -2,12 +2,19 @@
   "Works": {
     "eyebrow": "Our Works",
     "title": "Works",
-    "lead": "Stories opened by Elysian and Habom. Choose an image or a title to enter the work.",
+    "lead": "Stories made by Studio Elysian and our sister studio, Habom.",
     "filterLabel": "Series",
     "filterAll": "All",
     "count": "{count} works",
     "open": "Open the work",
-    "habomLink": "Studio Habom"
+    "habomLink": "Studio Habom",
+    "comingSoon": "Coming Soon",
+    "habom": {
+      "badge": "Sister studio",
+      "title": "Habom Studio",
+      "body": "Elysian's sister studio, making bright and gentle stories.\nSee more of Habom's games and news on the Habom website.",
+      "cta": "Visit the Habom website"
+    }
   },
   "Game": {
     "breadcrumb": "You are here",
@@ -20,10 +27,9 @@
     "about": "About",
     "tabs": {
       "overview": "Overview",
-      "gallery": "Plates",
+      "gallery": "Images",
       "video": "Video",
       "credits": "Credits",
-      "history": "History",
       "related": "More works"
     },
     "info": {
@@ -33,13 +39,7 @@
       "platform": "Platform",
       "genre": "Genre",
       "release": "Release",
-      "staff": "Key staff"
-    },
-    "keyart": {
-      "title": "Plates",
-      "lead": "The key images of this work. Select one to view it larger.",
-      "visual": "Key visual",
-      "poster": "Poster"
+      "exhibitions": "Exhibitions"
     },
     "videos": {
       "title": "Video",
@@ -48,9 +48,6 @@
     },
     "credits": {
       "title": "Credits"
-    },
-    "history": {
-      "title": "Project history"
     },
     "related": {
       "series": "More from this series",
@@ -65,7 +62,11 @@
       "close": "Close",
       "prev": "Previous image",
       "next": "Next image",
-      "counter": "{current} / {total}"
-    }
+      "counter": "{current} / {total}",
+      "listLabel": "{title} images"
+    },
+    "stores": "Stores",
+    "imagesLabel": "Images",
+    "comingSoon": "Coming Soon"
   }
 }

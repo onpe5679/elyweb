@@ -11,8 +11,6 @@ const FONT_CSS =
   'https://fonts.googleapis.com/css2?family=Hahmlet:wght@400;600;800&family=Shippori+Mincho:wght@500;800' +
   '&family=Noto+Sans+KR:wght@400;500;700&family=Noto+Sans+JP:wght@400;500;700&family=IBM+Plex+Mono:wght@400;500&display=swap';
 
-const THEME_INIT = `try{var t=localStorage.getItem('se-theme');if(t==='night')document.documentElement.setAttribute('data-theme','night')}catch(e){}`;
-
 const LANGS = [
   { id: 'ko', title: '페이지를 찾을 수 없습니다', body: '주소가 바뀌었거나 없어진 페이지예요.', home: '처음으로' },
   { id: 'en', title: 'Page not found', body: 'The address may have changed, or the page no longer exists.', home: 'Back to the cover' },
@@ -25,7 +23,7 @@ export default function GlobalNotFound() {
       <head>
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <title>404 · Studio Elysian</title>
-        <script dangerouslySetInnerHTML={{ __html: THEME_INIT }} />
+        <meta name="darkreader-lock" />
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="" />
         <link href={FONT_CSS} rel="stylesheet" />

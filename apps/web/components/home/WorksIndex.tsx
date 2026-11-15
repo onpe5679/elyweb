@@ -2,9 +2,8 @@ import { getTranslations } from 'next-intl/server';
 import { Link } from '@/i18n/routing';
 import type { GameCardModel } from '@/lib/game-model';
 import StatusMarker from '@/components/ui/StatusMarker';
-import { pad2 } from '@/lib/format';
 
-/** 홈의 작품 섹션: 이번 호(대표 작품) + 나머지 도판 색인. */
+/** 홈의 작품 섹션: 대표 작품(어드민의 is_featured) + 나머지 작품. */
 export default async function WorksIndex({ featured, others }: { featured?: GameCardModel; others: GameCardModel[] }) {
   const t = await getTranslations('Home');
   return (
@@ -32,7 +31,7 @@ export default async function WorksIndex({ featured, others }: { featured?: Game
               <div className="flex flex-wrap items-center gap-3">
                 <span className="marker">{featured.series}</span>
                 <StatusMarker status={featured.status} />
-                <span className="t-eyebrow">{t('works.featured')}</span>
+                <span className="font-mono text-[12px] tracking-[.12em] text-ink-3">{featured.year ?? t('works.comingSoon')}</span>
               </div>
               <h3 className="t-display mt-5 text-[clamp(34px,5.4vw,72px)]">
                 <Link href={`/games/${featured.slug}`} className="link-u">{featured.title}</Link>
@@ -61,7 +60,7 @@ export default async function WorksIndex({ featured, others }: { featured?: Game
                     </div>
                   </div>
                   <div className="mt-5 flex items-center gap-3">
-                    <span className="font-mono text-[12px] text-ink-3">No.{pad2(i + 2)}</span>
+                    <span className="font-mono text-[12px] tracking-[.12em] text-ink-3">{g.year ?? t('works.comingSoon')}</span>
                     <StatusMarker status={g.status} />
                   </div>
                   <h3 className="t-display mt-3 text-[26px]"><span className="link-u">{g.title}</span></h3>

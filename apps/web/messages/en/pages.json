@@ -7,7 +7,6 @@
     "eyebrow": "About Studio Elysian",
     "title": "The Studio",
     "lead": "Meet the people behind Studio Elysian, a studio that makes stories.",
-    "plate": "Plate · About the studio",
     "vision": {
       "eyebrow": "Vision",
       "title": "Infinite Horizon of Stories",
@@ -37,7 +36,7 @@
     "history": {
       "eyebrow": "History",
       "title": "History",
-      "lead": "Our steps since 2022, in order.",
+      "lead": "Our steps, from the most recent back to our start in 2022.",
       "caption": "Studio Elysian chronology",
       "date": "Date",
       "event": "Event",
@@ -83,59 +82,50 @@
     "title": "Press Kit",
     "lead": "Official materials for articles and write-ups, gathered in one place.",
     "list": {
-      "eyebrow": "Downloads",
-      "title": "Materials",
-      "contact": "If you need help using these materials or want something more, please get in touch.",
+      "eyebrow": "Studio",
+      "title": "Studio material",
+      "contact": "Need permission or more material? Email us.",
       "open": "Open files",
       "pending": "Coming soon",
       "fallbackDesc": "Materials for press and introductions"
     },
     "empty": {
-      "title": "No press kits are public yet",
-      "body": "If you need something specific, let us know through the contact page.",
-      "cta": "Contact us"
+      "title": "No studio material published yet",
+      "body": "If you need something, let us know by email."
+    },
+    "games": {
+      "eyebrow": "By Title",
+      "title": "By title",
+      "lead": "Key visuals and press material for each title.",
+      "keyVisual": "Key visual",
+      "poster": "Poster",
+      "store": "Store page",
+      "none": "Press material is on the way."
     }
   },
   "Contact": {
     "metaTitle": "Contact",
     "eyebrow": "Get in Touch",
     "title": "Contact",
-    "lead": "Send us your collaboration, publishing or press enquiry. We'll reply by email.",
-    "form": {
-      "title": "Send a message",
-      "name": "Name",
-      "email": "Email",
-      "message": "Message",
-      "required": "Required",
-      "submit": "Send message",
-      "sending": "Sending…",
-      "consent": "We use your name, email and message only to read and answer your enquiry. See our <link>privacy policy</link> for details.",
-      "summary": "Please check the fields below.",
-      "errors": {
-        "nameRequired": "Please enter your name.",
-        "emailRequired": "Please enter your email.",
-        "emailInvalid": "Please check the email format, e.g. name@example.com",
-        "messageRequired": "Please enter your message.",
-        "send": "We couldn't send your message. Please try again in a moment, or email us directly."
-      },
-      "success": {
-        "badge": "Received",
-        "title": "Your message has been received",
-        "body": "We'll reply to the email address you gave us.",
-        "confirmation": "We've also sent you a confirmation email."
-      },
-      "preview": {
-        "badge": "Preview",
-        "title": "Submission screen checked",
-        "body": "This is a preview environment, so nothing was stored or sent. Your message was not delivered to anyone."
-      },
-      "again": "Write another message"
-    },
+    "lead": "For collaboration, publishing, events or press, please email us. We will get back to you.",
     "info": {
-      "eyebrow": "Contact",
-      "title": "Reach us directly",
-      "email": "Email",
-      "follow": "Official social media"
+      "eyebrow": "Follow",
+      "follow": "Official channels"
+    },
+    "mail": {
+      "eyebrow": "Email",
+      "title": "Email us",
+      "write": "Write an email",
+      "copy": "Copy address",
+      "copied": "Copied",
+      "missing": "Our contact address is being set up."
+    },
+    "topics": {
+      "title": "We would love to hear about",
+      "collab": "Game & IP collaboration",
+      "publishing": "Publishing",
+      "events": "Events & exhibitions",
+      "press": "Press & interviews"
     }
   },
   "Privacy": {

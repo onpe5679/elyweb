@@ -20,19 +20,19 @@ type Props = {
   params: { locale: string };
 };
 
-// 서체: 엘리시안(Hahmlet 명조 + Noto Sans + IBM Plex Mono) / 하봄(Jua + Gowun Dodum)
+// 서체: 엘리시안(Hahmlet + Noto Serif KR 명조 + Cormorant Garamond + Noto Sans + IBM Plex Mono)
+//       하봄(Jua + M PLUS Rounded 1c + Gowun Dodum)
 const FONT_CSS =
   'https://fonts.googleapis.com/css2' +
   '?family=Hahmlet:wght@400;600;800' +
-  '&family=Shippori+Mincho:wght@500;800' +
+  '&family=Noto+Serif+KR:wght@300;400;500;600' +
+  '&family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500' +
+  '&family=Shippori+Mincho:wght@400;500;800' +
   '&family=Noto+Sans+KR:wght@400;500;700' +
   '&family=Noto+Sans+JP:wght@400;500;700' +
   '&family=IBM+Plex+Mono:wght@400;500' +
-  '&family=Jua&family=Gowun+Dodum&family=M+PLUS+Rounded+1c:wght@400;700' +
+  '&family=Jua&family=Gowun+Dodum&family=M+PLUS+Rounded+1c:wght@400;500;700;800' +
   '&display=swap';
-
-// 첫 페인트 전에 저장된 테마(종이/밤)를 적용한다.
-const THEME_INIT = `try{var t=localStorage.getItem('se-theme');if(t==='night')document.documentElement.setAttribute('data-theme','night')}catch(e){}`;
 
 export default async function LocaleLayout({ children, params: { locale } }: Props) {
   if (!routing.locales.includes(locale as 'ko' | 'en' | 'ja')) {
@@ -47,7 +47,9 @@ export default async function LocaleLayout({ children, params: { locale } }: Pro
   return (
     <html lang={locale} suppressHydrationWarning>
       <head>
-        <script dangerouslySetInnerHTML={{ __html: THEME_INIT }} />
+        {/* 종이(밝은) 테마 하나만 쓴다. Dark Reader 같은 확장이 색 변수(RGB 3값)를 잘못 읽어
+            화면 전체를 붉은 갈색으로 칠하는 문제가 있어, 이 사이트에는 적용하지 않도록 잠근다. */}
+        <meta name="darkreader-lock" />
         <link rel="icon" href={faviconUrl || '/favicon.svg'} />
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="" />

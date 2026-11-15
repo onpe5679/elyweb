@@ -1,8 +1,5 @@
 {
   "Common": {
-    "theme": "Toggle colour theme",
-    "themePaper": "Paper",
-    "themeNight": "Night",
     "language": "Language",
     "mainNav": "Main navigation",
     "openMenu": "Open menu",
@@ -11,13 +8,15 @@
     "toElysian": "Studio Elysian",
     "back": "Back",
     "close": "Close",
-    "viewMore": "More"
+    "viewMore": "More",
+    "habomFabLabel": "Go to the Habom Studio website",
+    "habomFabSub": "Our sister studio"
   },
   "Nav": {
     "works": "Works",
-    "studio": "Studio",
+    "studio": "About",
     "news": "News",
-    "habom": "Habom",
+    "habom": "Habom Studio",
     "contact": "Contact",
     "press": "Press",
     "habomHome": "Habom Home",
@@ -36,7 +35,7 @@
     "habomTagline": "A sister studio of Studio Elysian.\nSoft, bright stories you can pick up and enjoy.",
     "sitemap": "Sitemap",
     "contactTitle": "Contact",
-    "contactNote": "For collaboration, publishing and press enquiries, please use the contact page.",
+    "contactNote": "For collaboration, publishing or press, email us.",
     "colophon": "Colophon",
     "legalName": "Company: Studio Elysian Inc. (주식회사 스튜디오엘리시안)",
     "legalReg": "Business registration no.: 373-81-03729",

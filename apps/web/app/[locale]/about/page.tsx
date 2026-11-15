@@ -1,15 +1,12 @@
 import type { Metadata } from 'next';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
-import { Link } from '@/i18n/routing';
 import {
   getLocalizedField,
   getLocalizedSettingValue,
   getSettings,
-  getTeamMembers,
   getTimelineEvents,
 } from '@/lib/supabase';
-import { resolveBrand } from '@/lib/brands';
-import { fmtDate, pad2, stripEmoji } from '@/lib/format';
+import { fmtDate, newestFirst, stripEmoji } from '@/lib/format';
 import Shell from '@/components/shell/Shell';
 import PageHeader from '@/components/pages/PageHeader';
 import SectionHead from '@/components/pages/SectionHead';
@@ -23,10 +20,10 @@ export async function generateMetadata({ params: { locale } }: { params: { local
 
 export default async function AboutPage({ params: { locale } }: { params: { locale: string } }) {
   setRequestLocale(locale);
-  const [t, events, members, s] = await Promise.all([
+  // 팀원 소개는 회의에서 보류(작품 상세의 크레딧으로 대신)해 이 화면에서는 뺐다.
+  const [t, events, s] = await Promise.all([
     getTranslations('About'),
     getTimelineEvents(),
-    getTeamMembers(),
     getSettings([
       'about_image', 'hero_image', 'vision_title', 'vision_description',
       'stat_year_value', 'stat_projects_value', 'stat_released_value', 'stat_global_value', 'funding_percentage',
@@ -53,9 +50,8 @@ export default async function AboutPage({ params: { locale } }: { params: { loca
     { label: t('colophon.funding'), value: sv('funding_percentage', '1347%') },
   ];
 
-  // 연혁: 비활성 항목은 숨기고, 연도가 바뀌는 줄에는 굵은 괘선을 긋는다.
-  const rows = events
-    .filter((e) => e.is_active !== false)
+  // 연혁: 최신순. 비활성 항목은 숨기고, 연도가 바뀌는 줄에는 굵은 괘선을 긋는다.
+  const rows = newestFirst(events.filter((e) => e.is_active !== false))
     .map((e, i, all) => {
       const raw = e.date || '';
       const year = raw.match(/^(\d{4})/)?.[1] ?? '';
@@ -81,7 +77,6 @@ export default async function AboutPage({ params: { locale } }: { params: { loca
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img src={image} alt="" className="plate__img object-[50%_38%]" />
             </div>
-            <figcaption className="mt-2 px-1 pb-1 font-mono text-[11px] uppercase tracking-[.14em] text-ink-3">{t('plate')}</figcaption>
           </figure>
         </div>
       )}
@@ -129,44 +124,6 @@ export default async function AboutPage({ params: { locale } }: { params: { loca
         </div>
       </section>
 
-      {/* Team */}
-      {members.length > 0 && (
-        <section aria-labelledby="team-title" className="border-t border-ink/15 bg-paper-2">
-          <div className="mx-auto grid max-w-page gap-10 px-5 py-16 md:grid-cols-12 md:gap-12 md:px-10 md:py-24">
-            <SectionHead id="team-title" eyebrow={t('team.eyebrow')} title={t('team.title')} sticky>
-              {t('team.lead')}
-            </SectionHead>
-            <ul className="border-t border-ink md:col-span-8" data-testid="team-list">
-              {members.map((m, i) => {
-                const name = getLocalizedField(m, 'name', locale);
-                const role = getLocalizedField(m, 'role', locale);
-                const habom = resolveBrand({ developer: [m.role_ko, m.role_en, m.role_ja].filter(Boolean).join(' ') }) === 'habom';
-                return (
-                  <li key={m.id} className="border-b border-ink/15">
-                    <Link
-                      href={`/team/${m.slug}`}
-                      className="group grid min-h-[72px] grid-cols-[2.5rem_minmax(0,1fr)] items-baseline gap-x-3 gap-y-1 px-1 py-6 transition-colors hover:bg-ink hover:text-paper focus-visible:bg-ink focus-visible:text-paper md:grid-cols-[3rem_minmax(0,1fr)_minmax(0,1.1fr)_1.5rem] md:gap-x-6 md:px-4"
-                    >
-                      <span aria-hidden className="font-mono text-[12px] text-ink-3 group-hover:text-paper/70 group-focus-visible:text-paper/70">{pad2(i + 1)}</span>
-                      <span className="break-keep font-display text-[clamp(24px,2.6vw,34px)] font-extrabold leading-tight">{name}</span>
-                      <span className="col-start-2 flex items-center gap-2 break-keep font-serif text-[16px] leading-7 text-ink-2 group-hover:text-paper/85 group-focus-visible:text-paper/85 md:col-start-auto">
-                        {habom && (
-                          // 하봄 소속: 하봄 토큰의 핑크를 작은 점으로만 쓴다
-                          <span data-brand="habom" className="inline-flex shrink-0">
-                            <span className="h-2 w-2 rounded-full bg-accent" />
-                          </span>
-                        )}
-                        {role}
-                      </span>
-                      <span aria-hidden className="hidden text-right font-mono text-[14px] opacity-0 transition-opacity group-hover:opacity-100 group-focus-visible:opacity-100 md:block">→</span>
-                    </Link>
-                  </li>
-                );
-              })}
-            </ul>
-          </div>
-        </section>
-      )}
 
       {/* History */}
       <section id="history" aria-labelledby="history-title" className="scroll-mt-[var(--header-h)] border-t border-ink/15">

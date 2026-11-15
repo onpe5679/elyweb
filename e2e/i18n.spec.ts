@@ -8,7 +8,7 @@ test.describe('Internationalization (ko / en / ja)', () => {
 
   for (const [loc, title, work] of [
     ['ko', '스튜디오', '메모리얼 서킷'],
-    ['en', 'STUDIO', 'Memorial Circuit'],
+    ['en', 'Studio', 'Memorial Circuit'],
     ['ja', 'スタジオ', 'メモリアルサーキット'],
   ] as const) {
     test(`${loc}: html lang, cover title and work names`, async ({ page }) => {
@@ -20,7 +20,7 @@ test.describe('Internationalization (ko / en / ja)', () => {
 
     test(`${loc}: pages do not overflow at 390px`, async ({ page }) => {
       await page.setViewportSize({ width: 390, height: 844 });
-      for (const path of ['', '/games', '/games/sharehouse', '/habom', '/about', '/contact']) {
+      for (const path of ['', '/games', '/games/sharehouse', '/habom', '/about', '/contact', '/press']) {
         await page.goto(`/${loc}${path}`);
         const { sw, cw } = await page.evaluate(() => ({ sw: document.documentElement.scrollWidth, cw: document.documentElement.clientWidth }));
         expect(sw, `${loc}${path}`).toBeLessThanOrEqual(cw);

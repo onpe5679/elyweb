@@ -1,8 +1,5 @@
 {
   "Common": {
-    "theme": "配色テーマの切り替え",
-    "themePaper": "紙",
-    "themeNight": "夜",
     "language": "言語",
     "mainNav": "メインメニュー",
     "openMenu": "メニューを開く",
@@ -11,13 +8,15 @@
     "toElysian": "スタジオ エリシアン",
     "back": "戻る",
     "close": "閉じる",
-    "viewMore": "もっと見る"
+    "viewMore": "もっと見る",
+    "habomFabLabel": "ハボムスタジオのサイトへ",
+    "habomFabSub": "エリシアンのレーベル"
   },
   "Nav": {
     "works": "作品",
-    "studio": "スタジオ",
+    "studio": "スタジオ紹介",
     "news": "お知らせ",
-    "habom": "ハボム",
+    "habom": "ハボム スタジオ",
     "contact": "お問い合わせ",
     "press": "プレス",
     "habomHome": "ハボム ホーム",
@@ -36,7 +35,7 @@
     "habomTagline": "スタジオエリシアンのレーベルスタジオ。\n軽やかでやわらかな物語を届けます。",
     "sitemap": "サイトマップ",
     "contactTitle": "Contact",
-    "contactNote": "協業・パブリッシング・取材のご相談は、お問い合わせページからお送りください。",
+    "contactNote": "協業・パブリッシング・取材のお問い合わせはメールでお送りください。",
     "colophon": "奥付",
     "legalName": "商号：株式会社スタジオエリシアン(주식회사 스튜디오엘리시안)",
     "legalReg": "事業者登録番号：373-81-03729",

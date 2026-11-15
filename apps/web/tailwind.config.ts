@@ -22,6 +22,15 @@ const config: Config = {
         "accent-ink": token("accent-ink"),
         sub: token("sub"),
         grid: token("grid"),
+        // 하봄(시안 C 팔레트): 브랜드 토큰과 무관하게 고정색으로 쓴다.
+        cream: "#FFF8F0",
+        blush: "#FDE7EE",
+        petal: "#F49AB5",
+        rose: "#C9416D",
+        butter: "#FFD978",
+        "butter-soft": "#FFF1C7",
+        plum: "#4A2B38",
+        "plum-soft": "#7A5866",
       },
       fontFamily: {
         // display/serif/sans 는 브랜드에 따라 --font-* 가 바뀐다.
@@ -29,6 +38,12 @@ const config: Config = {
         serif: ["var(--font-serif)"],
         sans: ["var(--font-sans)"],
         mono: ["var(--font-mono)"],
+        // 엘리시안 타이틀용 명조 / 영문 세리프
+        myeongjo: ['"Noto Serif KR"', '"Noto Serif JP"', '"Shippori Mincho"', "serif"],
+        latin: ['"Cormorant Garamond"', '"Noto Serif KR"', "serif"],
+        // 하봄(시안 C): 둥근 제목 / 둥근 영문
+        round: ['"Jua"', '"M PLUS Rounded 1c"', '"Noto Sans KR"', "sans-serif"],
+        "round-latin": ['"M PLUS Rounded 1c"', '"Jua"', "sans-serif"],
       },
       borderRadius: {
         ui: "var(--radius-ui)",
