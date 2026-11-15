@@ -1,0 +1,26 @@
+{
+  "bg": [
+    "living-evening",
+    "living-night",
+    "room-night",
+    "saeun-room"
+  ],
+  "ecg": [
+    "jihye-cooking"
+  ],
+  "stand": [
+    "jihye/awkward",
+    "jihye/cry",
+    "jihye/grin",
+    "jihye/happy",
+    "jihye/interest",
+    "jihye/smile",
+    "jihye/worry",
+    "saeun/base",
+    "saeun/grin",
+    "saeun/pout",
+    "saeun/startled",
+    "saeun/surprised",
+    "saeun/tired"
+  ]
+}

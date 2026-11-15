@@ -6,7 +6,7 @@ import { toCard } from '@/lib/game-model';
 import HabomShell from '@/components/habom/HabomShell';
 import Icon from '@/components/habom/Icon';
 import StoreIcon from '@/components/game/StoreIcon';
-import { DEMO_SCRIPTS } from '@/components/habom/demo-script';
+import { WEB_DEMO_SLUGS } from '@/components/habom/sharehouse-demo/meta';
 
 export const revalidate = 10;
 
@@ -86,7 +86,7 @@ export default async function HabomHome({ params: { locale } }: { params: { loca
             <ul className="mt-12 space-y-8">
               {works.map((w) => {
                 const steam = bySlug.get(w.slug)?.steam_url;
-                const demo = !!DEMO_SCRIPTS[w.slug];
+                const demo = WEB_DEMO_SLUGS.has(w.slug);
                 return (
                   <li key={w.slug}>
                     <article data-testid="habom-game-card" className="grid gap-8 overflow-hidden rounded-[32px] bg-cream p-4 ring-1 ring-blush md:p-6 lg:grid-cols-12 lg:items-center lg:gap-12">
@@ -109,7 +109,7 @@ export default async function HabomHome({ params: { locale } }: { params: { loca
                             {t('detail')} <Icon name="arrowRight" size={16} />
                           </Link>
                           {demo && (
-                            <Link href={`/games/${w.slug}?demo=1#demo`} className="inline-flex min-h-[48px] items-center gap-2 rounded-full bg-butter px-5 text-[0.9375rem] font-semibold text-plum">
+                            <Link href={`/games/${w.slug}#demo`} className="inline-flex min-h-[48px] items-center gap-2 rounded-full bg-butter px-5 text-[0.9375rem] font-semibold text-plum">
                               <Icon name="chat" size={16} /> {t('tryDemo')}
                             </Link>
                           )}

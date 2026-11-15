@@ -12,8 +12,8 @@ import Icon from './Icon';
 import TrailerButton from './TrailerButton';
 import VideoShelf from './VideoShelf';
 import CopyLinkButton from './CopyLinkButton';
-import DialogueDemo, { DemoLauncher } from './DialogueDemo';
-import { DEMO_SCRIPTS } from './demo-script';
+import SharehouseDemo from './sharehouse-demo/SharehouseDemo';
+import { WEB_DEMO_SLUGS } from './sharehouse-demo/meta';
 
 type Props = { m: GameDetailModel; locale: string; related: GameCardModel[] };
 
@@ -32,9 +32,9 @@ function titleScale(text: string, sizes: [string, string, string]) {
  * 주요 전시는 기본 정보 안에, 스토어 버튼은 히어로에 둔다.
  */
 export default async function HabomGameDetail({ m, locale, related }: Props) {
-  const [t, ts, th] = await Promise.all([getTranslations('HabomGame'), getTranslations('Status'), getTranslations('Habom')]);
+  const [t, ts, th, td] = await Promise.all([getTranslations('HabomGame'), getTranslations('Status'), getTranslations('Habom'), getTranslations('HabomDemo')]);
   const status = (STATUSES as readonly string[]).includes(m.status) ? ts(m.status as (typeof STATUSES)[number]) : m.status;
-  const script = DEMO_SCRIPTS[m.slug]?.[locale] || DEMO_SCRIPTS[m.slug]?.ko;
+  const hasDemo = WEB_DEMO_SLUGS.has(m.slug);
   const steam = m.stores.find((s) => s.kind === 'steam');
   const trailer = m.videos[0];
   const banner = m.hero || m.wide || m.tall;
@@ -43,7 +43,7 @@ export default async function HabomGameDetail({ m, locale, related }: Props) {
   // 구역 순서 = 탭 순서. 번호는 제목이 있는 구역에만 차례로 붙인다(이미지 캐러셀은 제목 없이).
   const sections = [
     { id: 'about', label: t('tabAbout'), numbered: true, show: true },
-    { id: 'demo', label: t('tabDemo'), numbered: true, show: !!script },
+    { id: 'demo', label: t('tabDemo'), numbered: true, show: hasDemo },
     { id: 'gallery', label: t('tabGallery'), numbered: false, show: m.images.length > 0 },
     { id: 'videos', label: t('tabVideos'), numbered: true, show: m.videos.length > 0 },
     { id: 'credits', label: t('tabCredits'), numbered: true, show: m.credits.length > 0 },
@@ -124,7 +124,11 @@ export default async function HabomGameDetail({ m, locale, related }: Props) {
 
                 <div className="mt-9 flex flex-wrap items-center gap-3">
                   {trailer && <TrailerButton youtubeId={trailer.youtubeId} title={`${m.title} — ${trailer.title}`} className={btn.primary} />}
-                  {script && <DemoLauncher className={btn.demo} />}
+                  {hasDemo && (
+                    <a href="#demo" className={btn.demo}>
+                      <Icon name="chat" size={18} /> {t('tabDemo')}
+                    </a>
+                  )}
                   <CopyLinkButton className={btn.icon} />
                 </div>
 
@@ -185,9 +189,13 @@ export default async function HabomGameDetail({ m, locale, related }: Props) {
             </div>
           </section>
 
-          {script && (
+          {hasDemo && (
             <section id="demo" aria-labelledby="demo-title" className="scroll-mt-32 pb-16 md:pb-24">
-              <DialogueDemo script={script} background={banner} steamUrl={steam?.url} title={m.title} n={num.demo} />
+              <SectionTitle id="demo-title" n={num.demo} title={td('title')} />
+              <p className="mt-4 max-w-2xl text-[1.0625rem] leading-relaxed text-plum-soft">{td('lead')}</p>
+              <div className="mx-auto mt-8 max-w-[70rem]">
+                <SharehouseDemo steamUrl={steam?.url} />
+              </div>
             </section>
           )}
 

@@ -1,18 +1,29 @@
 import { test, expect, type Page } from '@playwright/test';
 
-/** 미니 체험 창을 엔딩 카드까지 진행한다. 선택지는 pick 번째를 고른다. */
-async function playThrough(page: Page, pick = 0) {
-  for (let i = 0; i < 80; i++) {
-    if (await page.getByTestId('demo-end').isVisible().catch(() => false)) return;
-    const choice = page.getByTestId('demo-choice');
-    if (await choice.first().isVisible().catch(() => false)) {
-      await choice.nth(pick).click();
-    } else {
-      await page.getByTestId('demo-line').click();
-    }
-    await page.waitForTimeout(40);
+/** 미니 체험: 시작 → 장면(pick 번째) 고르기까지 */
+async function openScene(page: Page, pick = 0) {
+  const stage = page.getByTestId('demo-stage');
+  await stage.scrollIntoViewIfNeeded();
+  await stage.getByTestId('demo-start').click();
+  await expect(stage.getByTestId('demo-choice')).toHaveCount(2);
+  await stage.getByTestId('demo-choice').nth(pick).click();
+  await expect(stage.getByTestId('demo-line')).toBeVisible();
+  return stage;
+}
+
+/** 타자 효과가 끝날 때(▼)까지 기다렸다가 다음 줄로 */
+async function next(page: Page, times = 1) {
+  const stage = page.getByTestId('demo-stage');
+  for (let i = 0; i < times; i++) {
+    await expect(stage.getByTestId('demo-text')).toContainText('▼');
+    await stage.getByTestId('demo-line').click();
   }
-  throw new Error('demo did not reach the ending');
+}
+
+/** 진행 표시("3 / 147")의 현재 줄 번호 */
+async function lineNo(page: Page) {
+  const txt = await page.locator('#demo').getByText(/^\d+ \/ \d+$/).innerText();
+  return Number(txt.split('/')[0].trim());
 }
 
 test.describe('Habom Studio home (concept C chrome)', () => {
@@ -26,12 +37,15 @@ test.describe('Habom Studio home (concept C chrome)', () => {
     await expect(page.locator('footer')).toContainText('임시 워드마크');
   });
 
-  test('a work card leads to its detail page, and "미니 체험" opens the demo there', async ({ page }) => {
+  test('a work card leads to its detail page, and "미니 체험" goes to the demo section there', async ({ page }) => {
     await page.goto('/ko/habom');
     const card = page.getByTestId('habom-game-card').first();
-    await card.getByRole('link', { name: /미니 체험/ }).click();
-    await expect(page).toHaveURL(/\/ko\/games\/sharehouse\/?(#demo)?$/);
-    await expect(page.getByRole('dialog')).toBeVisible();
+    const link = card.getByRole('link', { name: /미니 체험/ });
+    await expect(link).toHaveAttribute('href', /\/games\/sharehouse\/?#demo$/);
+    await link.click();
+    await expect(page).toHaveURL(/\/ko\/games\/sharehouse\/?#demo$/);
+    await expect(page.getByTestId('demo-stage')).toBeInViewport();
+    await expect(page.getByRole('dialog')).toHaveCount(0);
   });
 });
 
@@ -71,55 +85,118 @@ test.describe('Habom game detail', () => {
   });
 });
 
-test.describe('Mini demo (Habom only)', () => {
-  test('opens from the hero, labelled as a sample script', async ({ page }) => {
+test.describe('Mini demo (Habom only, inline)', () => {
+  test('is part of the page: the hero button only scrolls to it, no dialog or new window', async ({ page }) => {
     await page.goto('/ko/games/sharehouse');
-    await page.getByTestId('game-banner').getByRole('button', { name: /미니 체험/ }).click();
-    await expect(page.getByRole('dialog')).toBeVisible();
-    await expect(page.getByTestId('demo-draft-badge')).toContainText('시안용 예시 대본');
+    const heroLink = page.getByTestId('game-banner').getByRole('link', { name: /미니 체험/ });
+    await expect(heroLink).toHaveAttribute('href', '#demo');
+    await heroLink.click();
+    await expect(page).toHaveURL(/#demo$/);
+    const stage = page.locator('#demo').getByTestId('demo-stage');
+    await expect(stage).toBeInViewport();
+    await expect(page.getByRole('dialog')).toHaveCount(0);
+    await expect(page.locator('#demo dialog, #demo [role="dialog"]')).toHaveCount(0);
+    // 실제 게임 리소스(타이틀 그림·로고)를 쓴다
+    await expect(stage.locator('img[src*="/habom/sharehouse-demo/img/title.webp"]')).toHaveCount(1);
+    await expect(page.getByTestId('demo-sample-badge')).toHaveCount(0);
   });
 
-  test('advance, choose, reach the ending and play again', async ({ page }) => {
+  test('start, pick a scene, advance lines with the real script and art', async ({ page }) => {
     await page.goto('/ko/games/sharehouse');
-    await page.getByTestId('demo-preview').click();
-    await expect(page.getByRole('dialog')).toBeVisible();
-    await playThrough(page, 1);
-    await expect(page.getByTestId('demo-end')).toBeVisible();
-    await page.getByTestId('demo-end').getByRole('button', { name: '다시 하기' }).click();
-    await expect(page.getByTestId('demo-line')).toBeVisible();
+    const stage = await openScene(page, 0);
+    expect(await lineNo(page)).toBe(1);
+    await next(page, 10); // 11번째 줄 = 지혜 등장
+    expect(await lineNo(page)).toBe(11);
+    await expect(stage.getByTestId('demo-text')).toContainText('류지혜');
+    await expect(stage.locator('img[src*="/sharehouse-demo/img/stand/jihye-"]')).toHaveCount(1);
+    await expect(stage.locator('img[src*="/sharehouse-demo/img/bg/"]')).toHaveCount(1);
+    await expect(page.getByTestId('demo-live')).not.toBeEmpty();
   });
 
-  test('Escape closes it and returns focus to the opener', async ({ page }) => {
+  test('Enter/Space advance only while the stage has focus (page keys are left alone)', async ({ page, isMobile }) => {
+    test.skip(isMobile, '키보드 시나리오');
+    await page.emulateMedia({ reducedMotion: 'reduce' }); // 타자 효과 없이 한 번에
     await page.goto('/ko/games/sharehouse');
-    const opener = page.getByTestId('demo-preview');
-    await opener.click();
-    await expect(page.getByRole('dialog')).toBeVisible();
+    await openScene(page, 1);
+    const advance = page.getByTestId('demo-line');
+    const text = page.getByTestId('demo-text');
+    await expect(advance).toBeFocused();
+    await expect(text).toContainText('▼');
+    await page.keyboard.press('Enter');
+    await expect.poll(() => lineNo(page)).toBe(2);
+    await expect(text).toContainText('▼');
+    await page.keyboard.press(' ');
+    await expect.poll(() => lineNo(page)).toBe(3);
+    // 무대 밖에 포커스가 있으면 Space 는 페이지 스크롤에 쓰인다
+    await page.locator('#demo h2').click();
+    const y = await page.evaluate(() => window.scrollY);
+    await page.keyboard.press(' ');
+    await expect.poll(() => page.evaluate(() => window.scrollY)).toBeGreaterThan(y);
+    expect(await lineNo(page)).toBe(3);
+  });
+
+  test('fast-forward reaches the ending card; the other scene and restart work', async ({ page }) => {
+    await page.goto('/ko/games/sharehouse');
+    const stage = await openScene(page, 1);
+    await page.getByTestId('demo-skip').click();
+    const end = stage.getByTestId('demo-end');
+    await expect(end).toBeVisible({ timeout: 30_000 });
+    await expect(end.getByRole('link', { name: /Steam/ })).toHaveAttribute('href', /steampowered/);
+    await expect(page.getByTestId('demo-progress')).toHaveAttribute('aria-valuenow', '100');
+    await end.getByRole('button', { name: '다른 장면 보기' }).click();
+    await expect(stage.getByTestId('demo-line')).toBeVisible();
+    expect(await lineNo(page)).toBe(1);
+    await next(page, 2);
+    expect(await lineNo(page)).toBe(3);
+    await page.getByTestId('demo-restart').click();
+    expect(await lineNo(page)).toBe(1);
+  });
+
+  test('backlog lists past lines and closes with Escape', async ({ page }) => {
+    await page.emulateMedia({ reducedMotion: 'reduce' });
+    await page.goto('/ko/games/sharehouse');
+    const stage = await openScene(page, 0);
+    await next(page, 12);
+    await page.getByTestId('demo-log-button').click();
+    const log = stage.getByTestId('demo-log');
+    await expect(log.locator('li')).toHaveCount(13);
     await page.keyboard.press('Escape');
-    await expect(page.getByRole('dialog')).toHaveCount(0);
-    await expect(opener).toBeFocused();
+    await expect(log).toHaveCount(0);
   });
 
-  test('?demo=1 opens it once and the param is removed', async ({ page }) => {
-    await page.goto('/ko/games/sharehouse?demo=1');
-    await expect(page.getByRole('dialog')).toBeVisible();
-    expect(page.url()).not.toContain('demo=1');
-    await page.getByTestId('demo-close').click();
-    await expect(page.getByRole('dialog')).toHaveCount(0);
+  test('the player name replaces the protagonist name tag', async ({ page }) => {
+    await page.emulateMedia({ reducedMotion: 'reduce' });
+    await page.goto('/ko/games/sharehouse');
+    const stage = page.getByTestId('demo-stage');
+    await stage.scrollIntoViewIfNeeded();
+    await stage.getByTestId('demo-name').fill('하루');
+    await stage.getByTestId('demo-start').click();
+    await stage.getByTestId('demo-choice').first().click();
+    await expect(stage.getByTestId('demo-text')).toContainText('하루');
+  });
+
+  test('uses the localized script', async ({ page }) => {
+    await page.emulateMedia({ reducedMotion: 'reduce' });
+    await page.goto('/ja/games/sharehouse');
+    const stage = await openScene(page, 1);
+    await next(page, 10); // 11번째 줄 = 세은(紗夜) 등장
+    await expect(stage.getByTestId('demo-text')).toContainText('紗夜');
   });
 
   test('is never offered on Elysian works', async ({ page }) => {
     for (const slug of ['memorial-circuit', 'IBAT', 'cella', 'festival-not-over']) {
-      await page.goto(`/ko/games/${slug}?demo=1`);
-      await expect(page.getByRole('dialog')).toHaveCount(0);
-      await expect(page.getByRole('button', { name: /미니 체험/ })).toHaveCount(0);
+      await page.goto(`/ko/games/${slug}`);
+      await expect(page.getByTestId('demo-stage')).toHaveCount(0);
+      await expect(page.getByRole('link', { name: /미니 체험/ })).toHaveCount(0);
     }
   });
 
-  test('works on a phone viewport without horizontal scroll', async ({ page }) => {
+  test('fits a phone viewport without horizontal scroll', async ({ page }) => {
     await page.setViewportSize({ width: 390, height: 844 });
-    await page.goto('/ko/games/sharehouse?demo=1');
-    await expect(page.getByRole('dialog')).toBeVisible();
-    await playThrough(page);
+    await page.goto('/ko/games/sharehouse');
+    const stage = await openScene(page, 0);
+    await page.getByTestId('demo-skip').click();
+    await expect(stage.getByTestId('demo-end')).toBeVisible({ timeout: 30_000 });
     const { sw, cw } = await page.evaluate(() => ({ sw: document.documentElement.scrollWidth, cw: document.documentElement.clientWidth }));
     expect(sw).toBeLessThanOrEqual(cw);
   });
