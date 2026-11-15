@@ -5,7 +5,7 @@ import { Box, Tabs, Tab } from '@mui/material';
 export const LocalizedInput = ({ source, label, component: Component = TextInput, ...props }: any) => {
     const [locale, setLocale] = useState('ko');
 
-    const handleChange = (event: any, newValue: string) => {
+    const handleChange = (_event: unknown, newValue: string) => {
         setLocale(newValue);
     };
 

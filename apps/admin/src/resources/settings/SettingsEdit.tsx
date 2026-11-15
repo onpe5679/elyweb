@@ -8,7 +8,8 @@ import {
   useRecordContext,
   Labeled,
 } from 'react-admin';
-import { Box, Typography, Divider } from '@mui/material';
+import { Alert, Box, Typography, Divider } from '@mui/material';
+import { settingInfo } from '../../siteMap';
 
 const WEB_URL = (import.meta as any).env?.VITE_WEB_API_URL || 'http://localhost:3000';
 
@@ -78,25 +79,38 @@ const SettingValueInputs = () => {
 
   return (
     <Box>
-      <Labeled label="Korean">
+      <Labeled label="한국어">
         <TextInput source="value_ko" label={false} multiline fullWidth rows={4} />
       </Labeled>
       <Divider sx={{ my: 2 }} />
-      <Labeled label="English">
+      <Labeled label="English (비우면 한국어)">
         <TextInput source="value_en" label={false} multiline fullWidth rows={4} />
       </Labeled>
       <Divider sx={{ my: 2 }} />
-      <Labeled label="Japanese">
+      <Labeled label="日本語 (비우면 한국어)">
         <TextInput source="value_ja" label={false} multiline fullWidth rows={4} />
       </Labeled>
     </Box>
   );
 };
 
+const SettingInfoBox = () => {
+  const record = useRecordContext();
+  if (!record) return null;
+  const info = settingInfo(record.key);
+  return (
+    <Alert severity={info.unused ? 'warning' : 'info'} sx={{ mb: 2, width: '100%' }}>
+      <b>{info.unused ? '새 사이트에서 사용하지 않는 설정' : '웹에서 보이는 곳'}:</b> {info.where}
+      {info.hint && <><br />{info.hint}</>}
+    </Alert>
+  );
+};
+
 export const SettingsEdit = () => (
-  <Edit>
+  <Edit mutationMode="pessimistic">
     <SimpleForm>
-      <TextInput source="key" label="Setting Key" disabled fullWidth />
+      <SettingInfoBox />
+      <TextInput source="key" label="키" disabled fullWidth />
       <Divider sx={{ my: 2, width: '100%' }} />
       <SettingValueInputs />
     </SimpleForm>

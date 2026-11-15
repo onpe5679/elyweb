@@ -66,7 +66,9 @@ function youtubeId(url: string): string {
   return m ? m[1] : url;
 }
 
-export function storeKind(name: string, url: string): StoreKind {
+export function storeKind(name: string, url: string, icon?: string): StoreKind {
+  // 어드민 '스토어' 섹션에서 고른 로고가 있으면 그것을 따른다.
+  if (icon === 'steam' || icon === 'stove' || icon === 'itch') return icon;
   const hay = `${name} ${url}`;
   if (/steampowered|steam|스팀/i.test(hay)) return 'steam';
   if (/onstove|stove|스토브/i.test(hay)) return 'stove';
@@ -159,7 +161,7 @@ export function toDetail(game: Game, rows: GameSectionDB[], locale: string): Gam
         if (row.credits?.length) credits.push({ id: row.id, title, rows: row.credits.filter((c) => c.role || c.name) });
         break;
       case 'store':
-        (row.store_links || []).forEach((l) => l.url && stores.push({ name: l.name, url: l.url, kind: storeKind(l.name, l.url) }));
+        (row.store_links || []).forEach((l) => l.url && stores.push({ name: l.name, url: l.url, kind: storeKind(l.name, l.url, l.icon) }));
         break;
     }
   }

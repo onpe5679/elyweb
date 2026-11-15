@@ -15,6 +15,6 @@ export const authProvider = {
     login: async (params: { username?: string; password?: string; email?: string }) => {
         const email = params.email || params.username;
         const password = params.password;
-        return baseAuthProvider.login({ email, password });
+        return baseAuthProvider.login({ email: email ?? "", password: password ?? "" });
     },
 };

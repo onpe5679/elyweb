@@ -16,8 +16,9 @@ const statusChoices = [
   { id: 'archived', name: 'Archived' },
 ];
 
+/** 이전 문의 폼 기록 — 새 사이트의 문의 페이지는 입력 폼 없이 대표 메일만 보여 준다. */
 export const ContactSubmissionList = () => (
-  <List sort={{ field: 'created_at', order: 'DESC' }}>
+  <List sort={{ field: 'created_at', order: 'DESC' }} title="이전 문의 폼 기록 (새 사이트는 메일 문의)">
     <Datagrid rowClick="show">
       <TextField source="name" />
       <EmailField source="email" />

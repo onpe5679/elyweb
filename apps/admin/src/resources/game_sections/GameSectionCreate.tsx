@@ -12,7 +12,9 @@ import {
     ImageField,
     FormDataConsumer,
 } from 'react-admin';
+import { Alert } from '@mui/material';
 import { LocalizedInput } from '../../components/LocalizedInput';
+import { sectionTypeChoices, sectionTypeInfo } from '../../siteMap';
 
 const WEB_URL = import.meta.env.VITE_WEB_API_URL || 'http://localhost:3000';
 
@@ -36,26 +38,29 @@ const parseImageForStorage = (value: File | { src: string; rawFile?: File } | st
     return null;
 };
 
-const sectionTypeChoices = [
-    { id: 'text', name: 'Text' },
-    { id: 'gallery', name: 'Gallery' },
-    { id: 'video', name: 'Video' },
-    { id: 'store', name: 'Store Links' },
-    { id: 'credits', name: 'Credits' },
-    { id: 'timeline', name: 'Timeline' },
-    { id: 'custom', name: 'Custom' },
-];
 
 export const GameSectionCreate = () => (
     <Create>
         <SimpleForm>
             <ReferenceInput source="game_id" reference="games">
-                <SelectInput optionText="title_ko" label="Game" fullWidth />
+                <SelectInput optionText="title_ko" label="작품" fullWidth />
             </ReferenceInput>
 
-            <SelectInput source="section_type" choices={sectionTypeChoices} fullWidth defaultValue="text" />
+            <SelectInput source="section_type" label="섹션 종류" choices={sectionTypeChoices} fullWidth defaultValue="text" />
 
-            <LocalizedInput source="title" label="Section Title" />
+            <FormDataConsumer>
+                {({ formData }) => {
+                    const info = sectionTypeInfo(formData?.section_type);
+                    return info ? (
+                        <Alert severity="info" sx={{ mb: 2, width: '100%' }}>
+                            <b>웹에서 보이는 곳:</b> {info.where}
+                            {info.hint && <><br />{info.hint}</>}
+                        </Alert>
+                    ) : null;
+                }}
+            </FormDataConsumer>
+
+            <LocalizedInput source="title" label="섹션 제목" />
 
             <FormDataConsumer>
                 {({ formData }) => {
@@ -65,7 +70,7 @@ export const GameSectionCreate = () => (
                         return (
                             <LocalizedInput 
                                 source="content" 
-                                label="Content" 
+                                label="본문" 
                                 multiline 
                                 rows={6} 
                             />
@@ -74,7 +79,7 @@ export const GameSectionCreate = () => (
 
                     if (sectionType === 'gallery') {
                         return (
-                            <ArrayInput source="images" label="Images">
+                            <ArrayInput source="images" label="이미지 (캐러셀에 순서대로)">
                                 <SimpleFormIterator>
                                     <ImageInput 
                                         source="" 
@@ -94,22 +99,22 @@ export const GameSectionCreate = () => (
                         return (
                             <TextInput 
                                 source="video_url" 
-                                label="Video URL (YouTube embed URL)" 
+                                label="YouTube 주소" 
                                 fullWidth 
-                                helperText="Enter YouTube embed URL like: https://www.youtube.com/embed/VIDEO_ID"
+                                helperText="watch?v=… / youtu.be/… / embed/… 모두 됩니다"
                             />
                         );
                     }
 
                     if (sectionType === 'store') {
                         return (
-                            <ArrayInput source="store_links" label="Store Links">
+                            <ArrayInput source="store_links" label="스토어 버튼">
                                 <SimpleFormIterator>
-                                    <TextInput source="name" label="Store Name" />
-                                    <TextInput source="url" label="Store URL" />
+                                    <TextInput source="name" label="버튼 이름 (예: STOVE)" />
+                                    <TextInput source="url" label="주소" />
                                     <SelectInput 
                                         source="icon" 
-                                        label="Icon"
+                                        label="로고"
                                         choices={[
                                             { id: 'steam', name: 'Steam' },
                                             { id: 'stove', name: 'STOVE' },
@@ -126,10 +131,10 @@ export const GameSectionCreate = () => (
 
                     if (sectionType === 'credits') {
                         return (
-                            <ArrayInput source="credits" label="Credits">
+                            <ArrayInput source="credits" label="크레딧 (역할 · 이름)">
                                 <SimpleFormIterator>
-                                    <TextInput source="role" label="Role" />
-                                    <TextInput source="name" label="Name(s)" helperText="For multiple names, separate with /" />
+                                    <TextInput source="role" label="역할" />
+                                    <TextInput source="name" label="이름" helperText="여러 명은 / 로 구분" />
                                 </SimpleFormIterator>
                             </ArrayInput>
                         );
@@ -137,9 +142,9 @@ export const GameSectionCreate = () => (
 
                     if (sectionType === 'timeline') {
                         return (
-                            <ArrayInput source="timeline_items" label="Timeline Events">
+                            <ArrayInput source="timeline_items" label="연혁 항목 (출시·전시·수상 위주)">
                                 <SimpleFormIterator>
-                                    <TextInput source="date" label="Date" />
+                                    <TextInput source="date" label="날짜 (예: 2024.04.11)" />
                                     <TextInput source="event_ko" label="Event (KO)" />
                                     <TextInput source="event_en" label="Event (EN)" />
                                     <TextInput source="event_ja" label="Event (JA)" />
@@ -152,8 +157,8 @@ export const GameSectionCreate = () => (
                 }}
             </FormDataConsumer>
 
-            <NumberInput source="display_order" label="Display Order" defaultValue={0} />
-            <BooleanInput source="is_visible" label="Visible" defaultValue={true} />
+            <NumberInput source="display_order" label="순서 (같은 종류끼리 작은 숫자가 앞)" defaultValue={0} />
+            <BooleanInput source="is_visible" label="공개" defaultValue={true} />
         </SimpleForm>
     </Create>
 );
