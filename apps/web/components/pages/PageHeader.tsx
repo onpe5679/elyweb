@@ -6,17 +6,19 @@ type Props = {
   lead?: string;
   /** 제목 오른쪽 아래에 붙는 보조 영역(링크 등) */
   aside?: React.ReactNode;
+  /** 여백을 줄인 머리말(프레스처럼 아래 내용이 첫 화면에 보여야 하는 페이지) */
+  compact?: boolean;
 };
 
 /**
  * 보조 페이지 공통 머리말: 영문 소제목(mono) + 원고지 칸 제목(h1) + 짧은 안내문.
  * 배경은 원고지 모눈이 아래로 흐려진다. 가운데 정렬은 쓰지 않는다(8:4 비대칭).
  */
-export default function PageHeader({ eyebrow, title, lead, aside }: Props) {
+export default function PageHeader({ eyebrow, title, lead, aside, compact = false }: Props) {
   return (
     <header className="relative isolate overflow-hidden">
       <div aria-hidden className="ruled ruled-fade absolute inset-0 -z-10 opacity-50" />
-      <div className="mx-auto max-w-page px-5 pb-14 pt-14 md:px-10 md:pb-20 md:pt-20">
+      <div className={`mx-auto max-w-page px-5 md:px-10 ${compact ? 'pb-8 pt-10 md:pb-10 md:pt-12' : 'pb-14 pt-14 md:pb-20 md:pt-20'}`}>
         <div className="grid gap-8 md:grid-cols-12 md:items-end md:gap-12">
           <div className="md:col-span-8">
             <p className="t-eyebrow">{eyebrow}</p>

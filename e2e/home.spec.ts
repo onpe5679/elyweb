@@ -54,6 +54,9 @@ test.describe('Home — cover', () => {
 
   test('has a Habom gateway section', async ({ page }) => {
     await expect(page.getByRole('link', { name: /하봄 둘러보기/ })).toHaveAttribute('href', /\/habom$/);
+    // 2026-11 회의: "산하 스튜디오" 대신 "미연시 스튜디오"
+    await expect(page.locator('#habom-title').locator('xpath=..')).toContainText('미연시 스튜디오');
+    await expect(page.getByText('산하 스튜디오')).toHaveCount(0);
   });
 
   test('footer shows the colophon with company information', async ({ page }) => {

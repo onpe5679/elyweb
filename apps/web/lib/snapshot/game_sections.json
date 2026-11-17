@@ -791,5 +791,65 @@
     "title_en": "DEMO PLAY",
     "title_ja": "DEMO PLAY",
     "video_url": "https://www.youtube.com/embed/gdBnCGypW18"
+  },
+  {
+    "id": "0d56eff7-c80e-5a1d-9792-428030ed6496",
+    "game_id": "25186d57-9974-543e-a5ed-c60b5a9fb724",
+    "section_type": "store",
+    "display_order": 20,
+    "is_visible": true,
+    "title_ko": "스토어·SNS",
+    "content_ko": null,
+    "title_en": "Store & social",
+    "content_en": null,
+    "title_ja": null,
+    "content_ja": null,
+    "store_links": [
+      {
+        "name": "X",
+        "url": "https://x.com/fest_isnt_over",
+        "icon": "x"
+      }
+    ]
+  },
+  {
+    "id": "26469ce2-abab-5b2a-a70a-fcfcc35a58dd",
+    "game_id": "5d1e2152-9a4f-526b-a0b1-ffa7c1408d92",
+    "section_type": "store",
+    "display_order": 20,
+    "is_visible": true,
+    "title_ko": "스토어·SNS",
+    "content_ko": null,
+    "title_en": "Store & social",
+    "content_en": null,
+    "title_ja": null,
+    "content_ja": null,
+    "store_links": [
+      {
+        "name": "X",
+        "url": "https://x.com/Ciella_Casebook",
+        "icon": "x"
+      }
+    ]
+  },
+  {
+    "id": "0e714f2a-6fe9-5ce7-b753-bc12abe6af9e",
+    "game_id": "53d9b368-84a7-53fb-a838-800ade3f1219",
+    "section_type": "store",
+    "display_order": 20,
+    "is_visible": true,
+    "title_ko": "스토어·SNS",
+    "content_ko": null,
+    "title_en": "Store & social",
+    "content_en": null,
+    "title_ja": null,
+    "content_ja": null,
+    "store_links": [
+      {
+        "name": "X",
+        "url": "https://x.com/HabomStudio",
+        "icon": "x"
+      }
+    ]
   }
 ]

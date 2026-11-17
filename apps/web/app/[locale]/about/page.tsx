@@ -20,13 +20,12 @@ export async function generateMetadata({ params: { locale } }: { params: { local
 
 export default async function AboutPage({ params: { locale } }: { params: { locale: string } }) {
   setRequestLocale(locale);
-  // 팀원 소개는 회의에서 보류(작품 상세의 크레딧으로 대신)해 이 화면에서는 뺐다.
+  // 팀원 소개(보류)와 "숫자로 보는 스튜디오"(2026-11 회의에서 삭제)는 이 화면에 두지 않는다. 숫자는 메인 비전에만 남는다.
   const [t, events, s] = await Promise.all([
     getTranslations('About'),
     getTimelineEvents(),
     getSettings([
       'about_image', 'hero_image', 'vision_title', 'vision_description',
-      'stat_year_value', 'stat_projects_value', 'stat_released_value', 'stat_global_value', 'funding_percentage',
     ]),
   ]);
 
@@ -40,15 +39,6 @@ export default async function AboutPage({ params: { locale } }: { params: { loca
   // 미션 문장: 첫 문장은 크게, 나머지는 한 단계 낮춰 읽히게 나눈다.
   const mission = t('mission.body');
   const [missionLead, ...missionRest] = mission.split(/(?<=[.。!?])\s*/).filter(Boolean);
-
-  const sv = (key: string, fallback: string) => getLocalizedSettingValue(s[key], locale) || fallback;
-  const stats = [
-    { label: t('colophon.year'), value: sv('stat_year_value', '2022') },
-    { label: t('colophon.projects'), value: sv('stat_projects_value', '3+') },
-    { label: t('colophon.released'), value: sv('stat_released_value', '2') },
-    { label: t('colophon.global'), value: sv('stat_global_value', 'Global') },
-    { label: t('colophon.funding'), value: sv('funding_percentage', '1347%') },
-  ];
 
   // 연혁: 최신순. 비활성 항목은 숨기고, 연도가 바뀌는 줄에는 굵은 괘선을 긋는다.
   const rows = newestFirst(events.filter((e) => e.is_active !== false))
@@ -105,25 +95,6 @@ export default async function AboutPage({ params: { locale } }: { params: { loca
           </p>
         </div>
       </section>
-
-      {/* Colophon: 숫자 */}
-      <section aria-labelledby="colophon-title" className="border-t border-ink/15">
-        <div className="mx-auto grid max-w-page gap-10 px-5 py-16 md:grid-cols-12 md:gap-12 md:px-10 md:py-24">
-          <SectionHead id="colophon-title" eyebrow={t('colophon.eyebrow')} title={t('colophon.title')} />
-          <dl className="border-t border-ink md:col-span-8">
-            {stats.map((st) => (
-              <div key={st.label} className="flex items-baseline gap-3 border-b border-ink/15 py-5">
-                {/* 점선 리더(목차처럼 라벨과 값을 이어 준다) */}
-                <dt className="t-eyebrow flex min-w-0 flex-1 items-baseline gap-3 after:mb-1 after:block after:min-w-[1.5rem] after:flex-1 after:border-b after:border-dotted after:border-ink/40 after:content-['']">
-                  <span>{st.label}</span>
-                </dt>
-                <dd className="font-display text-[clamp(28px,3.4vw,46px)] font-extrabold leading-none">{st.value}</dd>
-              </div>
-            ))}
-          </dl>
-        </div>
-      </section>
-
 
       {/* History */}
       <section id="history" aria-labelledby="history-title" className="scroll-mt-[var(--header-h)] border-t border-ink/15">

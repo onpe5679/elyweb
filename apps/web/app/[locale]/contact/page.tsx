@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
-import { getLocalizedSettingValue, getSettings } from '@/lib/supabase';
+import { getAllGameSectionRows, getGames, getLocalizedField, getLocalizedSettingValue, getSettings } from '@/lib/supabase';
+import { snsOf } from '@/lib/game-model';
 import Shell from '@/components/shell/Shell';
 import PageHeader from '@/components/pages/PageHeader';
 import CopyEmail from '@/components/contact/CopyEmail';
@@ -19,10 +20,12 @@ const TOPICS = ['collab', 'publishing', 'events', 'press'] as const;
 /** 문의: 입력 폼 없이 대표 메일 하나만 크게 둔다(주소는 어드민 설정의 contact_email). */
 export default async function ContactPage({ params: { locale } }: { params: { locale: string } }) {
   setRequestLocale(locale);
-  const [t, tp, s] = await Promise.all([
+  const [t, tp, s, games, sections] = await Promise.all([
     getTranslations('Contact'),
     getTranslations('Pages'),
     getSettings(['contact_email', 'twitter_url', 'youtube_url', 'instagram_url']),
+    getGames(),
+    getAllGameSectionRows(),
   ]);
 
   const email = getLocalizedSettingValue(s.contact_email, locale);
@@ -31,6 +34,15 @@ export default async function ContactPage({ params: { locale } }: { params: { lo
     { id: 'youtube', label: 'YouTube', url: safeUrl(getLocalizedSettingValue(s.youtube_url, locale)) },
     { id: 'instagram', label: 'Instagram', url: safeUrl(getLocalizedSettingValue(s.instagram_url, locale)) },
   ].filter((x): x is { id: string; label: string; url: string } => !!x.url);
+
+  // 작품별 SNS: 각 작품의 '스토어·SNS' 섹션에서 SNS 로고를 고른 링크(작품 정렬 순서대로)
+  const gameSocial = games.flatMap((g) =>
+    snsOf(sections.filter((r) => r.game_id === g.id)).map((x) => ({
+      id: x.kind as string,
+      label: getLocalizedField(g, 'title', locale),
+      url: x.url,
+    })),
+  );
 
   return (
     <Shell locale={locale}>
@@ -62,36 +74,54 @@ export default async function ContactPage({ params: { locale } }: { params: { lo
             </ul>
           </div>
 
-          {social.length > 0 && (
+          {(social.length > 0 || gameSocial.length > 0) && (
             <aside aria-labelledby="follow-title" className="md:col-span-4 md:col-start-9">
               <p className="t-eyebrow">{t('info.eyebrow')}</p>
               <h2 id="follow-title" className="t-display mt-4 text-[clamp(22px,2.4vw,30px)]">{t('info.follow')}</h2>
-              <ul className="mt-8 border-t border-ink">
-                {social.map((x) => (
-                  <li key={x.id} className="border-b border-ink/15">
-                    <a
-                      href={x.url}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="group flex min-h-[56px] items-center gap-4 py-2 transition-colors hover:text-accent-text"
-                    >
-                      <span className="grid h-10 w-10 shrink-0 place-items-center border border-ink/60 transition-colors group-hover:border-ink group-hover:bg-ink group-hover:text-paper">
-                        <SocialIcon id={x.id} />
-                      </span>
-                      <span className="min-w-0 flex-1">
-                        <span className="block text-[15px] font-bold leading-5">{x.label}</span>
-                        <span className="block break-all font-mono text-[12px] leading-5 text-ink-3">{handleOf(x.url)}</span>
-                      </span>
-                      <ArrowUpRightIcon className="h-4 w-4 shrink-0 text-ink-3 transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
-                      <span className="sr-only">{tp('external')}</span>
-                    </a>
-                  </li>
-                ))}
-              </ul>
+              <SocialList items={social} external={tp('external')} />
+              {gameSocial.length > 0 && (
+                <>
+                  <h2 id="follow-games-title" className="t-display mt-14 text-[clamp(22px,2.4vw,30px)]">{t('info.games')}</h2>
+                  <div data-testid="contact-game-sns">
+                    <SocialList items={gameSocial} external={tp('external')} />
+                  </div>
+                </>
+              )}
             </aside>
           )}
         </div>
       </section>
     </Shell>
+  );
+}
+
+type SocialItem = { id: string; label: string; url: string };
+
+/** 공식 SNS·작품별 SNS 공통 목록(같은 서체·같은 줄 모양) */
+function SocialList({ items, external }: { items: SocialItem[]; external: string }) {
+  if (!items.length) return null;
+  return (
+      <ul className="mt-8 border-t border-ink">
+        {items.map((x) => (
+          <li key={x.url} className="border-b border-ink/15">
+            <a
+              href={x.url}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="group flex min-h-[56px] items-center gap-4 py-2 transition-colors hover:text-accent-text"
+            >
+              <span className="grid h-10 w-10 shrink-0 place-items-center border border-ink/60 transition-colors group-hover:border-ink group-hover:bg-ink group-hover:text-paper">
+                <SocialIcon id={x.id} />
+              </span>
+              <span className="min-w-0 flex-1">
+                <span className="block text-[15px] font-bold leading-5">{x.label}</span>
+                <span className="block break-all font-mono text-[12px] leading-5 text-ink-3">{handleOf(x.url)}</span>
+              </span>
+              <ArrowUpRightIcon className="h-4 w-4 shrink-0 text-ink-3 transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
+              <span className="sr-only">{external}</span>
+            </a>
+          </li>
+        ))}
+      </ul>
   );
 }

@@ -97,6 +97,26 @@ test.describe('Game detail — Elysian work (Memorial Circuit)', () => {
   });
 });
 
+test.describe('Game detail — 2026-11 feedback', () => {
+  test('carousel starts with the vertical poster; poster in the hero is not cropped', async ({ page }) => {
+    await page.setViewportSize({ width: 1440, height: 900 });
+    await page.goto('/ko/games/memorial-circuit');
+    const poster = await page.getByTestId('game-poster').getAttribute('src');
+    const first = await page.locator('#gallery img').first().getAttribute('src');
+    expect(first).toBe(poster);
+    await expect(page.getByTestId('game-poster')).toHaveCSS('object-fit', 'contain');
+  });
+
+  test('work SNS sits next to the store buttons', async ({ page }) => {
+    await page.goto('/ko/games/festival-not-over');
+    await expect(page.getByTestId('hero-stores').getByTestId('hero-sns')).toHaveAttribute('href', 'https://x.com/fest_isnt_over');
+    await page.goto('/ko/games/cella');
+    await expect(page.getByTestId('hero-stores').getByRole('link').first()).toHaveAttribute('href', /store\.steampowered\.com\/app\/4559640/);
+    await page.goto('/ko/games/sharehouse');
+    await expect(page.getByTestId('hero-sns')).toHaveAttribute('href', 'https://x.com/HabomStudio');
+  });
+});
+
 test.describe('Game detail — works with little content', () => {
   test('in-development work shows only the sections it has', async ({ page }) => {
     await page.goto('/ko/games/cella');

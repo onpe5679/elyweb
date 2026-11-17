@@ -6,6 +6,8 @@ import { fmtDate } from '@/lib/format';
 import ImageCarousel from '@/components/game/ImageCarousel';
 import CreditsGrid from '@/components/game/CreditsGrid';
 import StoreIcon from '@/components/game/StoreIcon';
+import { SocialIcon } from '@/components/pages/Icons';
+import { handleOf } from '@/components/pages/text';
 import HabomShell from './HabomShell';
 import HabomTabs from './HabomTabs';
 import Icon from './Icon';
@@ -132,12 +134,17 @@ export default async function HabomGameDetail({ m, locale, related }: Props) {
                   <CopyLinkButton className={btn.icon} />
                 </div>
 
-                {(m.stores.length > 0 || m.officialUrl) && (
+                {(m.stores.length > 0 || m.sns.length > 0 || m.officialUrl) && (
                   <div className="mt-6 flex flex-wrap items-center gap-2.5 border-t border-blush pt-6" data-testid="game-stores">
                     <span className="mr-1 text-[0.8125rem] font-semibold text-plum-soft">{t('storeLabel')}</span>
                     {m.stores.map((s) => (
                       <a key={s.url} href={s.url} target="_blank" rel="noopener noreferrer" className={btn.store} aria-label={t('storeOpen', { name: s.name })}>
                         <StoreIcon kind={s.kind} size={20} /> {s.name} <Icon name="arrowUpRight" size={14} />
+                      </a>
+                    ))}
+                    {m.sns.map((x) => (
+                      <a key={x.url} href={x.url} target="_blank" rel="noopener noreferrer" className={btn.ghost} data-testid="hero-sns">
+                        <SocialIcon id={x.kind} className="h-[18px] w-[18px]" /> {handleOf(x.url)} <Icon name="arrowUpRight" size={14} />
                       </a>
                     ))}
                     {m.officialUrl && (

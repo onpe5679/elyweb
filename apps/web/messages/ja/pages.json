@@ -19,15 +19,6 @@
       "title": "ミッション",
       "body": "私たちは物語の力を信じています。ビジュアルノベルとインタラクティブな体験を通じて、言語や文化の壁を越える情緒的なつながりを生み出したいと考えています。"
     },
-    "colophon": {
-      "eyebrow": "Colophon",
-      "title": "数字で見るスタジオ",
-      "year": "設立",
-      "projects": "プロジェクト",
-      "released": "リリース",
-      "global": "Steam リリース",
-      "funding": "ファンディング達成率"
-    },
     "team": {
       "eyebrow": "Team",
       "title": "物語をつくる仲間",
@@ -96,11 +87,8 @@
     "games": {
       "eyebrow": "By Title",
       "title": "作品別の素材",
-      "lead": "作品ごとにキービジュアルとプレス素材をまとめました。",
-      "keyVisual": "キービジュアル",
-      "poster": "ポスター",
-      "store": "ストアページ",
-      "none": "プレス素材は準備中です。"
+      "lead": "言語別のプレス素材とストアページです。",
+      "store": "STORE PAGE"
     }
   },
   "Contact": {
@@ -110,7 +98,8 @@
     "lead": "協業・パブリッシング・イベント・取材のお問い合わせはメールでお送りください。確認のうえご返信いたします。",
     "info": {
       "eyebrow": "Follow",
-      "follow": "公式SNS"
+      "follow": "公式SNS",
+      "games": "作品別SNS"
     },
     "mail": {
       "eyebrow": "Email",

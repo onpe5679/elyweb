@@ -13,8 +13,8 @@ const AREAS: Area[] = [
     path: '/',
     items: [
       { label: '대표작("현재 펼쳐진 이야기", 표지 띠 맨 앞)', note: '위에서 선택' },
-      { label: '표지 작품 띠·작품 순서·출시 연도', to: '#/games', note: '작품' },
-      { label: '비전 제목·본문, 숫자 4개, 비전 이미지', to: '#/company_settings', note: '사이트 설정' },
+      { label: '표지 작품 띠·작품 순서·출시 연도(띠 그림 = 썸네일, 없으면 배너)', to: '#/games', note: '작품' },
+      { label: '비전 제목·본문, 숫자 4개(설립·진행·출시·스팀), 비전 이미지', to: '#/company_settings', note: '사이트 설정' },
       { label: '주요 연혁(메인 표시 체크한 항목, 최신순)', to: '#/timeline_events', note: '스튜디오 연혁' },
     ],
   },
@@ -31,8 +31,8 @@ const AREAS: Area[] = [
     title: '게임 상세',
     path: '/games/[slug]',
     items: [
-      { label: '히어로: 제목·한 줄 소개·배너·포스터·스토어 버튼', to: '#/games', note: '작품 기본 정보' },
-      { label: '소개 / 이미지 / 영상 / 제작진 / 스토어', to: '#/games', note: '작품 → 상세 섹션' },
+      { label: '히어로: 제목·한 줄 소개·배너·포스터(전체 표시)·스토어·작품 SNS 버튼', to: '#/games', note: '작품 기본 정보' },
+      { label: '소개 / 이미지(포스터 → 갤러리 순) / 영상 / 제작진 / 스토어·SNS', to: '#/games', note: '작품 → 상세 섹션' },
       { label: '작품 정보의 출시·주요 전시 = "연혁" 섹션에서 자동 계산', to: '#/games' },
     ],
   },
@@ -48,7 +48,7 @@ const AREAS: Area[] = [
     title: '스튜디오 소개',
     path: '/about',
     items: [
-      { label: '소개 이미지·비전·숫자·펀딩 달성률', to: '#/company_settings', note: '사이트 설정' },
+      { label: '소개 이미지·비전', to: '#/company_settings', note: '사이트 설정 ("숫자로 보는 스튜디오"는 삭제됨)' },
       { label: '연혁(최신순, 비활성 항목 숨김)', to: '#/timeline_events', note: '스튜디오 연혁' },
       { label: '팀원 소개는 보류 — 현재 사이트에 나오지 않음', to: '#/team_members' },
     ],
@@ -65,15 +65,16 @@ const AREAS: Area[] = [
     title: '문의',
     path: '/contact',
     items: [
-      { label: '입력 폼 없이 대표 메일 + SNS만 표시', to: '#/company_settings', note: 'contact_email · SNS 주소' },
+      { label: '입력 폼 없이 대표 메일 + 공식 SNS', to: '#/company_settings', note: 'contact_email · SNS 주소' },
+      { label: '작품별 SNS = 각 작품의 "스토어·SNS" 섹션에서 SNS 로고를 고른 링크', to: '#/games' },
     ],
   },
   {
     title: '프레스',
     path: '/press',
     items: [
-      { label: '스튜디오 공통 자료 = 작품을 비워 둔 프레스 자료', to: '#/press_kits' },
-      { label: '작품별 자료 = 작품을 지정한 프레스 자료(키 비주얼·포스터·스토어는 자동)', to: '#/press_kits' },
+      { label: '스튜디오 공통 자료 = 작품을 비워 둔 프레스 자료("자료 열기")', to: '#/press_kits' },
+      { label: '작품별 버튼 = 작품을 지정한 프레스 자료(버튼 이름 = 제목, 예: EN·KR) + STORE PAGE 자동', to: '#/press_kits' },
     ],
   },
 ];

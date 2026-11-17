@@ -79,18 +79,32 @@ test.describe('Secondary pages render', () => {
     const numeric = dates.map((d) => d.trim()).filter((d) => /^\d{4}/.test(d));
     expect(numeric.length).toBeGreaterThan(2);
     expect([...numeric].sort().reverse()).toEqual(numeric);
+    // "숫자로 보는 스튜디오"는 2026-11 회의에서 삭제(숫자는 메인 비전에만)
+    await expect(page.getByText('숫자로 보는 스튜디오')).toHaveCount(0);
   });
 
-  test('press page has per-title sections', async ({ page }) => {
+  test('press page: studio kit, then one row of buttons per title (EN / KR / STORE PAGE)', async ({ page }) => {
+    await page.setViewportSize({ width: 1920, height: 1080 });
     await page.goto('/ko/press');
     await expect(page.getByTestId('press-games').locator('li[id^="press-"]')).toHaveCount(5);
-    await expect(page.locator('#press-memorial-circuit')).toContainText('키 비주얼');
+    const fest = page.locator('#press-festival-not-over').getByTestId('press-game-links').getByRole('link');
+    await expect(fest).toHaveText([/EN/, /KR/, /STORE PAGE/]);
+    await expect(fest.nth(0)).toHaveAttribute('href', /drive\.google\.com\/drive\/folders\//);
+    await expect(fest.nth(2)).toHaveAttribute('href', /store\.steampowered\.com\/app\/2946110/);
+    await expect(page.locator('#press-memorial-circuit')).not.toContainText('키 비주얼');
+    // FHD 첫 화면에 작품별 자료 첫 줄까지 보인다
+    const top = await page.locator('#press-cella').evaluate((el) => el.getBoundingClientRect().top);
+    expect(top).toBeLessThan(1080);
   });
 
   test('contact page is email-only (no form)', async ({ page }) => {
     await page.goto('/ko/contact');
     await expect(page.locator('form')).toHaveCount(0);
-    await expect(page.getByTestId('contact-email').getByRole('link').first()).toHaveAttribute('href', /^mailto:/);
+    await expect(page.getByTestId('contact-email').getByRole('link').first()).toHaveAttribute('href', 'mailto:contact@studioelysian.co');
+    // 공식 SNS 아래 작품별 SNS
+    const games = page.getByTestId('contact-game-sns').getByRole('link');
+    await expect(games).toHaveCount(3);
+    await expect(page.getByTestId('contact-game-sns')).toContainText('@fest_isnt_over');
   });
 
   test('unknown route shows a branded 404', async ({ page }) => {

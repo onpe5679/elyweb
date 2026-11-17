@@ -2,7 +2,7 @@
   "Works": {
     "eyebrow": "Our Works",
     "title": "Works",
-    "lead": "Stories made by Studio Elysian and our sister studio, Habom.",
+    "lead": "Stories made by Studio Elysian and our dating-sim studio, Habom.",
     "filterLabel": "Series",
     "filterAll": "All",
     "count": "{count} works",
@@ -10,9 +10,9 @@
     "habomLink": "Studio Habom",
     "comingSoon": "Coming Soon",
     "habom": {
-      "badge": "Sister studio",
+      "badge": "Dating-sim studio",
       "title": "Habom Studio",
-      "body": "Elysian's sister studio, making bright and gentle stories.\nSee more of Habom's games and news on the Habom website.",
+      "body": "Elysian's dating-sim studio, making bright and gentle stories.\nSee more of Habom's games and news on the Habom website.",
       "cta": "Visit the Habom website"
     }
   },

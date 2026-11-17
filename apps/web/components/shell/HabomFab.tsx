@@ -12,11 +12,11 @@ export default async function HabomFab() {
       href="/habom"
       data-testid="habom-fab"
       aria-label={t('habomFabLabel')}
-      className="habom-fab group inline-flex items-center gap-2.5 rounded-full bg-white py-2 pl-2 pr-4 text-plum shadow-[0_14px_30px_-14px_rgba(74,43,56,.55)] ring-1 ring-plum/15 transition hover:-translate-y-0.5 hover:ring-rose sm:pr-5"
+      className="habom-fab group inline-flex items-center gap-2.5 rounded-lg bg-white py-2 pl-2 pr-4 text-plum shadow-[0_14px_30px_-14px_rgba(74,43,56,.55)] ring-1 ring-plum/15 transition hover:-translate-y-0.5 hover:ring-rose sm:pr-5"
     >
       <span aria-hidden className="relative inline-block h-8 w-8 shrink-0">
-        <span className="absolute inset-0 rounded-full bg-petal" />
-        <span className="absolute -bottom-0.5 -right-0.5 h-3.5 w-3.5 rounded-full bg-butter ring-2 ring-white" />
+        <span className="absolute inset-0 rounded-md bg-petal" />
+        <span className="absolute -bottom-0.5 -right-0.5 h-3.5 w-3.5 rounded-sm bg-butter ring-2 ring-white" />
       </span>
       <span className="flex flex-col leading-none">
         <span className="font-round-latin text-[14px] font-extrabold tracking-[0.02em]">habom studio</span>

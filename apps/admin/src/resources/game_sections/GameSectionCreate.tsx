@@ -108,9 +108,9 @@ export const GameSectionCreate = () => (
 
                     if (sectionType === 'store') {
                         return (
-                            <ArrayInput source="store_links" label="스토어 버튼">
+                            <ArrayInput source="store_links" label="스토어·SNS 버튼">
                                 <SimpleFormIterator>
-                                    <TextInput source="name" label="버튼 이름 (예: STOVE)" />
+                                    <TextInput source="name" label="버튼 이름 (예: STOVE / 작품 X)" />
                                     <TextInput source="url" label="주소" />
                                     <SelectInput 
                                         source="icon" 
@@ -122,6 +122,9 @@ export const GameSectionCreate = () => (
                                             { id: 'gog', name: 'GOG' },
                                             { id: 'itch', name: 'itch.io' },
                                             { id: 'other', name: 'Other' },
+                                            { id: 'x', name: 'SNS: X (작품 계정)' },
+                                            { id: 'youtube', name: 'SNS: YouTube' },
+                                            { id: 'instagram', name: 'SNS: Instagram' },
                                         ]}
                                     />
                                 </SimpleFormIterator>

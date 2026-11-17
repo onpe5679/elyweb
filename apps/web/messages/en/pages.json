@@ -19,15 +19,6 @@
       "title": "Mission",
       "body": "We believe in the power of stories. Through visual novels and interactive experiences, we want to create emotional connections that reach across language and cultural barriers."
     },
-    "colophon": {
-      "eyebrow": "Colophon",
-      "title": "The Studio in Numbers",
-      "year": "Founded",
-      "projects": "Projects",
-      "released": "Released",
-      "global": "Steam release",
-      "funding": "Funding reached"
-    },
     "team": {
       "eyebrow": "Team",
       "title": "The People Behind the Pages",
@@ -96,11 +87,8 @@
     "games": {
       "eyebrow": "By Title",
       "title": "By title",
-      "lead": "Key visuals and press material for each title.",
-      "keyVisual": "Key visual",
-      "poster": "Poster",
-      "store": "Store page",
-      "none": "Press material is on the way."
+      "lead": "Press material by language, and the store page.",
+      "store": "STORE PAGE"
     }
   },
   "Contact": {
@@ -110,7 +98,8 @@
     "lead": "For collaboration, publishing, events or press, please email us. We will get back to you.",
     "info": {
       "eyebrow": "Follow",
-      "follow": "Official channels"
+      "follow": "Official channels",
+      "games": "Game accounts"
     },
     "mail": {
       "eyebrow": "Email",

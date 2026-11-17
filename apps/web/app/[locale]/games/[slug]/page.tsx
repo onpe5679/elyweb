@@ -14,6 +14,8 @@ import StoreIcon from '@/components/game/StoreIcon';
 import VideoCard from '@/components/game/VideoCard';
 import RichText from '@/components/game/RichText';
 import HabomGameDetail from '@/components/habom/HabomGameDetail';
+import { SocialIcon } from '@/components/pages/Icons';
+import { handleOf } from '@/components/pages/text';
 
 export const revalidate = 10;
 
@@ -85,6 +87,11 @@ export default async function GameDetailPage({ params: { locale, slug } }: Props
         <div className="absolute inset-0 -z-10">
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img src={m.hero || m.tall} alt="" data-testid="game-banner" className="h-full w-full object-cover object-[50%_30%]" />
+          {/* 목록 썸네일이 배너와 다르면, 목록에서 본 그림이 배너로 겹쳐 바뀐다(게임 속 O.L. 연출과 같은 방식). */}
+          {m.wide && m.hero && m.wide !== m.hero && (
+            // eslint-disable-next-line @next/next/no-img-element
+            <img src={m.wide} alt="" aria-hidden data-testid="game-banner-ol" className="hero-ol absolute inset-0 h-full w-full object-cover object-[50%_30%]" />
+          )}
           <div className="absolute inset-0 bg-gradient-to-r from-black/85 via-black/45 to-black/10" />
           <div className="absolute inset-0 bg-gradient-to-t from-[#0b0d14] via-transparent to-black/30" />
         </div>
@@ -118,6 +125,12 @@ export default async function GameDetailPage({ params: { locale, slug } }: Props
                   {t('buy', { name: s.name })} <span aria-hidden>↗</span>
                 </a>
               ))}
+              {m.sns.map((x) => (
+                <a key={x.url} href={x.url} target="_blank" rel="noopener noreferrer" className="btn btn--on-dark-ghost" data-testid="hero-sns">
+                  <SocialIcon id={x.kind} className="h-[18px] w-[18px]" />
+                  {handleOf(x.url)} <span aria-hidden>↗</span>
+                </a>
+              ))}
               {m.officialUrl && (
                 <a href={m.officialUrl} target="_blank" rel="noopener noreferrer" className="btn btn--on-dark-ghost">
                   <StoreIcon kind="web" size={18} /> {t('official')} <span aria-hidden>↗</span>
@@ -133,11 +146,10 @@ export default async function GameDetailPage({ params: { locale, slug } }: Props
           </div>
           {m.tall && (
             <div className="hidden lg:block">
+              {/* 포스터는 자르지 않고 원본 비율 그대로(전체 포스터가 보이게) */}
               <div className="plate">
-                <div className="aspect-[3/4] overflow-hidden">
-                  {/* eslint-disable-next-line @next/next/no-img-element */}
-                  <img src={m.tall} alt={m.title} className="plate__img" />
-                </div>
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img src={m.tall} alt={m.title} data-testid="game-poster" className="block h-auto max-h-[64svh] w-full object-contain" />
               </div>
             </div>
           )}

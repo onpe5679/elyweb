@@ -7,5 +7,77 @@
     "display_order": 2,
     "is_published": true,
     "created_at": "2024-01-01T00:00:00Z"
+  },
+  {
+    "id": "8aaf8b47-ea16-5600-a19b-6e3f93e287e2",
+    "title_ko": "EN",
+    "title_en": "EN",
+    "title_ja": "EN",
+    "description_ko": null,
+    "file_url": "https://drive.google.com/drive/folders/1dhwlCImLaf_r8IFExuUOxTTdMGpnhDsa",
+    "game_id": "5d1e2152-9a4f-526b-a0b1-ffa7c1408d92",
+    "display_order": 1,
+    "is_published": true,
+    "created_at": "2026-11-18T00:00:00Z"
+  },
+  {
+    "id": "7484ba0f-f94c-567f-a95d-967d3820e6bb",
+    "title_ko": "KR",
+    "title_en": "KR",
+    "title_ja": "KR",
+    "description_ko": null,
+    "file_url": "https://drive.google.com/drive/folders/1Lt7D4rEBsAuAS4NleMzPwkpwr_dMgnX9",
+    "game_id": "5d1e2152-9a4f-526b-a0b1-ffa7c1408d92",
+    "display_order": 2,
+    "is_published": true,
+    "created_at": "2026-11-18T00:00:00Z"
+  },
+  {
+    "id": "ac5e29d5-a97d-5e79-893b-de00126a87df",
+    "title_ko": "EN",
+    "title_en": "EN",
+    "title_ja": "EN",
+    "description_ko": null,
+    "file_url": "https://drive.google.com/drive/folders/1--uGJyVPM2ZhRZDvT_ZXp6ktPJ27mbJm",
+    "game_id": "25186d57-9974-543e-a5ed-c60b5a9fb724",
+    "display_order": 1,
+    "is_published": true,
+    "created_at": "2026-11-18T00:00:00Z"
+  },
+  {
+    "id": "017a276a-8b3a-535e-a3aa-8cfb4f12d58f",
+    "title_ko": "KR",
+    "title_en": "KR",
+    "title_ja": "KR",
+    "description_ko": null,
+    "file_url": "https://drive.google.com/drive/folders/1Av-wm2_aH9BiVpFdL9_OOe7FgzKSXk7y",
+    "game_id": "25186d57-9974-543e-a5ed-c60b5a9fb724",
+    "display_order": 2,
+    "is_published": true,
+    "created_at": "2026-11-18T00:00:00Z"
+  },
+  {
+    "id": "81e19a4d-18dd-5d7d-a072-37aef9a65f29",
+    "title_ko": "EN",
+    "title_en": "EN",
+    "title_ja": "EN",
+    "description_ko": null,
+    "file_url": "https://drive.google.com/drive/folders/1SOMm8QnP1whlEvv2mxFCNPz6rrxfblNp",
+    "game_id": "53d9b368-84a7-53fb-a838-800ade3f1219",
+    "display_order": 1,
+    "is_published": true,
+    "created_at": "2026-11-18T00:00:00Z"
+  },
+  {
+    "id": "b80270af-728f-552f-821d-561bc7ed75ab",
+    "title_ko": "KR",
+    "title_en": "KR",
+    "title_ja": "KR",
+    "description_ko": null,
+    "file_url": "https://drive.google.com/drive/folders/1Y-rCTmYH_P6Fsaox7w7BVJ24ibB3PIMB",
+    "game_id": "53d9b368-84a7-53fb-a838-800ade3f1219",
+    "display_order": 2,
+    "is_published": true,
+    "created_at": "2026-11-18T00:00:00Z"
   }
 ]

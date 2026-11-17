@@ -43,9 +43,9 @@
   },
   {
     "key": "contact_email",
-    "value_ko": "stdelysian@gmail.com",
-    "value_en": "stdelysian@gmail.com",
-    "value_ja": "stdelysian@gmail.com"
+    "value_ko": "contact@studioelysian.co",
+    "value_en": "contact@studioelysian.co",
+    "value_ja": "contact@studioelysian.co"
   },
   {
     "key": "twitter_url",
@@ -73,15 +73,15 @@
   },
   {
     "key": "stat_projects_value",
-    "value_ko": "3+",
-    "value_en": "3+",
-    "value_ja": "3+"
+    "value_ko": "6+",
+    "value_en": "6+",
+    "value_ja": "6+"
   },
   {
     "key": "stat_released_value",
-    "value_ko": "2",
-    "value_en": "2",
-    "value_ja": "2"
+    "value_ko": "3",
+    "value_en": "3",
+    "value_ja": "3"
   },
   {
     "key": "stat_global_value",

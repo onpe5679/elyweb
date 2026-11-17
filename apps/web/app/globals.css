@@ -20,8 +20,8 @@
   --c-ink: 17 19 26;
   --c-ink-2: 69 73 87;
   --c-ink-3: 102 106 124;
-  --c-accent: 43 68 184;
-  --c-accent-text: 43 68 184;
+  --c-accent: 33 52 102;
+  --c-accent-text: 33 52 102;
   --c-accent-ink: 255 255 255;
   --c-sub: 220 224 246;
   --c-grid: 190 200 218;
@@ -490,3 +490,8 @@ html { scrollbar-color: rgb(var(--c-ink) / .4) transparent; }
   bottom: max(16px, env(safe-area-inset-bottom));
   z-index: 70;
 }
+
+/* 게임 상세 히어로: 목록 썸네일 → 배너로 겹쳐 바뀌는 연출(O.L.) */
+.hero-ol { animation: hero-ol 1.6s ease-in-out .45s forwards; }
+@keyframes hero-ol { to { opacity: 0; visibility: hidden; } }
+@media (prefers-reduced-motion: reduce) { .hero-ol { animation: none; opacity: 0; visibility: hidden; } }
