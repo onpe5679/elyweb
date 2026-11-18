@@ -616,6 +616,27 @@
   outline-offset: 2px;
 }
 
+/* 터치 화면에서 무대가 넓을 때(가로로 든 휴대폰·태블릿): 겉모습은 원본 그대로 두고 누르는 영역만 넓힌다 */
+@media (pointer: coarse) {
+  .key {
+    position: relative;
+  }
+  .key::after {
+    content: '';
+    position: absolute;
+    inset: -12px -6px;
+  }
+  .btn {
+    min-height: max(3.6cqw, 40px);
+  }
+  .slot {
+    min-height: max(5cqw, 44px);
+  }
+  .range {
+    min-height: 32px;
+  }
+}
+
 /* ── 좁은 무대: 대사창·버튼을 그림 아래로 ─────── */
 @container (max-width: 759px) {
   /* static 이 아니라 relative: 무대 전체를 덮는 "다음" 버튼보다 위에 오도록(z-index 유지) */
@@ -659,18 +680,28 @@
     padding: 10px 12px 14px;
   }
 
+  /* 손가락으로 누르기 쉬운 크기(40px 이상). 좁은 무대에서는 버튼 자체가 커서 넓힌 영역은 끈다 */
+  .key::after {
+    content: none;
+  }
+
   .key {
+    min-height: 40px;
     font-size: 12px;
-    gap: 4px;
-    padding: 4px 2px;
+    gap: 5px;
+    padding: 4px 6px;
   }
 
   .cap {
-    min-width: 18px;
-    height: 17px;
-    padding: 0 4px;
+    min-width: 22px;
+    height: 20px;
+    padding: 0 5px;
     border-radius: 4px;
-    font-size: 9px;
+    font-size: 10px;
+  }
+
+  .range {
+    min-height: 32px;
   }
 
   .logo {
@@ -805,7 +836,7 @@
   }
 
   .ghost {
-    min-height: 36px;
+    min-height: 40px;
     font-size: 13px;
     padding: 0 12px;
   }

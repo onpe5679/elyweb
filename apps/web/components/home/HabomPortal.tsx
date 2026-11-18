@@ -17,7 +17,7 @@ export default async function HabomPortal({ game }: { game?: GameCardModel }) {
               <p className="inline-flex items-center rounded-md bg-white px-3 py-1.5 text-xs font-semibold text-plum-soft ring-1 ring-blush">
                 {t('habom.badge')}
               </p>
-              <h2 id="habom-title" className="mt-6 font-round text-[3rem] leading-none md:text-[4rem]">{t('habom.title')}</h2>
+              <h2 id="habom-title" className="mt-6 break-keep font-round text-[3rem] leading-none md:text-[4rem]">{t('habom.title')}</h2>
               <p className="mt-2 font-round-latin text-xl font-extrabold text-rose">habom studio</p>
               <p className="mt-6 max-w-md whitespace-pre-line break-keep text-[17px] leading-8 text-plum-soft">{t('habom.body')}</p>
               <div className="mt-8 flex flex-wrap gap-3">

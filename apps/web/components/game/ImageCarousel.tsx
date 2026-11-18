@@ -17,6 +17,7 @@ export default function ImageCarousel({ images, title, variant = 'elysian' }: { 
   const track = useRef<HTMLUListElement>(null);
   const [edges, setEdges] = useState({ prev: false, next: false });
   const [open, setOpen] = useState<number | null>(null);
+  const swipe = useRef<{ x: number; y: number } | null>(null);
   const dialog = useRef<HTMLDivElement>(null);
   const close = useCallback(() => setOpen(null), []);
   useFocusTrap(dialog, open !== null, close);
@@ -137,13 +138,30 @@ export default function ImageCarousel({ images, title, variant = 'elysian' }: { 
           className="on-dark fixed inset-0 z-[120] flex flex-col bg-[#07080d]/95 text-white"
           onClick={(e) => e.target === e.currentTarget && close()}
         >
-          <div className="flex items-center justify-between px-5 py-4 font-mono text-[12px] tracking-wider">
+          <div className="flex items-center justify-between px-5 py-4 font-mono text-[12px] tracking-wider [@media(max-height:500px)]:py-1">
             <span>{(open ?? 0) + 1} / {images.length}</span>
             <button type="button" onClick={close} data-autofocus className="grid h-11 w-11 place-items-center rounded-full border border-white/40 hover:bg-white hover:text-black" aria-label={t('lightbox.close')}>
               <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden><path d="M5 5l14 14M19 5 5 19" /></svg>
             </button>
           </div>
-          <div className="relative flex min-h-0 flex-1 items-center justify-center px-4 pb-8" onClick={(e) => e.target === e.currentTarget && close()}>
+          <div
+            className="relative flex min-h-0 flex-1 items-center justify-center px-4 pb-8 [@media(max-height:500px)]:pb-2"
+            onClick={(e) => e.target === e.currentTarget && close()}
+            // 모바일: 좌우로 밀어 이전/다음 이미지
+            onTouchStart={(e) => {
+              const p = e.touches[0];
+              swipe.current = { x: p.clientX, y: p.clientY };
+            }}
+            onTouchEnd={(e) => {
+              const start = swipe.current;
+              swipe.current = null;
+              if (!start || images.length < 2) return;
+              const p = e.changedTouches[0];
+              const dx = p.clientX - start.x;
+              const dy = p.clientY - start.y;
+              if (Math.abs(dx) > 48 && Math.abs(dx) > Math.abs(dy) * 1.3) go(dx < 0 ? 1 : -1);
+            }}
+          >
             {images.length > 1 && (
               <button type="button" onClick={() => go(-1)} aria-label={t('lightbox.prev')} className="absolute left-3 z-10 grid h-12 w-12 place-items-center rounded-full border border-white/40 bg-black/40 hover:bg-white hover:text-black">
                 <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden><path d="m15 5-7 7 7 7" /></svg>

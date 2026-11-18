@@ -98,7 +98,7 @@ export default async function GameDetailPage({ params: { locale, slug } }: Props
         <div className="mx-auto grid min-h-[min(84svh,820px)] max-w-page items-end gap-10 px-5 pb-12 pt-28 md:px-10 lg:grid-cols-[minmax(0,1fr)_300px] lg:pb-16">
           <div className="min-w-0">
             <nav aria-label={t('breadcrumb')} className="mb-6 font-mono text-[12px] uppercase tracking-[.14em] text-white/70">
-              <Link href="/games" className="hover:text-white">{t('breadcrumbWorks')}</Link>
+              <Link href="/games" className="inline-block py-2 hover:text-white">{t('breadcrumbWorks')}</Link>
               <span aria-hidden> / </span>
               <span>{m.series}</span>
             </nav>

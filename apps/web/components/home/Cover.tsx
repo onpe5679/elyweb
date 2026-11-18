@@ -24,6 +24,7 @@ export default function Cover({ works }: { works: CoverWork[] }) {
   const t = useTranslations('Home');
   const locale = useLocale();
   const [active, setActive] = useState(0);
+  const tapOpen = useRef<boolean | null>(null);
   const interacted = useRef(false);
   const menuRef = useRef<HTMLUListElement>(null);
 
@@ -122,9 +123,16 @@ export default function Cover({ works }: { works: CoverWork[] }) {
                       aria-label={`${w.title} — ${w.series}`}
                       onMouseEnter={() => pick(i)}
                       onFocus={() => pick(i)}
+                      onPointerDown={(e) => {
+                        // 터치/펜: 누르는 순간 이 띠가 이미 펼쳐져 있었는지 기억한다.
+                        // (탭하면 focus·mouseenter 가 click 보다 먼저 와서 띠를 펼쳐 버리므로 click 에서 판단하면 늘 '펼쳐짐'이 된다)
+                        tapOpen.current = e.pointerType === 'mouse' ? null : on;
+                      }}
                       onClick={(e) => {
-                        // 터치: 첫 탭은 펼치기, 펼쳐진 상태에서 탭하면 이동
-                        if ((e.nativeEvent as PointerEvent).pointerType === 'touch' && !on) {
+                        // 터치: 접힌 띠의 첫 탭은 펼치기만, 펼쳐진 띠를 탭하면 이동
+                        const wasOpen = tapOpen.current;
+                        tapOpen.current = null;
+                        if (wasOpen === false) {
                           e.preventDefault();
                           pick(i);
                         }

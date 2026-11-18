@@ -495,3 +495,14 @@ html { scrollbar-color: rgb(var(--c-ink) / .4) transparent; }
 .hero-ol { animation: hero-ol 1.6s ease-in-out .45s forwards; }
 @keyframes hero-ol { to { opacity: 0; visibility: hidden; } }
 @media (prefers-reduced-motion: reduce) { .hero-ol { animation: none; opacity: 0; visibility: hidden; } }
+
+/* 가로로 든 휴대폰(높이 500px 이하): 고정 머리말·탭이 화면의 1/3을 차지하지 않게 스크롤과 함께 올라가게 한다 */
+@media (orientation: landscape) and (max-height: 500px) {
+  .site-header,
+  .habom-header { position: relative; }
+  .detail-nav,
+  .habom-tabs { position: static; }
+}
+
+/* 일본어 제목: 글자 단위로 끊기지 않게 구(句) 단위 줄바꿈(지원 브라우저: Chrome 119+, 그 외는 기본 줄바꿈) */
+:lang(ja) :is(h1, h2, h3, .t-display) { word-break: auto-phrase; }

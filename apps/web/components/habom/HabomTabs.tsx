@@ -32,7 +32,7 @@ export default function HabomTabs({ tabs, label }: { tabs: Tab[]; label: string 
   if (tabs.length < 2) return null;
 
   return (
-    <nav aria-label={label} className="sticky top-16 z-30 bg-cream/90 backdrop-blur-md">
+    <nav aria-label={label} className="habom-tabs sticky top-16 z-30 bg-cream/90 backdrop-blur-md">
       <ul ref={listRef} className="no-scrollbar mx-auto flex max-w-page gap-1 overflow-x-auto px-5 py-3 md:px-10">
         {tabs.map((t) => {
           const active = current === t.id;

@@ -291,3 +291,20 @@ test.describe('Mini demo (Habom only, inline)', () => {
     expect(sw).toBeLessThanOrEqual(cw);
   });
 });
+
+test.describe('Habom — mobile', () => {
+  test.use({ viewport: { width: 390, height: 844 } });
+
+  test('menu (works · about) and language are reachable on a phone', async ({ page }) => {
+    await page.goto('/ko/habom');
+    await page.getByTestId('habom-menu-button').click();
+    const menu = page.getByTestId('habom-mobile-menu');
+    const box = await menu.boundingBox();
+    expect(box!.height).toBeGreaterThan(844 - 64 - 2);
+    await expect(menu.getByRole('link').first()).toBeInViewport();
+    const langs = menu.getByTestId('language-menu').getByRole('link');
+    await expect(langs.nth(2)).toBeInViewport();
+    await langs.nth(2).click();
+    await expect(page).toHaveURL(/\/ja\/habom\/?$/);
+  });
+});

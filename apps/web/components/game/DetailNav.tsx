@@ -23,7 +23,7 @@ export default function DetailNav({ items, label }: { items: Item[]; label: stri
   }, [items]);
 
   return (
-    <nav aria-label={label} className="sticky top-[var(--header-h)] z-40 border-b border-ink/15 bg-paper/92 backdrop-blur-md">
+    <nav aria-label={label} className="detail-nav sticky top-[var(--header-h)] z-40 border-b border-ink/15 bg-paper/92 backdrop-blur-md">
       <ul className="mx-auto flex max-w-page gap-1 overflow-x-auto px-5 md:px-10 [scrollbar-width:none]">
         {items.map((i) => (
           <li key={i.id} className="shrink-0">

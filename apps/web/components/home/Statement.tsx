@@ -32,9 +32,10 @@ export default async function Statement({ title, paragraphs, image, stats }: Pro
               <p key={i} className="break-keep">{p}</p>
             ))}
           </div>
-          <dl className="mt-14 grid grid-cols-2 border-t border-ink/20 sm:grid-cols-4">
+          {/* 4칸은 넓은 화면(lg)에서만 — 태블릿·가로 휴대폰의 7/12 열에서는 "Global" 같은 값이 칸을 넘쳤다 */}
+          <dl className="mt-14 grid grid-cols-2 border-t border-ink/20 lg:grid-cols-4">
             {stats.map((s) => (
-              <div key={s.label} className="border-b border-ink/15 py-5 pr-4 sm:border-b-0 sm:border-r sm:px-5 sm:first:pl-0 sm:last:border-r-0">
+              <div key={s.label} className="min-w-0 border-b border-ink/15 py-5 pr-4 lg:border-b-0 lg:border-r lg:px-5 lg:first:pl-0 lg:last:border-r-0">
                 <dd className="font-display text-[34px] font-extrabold leading-none text-ink">{s.value}</dd>
                 <dt className="mt-2 font-mono text-[11px] uppercase tracking-[.12em] text-ink-3">{s.label}</dt>
               </div>

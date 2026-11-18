@@ -2,6 +2,7 @@ import { getTranslations } from 'next-intl/server';
 import { Link } from '@/i18n/routing';
 import { getLocalizedSettingValue, getSettings } from '@/lib/supabase';
 import LanguageSwitcher from '@/components/shell/LanguageSwitcher';
+import HabomMobileMenu from './HabomMobileMenu';
 import HabomWordmark from './HabomWordmark';
 import Icon from './Icon';
 
@@ -25,7 +26,7 @@ export default async function HabomShell({ locale, children }: { locale: string;
     <div data-brand="habom" className="flex min-h-screen flex-col bg-cream text-plum">
       <a href="#main" className="skip-link">{t('skip')}</a>
 
-      <header className="sticky top-0 z-40 bg-cream/85 backdrop-blur-md">
+      <header className="habom-header sticky top-0 z-40 bg-cream/85 backdrop-blur-md">
         <div className="mx-auto flex h-16 max-w-page items-center gap-3 px-4 md:gap-4 md:px-10">
           <Link href="/habom" aria-label={`${t('name')} — ${t('home')}`} className="shrink-0">
             <HabomWordmark localName={t('name')} />
@@ -39,11 +40,18 @@ export default async function HabomShell({ locale, children }: { locale: string;
           <Link
             href="/"
             data-testid="habom-to-elysian"
-            className="ml-auto inline-flex min-h-[40px] shrink-0 items-center gap-1.5 rounded-full bg-white px-3.5 text-[0.8125rem] font-semibold ring-1 ring-plum/10 hover:ring-plum/30 sm:ml-0"
+            aria-label={t('backLong')}
+            className="ml-auto inline-flex min-h-[40px] min-w-[40px] shrink-0 items-center justify-center gap-1.5 rounded-full bg-white px-3 text-[0.8125rem] font-semibold ring-1 ring-plum/10 hover:ring-plum/30 sm:ml-0 sm:px-3.5"
           >
-            <Icon name="arrowLeft" size={14} /> <span>{t('back')}</span>
+            {/* 좁은 화면에서는 줄여서 보여 준다: 화살표만(400px 미만) → "엘리시안"(640px 미만) → "스튜디오 엘리시안" */}
+            <Icon name="arrowLeft" size={14} />
+            <span className="hidden min-[400px]:inline sm:hidden">{t('backShort')}</span>
+            <span className="hidden sm:inline">{t('back')}</span>
           </Link>
-          <LanguageSwitcher className="hidden md:inline-flex" />
+          <LanguageSwitcher className="hidden sm:inline-flex" />
+          <HabomMobileMenu
+            labels={{ works: t('navWorks'), about: t('navAbout'), open: tc('openMenu'), close: tc('closeMenu'), nav: tc('mainNav'), language: tc('language') }}
+          />
         </div>
       </header>
 

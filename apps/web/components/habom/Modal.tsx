@@ -58,7 +58,9 @@ export default function Modal({ open, onClose, label, children, className = '' }
       aria-label={label}
       className={`m-0 h-full max-h-none w-full max-w-none bg-transparent p-0 backdrop:bg-black/80 backdrop:backdrop-blur-sm open:flex ${className}`}
       onClick={(e) => {
-        if (e.target === ref.current) ref.current?.close();
+        // 배경(대화상자 자체 또는 data-modal-backdrop 이 붙은 빈 영역)을 누르면 닫는다 — 모바일에서 영상 바깥 탭으로 닫기
+        const el = e.target as HTMLElement;
+        if (e.target === ref.current || el.hasAttribute('data-modal-backdrop')) ref.current?.close();
       }}
     >
       {open && children}

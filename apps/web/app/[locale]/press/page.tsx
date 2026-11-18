@@ -141,7 +141,7 @@ export default async function PressPage({ params: { locale } }: { params: { loca
                   id={`press-${game.slug}`}
                   className="flex scroll-mt-[calc(var(--header-h)+24px)] flex-wrap items-center gap-x-6 gap-y-3 border-b border-ink/15 py-4"
                 >
-                  <Link href={`/games/${game.slug}`} className="group flex min-w-0 flex-1 items-center gap-4" aria-label={card.title}>
+                  <Link href={`/games/${game.slug}`} className="group flex min-w-0 flex-[1_1_15rem] items-center gap-4" aria-label={card.title}>
                     <span className="hidden h-12 w-[4.5rem] shrink-0 overflow-hidden border border-ink/20 bg-paper-3 sm:block">
                       {/* eslint-disable-next-line @next/next/no-img-element */}
                       {card.wide && <img src={card.wide} alt="" loading="lazy" className="h-full w-full object-cover object-[50%_28%]" />}

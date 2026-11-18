@@ -25,7 +25,8 @@ export default async function SiteFooter({ brand, logoSrc, contactEmail, twitter
 
   return (
     <footer className="border-t border-ink/20 bg-paper-2">
-      <div className="mx-auto max-w-page px-5 py-14 md:px-10">
+      {/* 아래 여백: 오른쪽 아래 하봄 플로팅 버튼이 저작권·개인정보처리방침 줄을 가리지 않게 */}
+      <div className="mx-auto max-w-page px-5 pb-28 pt-14 md:px-10 md:pb-24">
         <div className="grid gap-12 md:grid-cols-12">
           <div className="md:col-span-5">
             {brand === 'habom' ? (
@@ -40,10 +41,10 @@ export default async function SiteFooter({ brand, logoSrc, contactEmail, twitter
               {brand === 'habom' ? t('habomTagline') : t('tagline')}
             </p>
             {social.length > 0 && (
-              <ul className="mt-6 flex flex-wrap gap-x-5 gap-y-2 font-mono text-[12px] uppercase tracking-wider">
+              <ul className="mt-4 flex flex-wrap gap-x-5 font-mono text-[12px] uppercase tracking-wider md:mt-6 md:gap-y-2">
                 {social.map((s) => (
                   <li key={s.label}>
-                    <a href={s.url} target="_blank" rel="noopener noreferrer" className="link-u text-ink-2 hover:text-ink">
+                    <a href={s.url} target="_blank" rel="noopener noreferrer" className="link-u inline-block py-2.5 text-ink-2 hover:text-ink md:py-0">
                       {s.label} ↗
                     </a>
                   </li>
@@ -54,7 +55,7 @@ export default async function SiteFooter({ brand, logoSrc, contactEmail, twitter
 
           <nav aria-label={t('sitemap')} className="md:col-span-4">
             <h2 className="t-eyebrow mb-4">{t('sitemap')}</h2>
-            <ul className="grid grid-cols-2 gap-x-6 gap-y-2 text-[15px]">
+            <ul className="grid grid-cols-2 gap-x-6 text-[15px] md:gap-y-2 [&_a]:inline-block [&_a]:py-2 md:[&_a]:py-0">
               <li><Link href="/about" className="link-u">{tn('studio')}</Link></li>
               <li><Link href="/games" className="link-u">{tn('works')}</Link></li>
               <li><Link href="/news" className="link-u">{tn('news')}</Link></li>
@@ -81,7 +82,7 @@ export default async function SiteFooter({ brand, logoSrc, contactEmail, twitter
           <p>{t('legalAddress')}</p>
           <div className="mt-4 flex flex-wrap items-center justify-between gap-3">
             <p>© {new Date().getFullYear()} Studio Elysian. All rights reserved.</p>
-            <Link href="/privacy" className="link-u hover:text-ink">{t('privacy')}</Link>
+            <Link href="/privacy" className="link-u inline-block py-2.5 hover:text-ink md:py-0">{t('privacy')}</Link>
           </div>
           {brand === 'habom' && <p className="mt-4 max-w-2xl text-ink-3">{t('habomNote')}</p>}
         </div>

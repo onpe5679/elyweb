@@ -82,12 +82,44 @@ test.describe('Home — mobile', () => {
     await btn.click();
     const menu = page.getByTestId('mobile-menu');
     await expect(menu).toBeVisible();
-    for (const name of ['스튜디오 소개', '작품', '새 소식', '문의', '프레스']) {
-      await expect(menu.getByRole('link', { name, exact: true })).toBeVisible();
+    // 패널이 헤더 아래 화면 전체를 덮어야 한다(부모 backdrop-filter 에 갇혀 64px 띠가 되던 버그 회귀 방지)
+    const box = await menu.boundingBox();
+    const vh = page.viewportSize()!.height;
+    expect(box!.height).toBeGreaterThan(vh - 64 - 2);
+    for (const name of ['스튜디오 소개', '작품', '새 소식', '문의', '프레스', '하봄 스튜디오']) {
+      const link = menu.getByRole('link', { name, exact: true });
+      await expect(link).toBeInViewport();
     }
+    // 실제로 손가락이 닿는 곳에 있는지(다른 요소에 가려지지 않음)
+    const last = menu.getByRole('link', { name: '프레스', exact: true });
+    const hit = await last.evaluate((el) => {
+      const r = el.getBoundingClientRect();
+      return el.contains(document.elementFromPoint(r.left + r.width / 2, r.top + r.height / 2));
+    });
+    expect(hit).toBe(true);
     await page.keyboard.press('Escape');
     await expect(menu).not.toBeVisible();
     await expect(btn).toBeFocused();
+  });
+
+  test('language can be changed from the mobile menu', async ({ page }) => {
+    await page.goto('/ko/games');
+    await page.getByTestId('mobile-menu-button').click();
+    const langs = page.getByTestId('mobile-menu').getByTestId('language-menu').getByRole('link');
+    await expect(langs).toHaveText(['한국어', 'English', '日本語']);
+    await expect(langs.nth(1)).toBeInViewport();
+    await langs.nth(1).click();
+    await expect(page).toHaveURL(/\/en\/games\/?$/);
+    await expect(page.locator('html')).toHaveAttribute('lang', 'en');
+    await expect(page.getByTestId('mobile-menu')).toHaveCount(0);
+  });
+
+  test('menu link navigates and closes the menu', async ({ page }) => {
+    await page.goto('/ko');
+    await page.getByTestId('mobile-menu-button').click();
+    await page.getByTestId('mobile-menu').getByRole('link', { name: '문의', exact: true }).click();
+    await expect(page).toHaveURL(/\/ko\/contact\/?$/);
+    await expect(page.getByTestId('mobile-menu')).toHaveCount(0);
   });
 
   test('no horizontal overflow at 390px', async ({ page }) => {

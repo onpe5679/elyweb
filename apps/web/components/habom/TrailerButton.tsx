@@ -28,8 +28,8 @@ export default function TrailerButton({ youtubeId, title, className }: { youtube
         <Icon name="play" size={18} /> {t('watch')}
       </button>
       <Modal open={open} onClose={() => setOpen(false)} label={`${t('player')} — ${title}`}>
-        <div className="flex h-full w-full flex-col items-center justify-center p-4 md:p-10">
-          <div className="flex w-full max-w-5xl justify-end pb-3">
+        <div data-modal-backdrop className="flex h-full w-full flex-col items-center justify-center p-4 md:p-10">
+          <div data-modal-backdrop className="flex w-full max-w-5xl justify-end pb-3">
             <button type="button" onClick={() => setOpen(false)} className="flex min-h-[44px] items-center gap-2 text-sm text-white" data-autofocus>
               {t('close')} <Icon name="close" size={22} />
             </button>
